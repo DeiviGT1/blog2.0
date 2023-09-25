@@ -1,0 +1,165 @@
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: white;
+  color: wrgb(53, 53, 53);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+  text-align: center;
+  width: 100%;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0 15px 0;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  font-weight: 450;
+}
+
+nav a {
+  text-decoration: none;
+  padding: 0.2rem 5rem;
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.submain{
+  justify-content: space-between;
+  padding: 0 1.5rem 0 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  nav {
+    flex-direction: column;
+  }
+  nav div{
+    display: flex;
+    flex-direction: column;
+  }
+  nav a {
+    padding: 1.25rem 0;
+  }
+  .submain{
+    padding: 0.2rem 0;
+  }
+  .title{
+    flex-direction: column;
+    align-items: center;
+  }
+  .title h1{
+    margin: 0.5rem 0;
+  }
+  img{
+    display: none;
+  }
+  .aboutme{
+    flex-direction: column;
+    align-items: center;
+  }
+  .aboutme p{
+    width: 100%;
+  }
+}
+
+nav a:hover {
+  color: #ff6f61;
+}
+
+.about{
+  padding: 2rem 25% 2rem 25%;
+  color: white;
+  background-color: rgb(59, 59, 59);
+}
+
+.title{
+  display: flex;
+  justify-content: space-between;
+}
+
+/* allign name to the end of the div */
+
+.job{
+  font-weight: 500;
+}
+
+.name{
+  font-size: 30px;
+  font-weight: 350;
+  color: #ff6f61;
+}
+
+.profilepic{
+  width: 30%;
+  height: 30%;
+  object-fit: cover;
+  border-radius: 5%;
+}
+
+.aboutme{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5rem 0 1.5rem;
+}
+
+.aboutme p{
+  align-self: center;
+  font-size: 18px;
+}
+
+.jobs{
+  display: flex;
+  padding: 2rem 25% 1rem 25%;
+}
+
+.info-job *{
+  margin: 0.5rem;
+}
+
+.job-busissnes{
+  font-size: 20px;
+  font-weight: 500;
+  width: 12rem;
+}
+
+.job-date{
+  font-size: 15px;
+  font-weight: 350;
+}
+
+.job-name{
+  font-size: 20px;
+  font-weight: 500;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.job-description{
+  font-size: 15px;
+  font-weight: 350;
+}
+
+.job-tasks{
+  margin-left: 1rem;
+}
+
+.tec-div{
+  padding: 2rem 25% 2rem 25%;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  background-color: rgb(59, 59, 59);
+}
+
+.tec-div div{
+  display: flex;
+  padding: 0 1.5rem 0 1.5rem;
+  justify-content: space-between;
+}
+
+.tec-div img{
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+}
