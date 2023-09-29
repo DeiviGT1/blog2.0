@@ -30,7 +30,7 @@
         <p> 
           I am a data scientist, which means I use data to solve problems and create value. I work with large and complex datasets, applying various methods of analysis, visualization, and machine learning. I use tools like Python, R, SQL, and Power BI to manipulate, explore, and communicate data. I am curious, creative, and analytical. I enjoy finding patterns, insights, and opportunities in data. I also like to learn new skills and techniques to improve my work.
         </p>
-        <img src="/assets/profile.jpg" alt="profile" class="profilepic">
+        <img src="/assets/profile.png" alt="profile" class="profilepic">
       </div>
     </section>
     <section class="experience">
@@ -67,7 +67,7 @@
         <div class="job-tasks">
           <h3 class="job-name">S.A. Ecommerce</h3>
           <ul>
-            <li>Negociación con transportadoras</li>
+            <li>Negotiation with carriers for optimal agreements.</li>
             <li>
               Entrega de informes y análisis del servicio de Ecommerce
             </li>
@@ -86,36 +86,25 @@
       
       <div class="white-section">
         <div class="info-job">
-          <h2 class="job-busissnes">Mattelsa S.A.S.</h2>
+          <h2 class="job-busissnes"></h2>
           
           <h4 class="job-date">09/2021 - Currently</h4>
         </div>
         <div class="job-tasks">
           <h3 class="job-name"> Analista de planeacion comercial</h3>
           <ul>
-            <li>Distribución de unidades a cada una de las bodegas</li>
+            <li>Supervision and control of the strategic distribution of units to
+              different warehouses.</li>
             <li>
-              Migración de datos del sistema a la bodega de datos en SQL
-              Automatización de procesos para su veloz desarrollo con el
-              uso de VBA y Python
+              Execution of data migration from the system to the data warehouse
+              in SQL, ensuring data integrity and quality throughout the process.
             </li>
             <li>
-              Desarrollo de modelos de Machine Learning por medio de
-              Python para el analisis de datos y la toma de desiciones
+              Design and development of automation solutions using VBA and
+              Python to streamline process development, improve efficiency, and reduce errors.
             </li>
             <li>
-              Analizar la información del mercado y los datos de ventas
-              para identificar tendencias y oportunidades de
-              crecimiento.
-            </li>
-            <li>
-              Establecer metas y objetivos a corto y largo plazo para el
-              equipo de ventas.
-            </li>
-            <li>
-              Coordinar con otros departamentos de la empresa, como el
-              de producción y el de finanzas, para garantizar que se
-              cumplan los objetivos comerciales.
+              Development of dynamic reports in Power BI.
             </li>
           </ul>
         </div>
@@ -124,7 +113,7 @@
   <section class="tecnologias" id="skills">
     <div class="container">
       <h2>SKILLS</h2>
-      <p>dfaf</p>
+      <p>Diving into My Technical Skillset </p>
       <div class="tec-div">
 
         <p>Data scientist</p>
@@ -278,7 +267,9 @@
         </div>
         <div class="white-section">
           <div class="mas">
-            <p>Ver mas</p>
+            <a href="https://github.com/DeiviGT1" target="_blank">
+              <p>Ver mas</p>
+            </a>
           </div>
         </div>
         </div>
@@ -286,14 +277,41 @@
   </section>
   </main> 
   <footer>
+    <div>
+      <a href="/assets/Hoja de vida.pdf" download="Hoja de vida.pdf">
+        <button class="button" href="/assets/CV_DAVID_GONZALEZ_DATA_ANALYST.pdf" download="CV_DAVID_GONZALEZ_DATA_ANALYST.pdf">
+          <p>
+            Descargar HDV
+          </p>
+        </button>
+    </div>
+    <div class="social">
+      <a href=""><img src="/assets/linkedln.png" alt=""></a>
+      <a href=""><img src="/assets/instagram.png" alt=""></a>
+      <a href=""><img src="/assets/github.png" alt=""></a>
+    </div>
 
-    <!-- I want a button to download a file -->
-    <a href="/assets/Hoja de vida.pdf" download="Hoja de vida.pdf">
-      <button class="button" href="/assets/CV_DAVID_GONZALEZ_DATA_ANALYST.pdf" download="CV_DAVID_GONZALEZ_DATA_ANALYST.pdf">
-        <p>
-          Descargar HDV
-        </p>
-      </button>
   </footer>
 </body>
+<script>
+  // script.js
+let prevScrollPos = window.pageYOffset;
+
+window.addEventListener('scroll', function() {
+  const currentScrollPos = window.pageYOffset;
+
+  if (prevScrollPos > currentScrollPos) {
+    // Scrolling up, show the header
+    document.querySelector('header').style.top = '0';
+    document.querySelector('header').style.position = 'fixed';
+  } else {
+    // Scrolling down, hide the header
+    document.querySelector('header').style.top = '-100px'; // Adjust to match header height
+    document.querySelector('header').style.position = 'fixed';
+  }
+
+  prevScrollPos = currentScrollPos;
+});
+
+</script>
 </html>

@@ -5,28 +5,47 @@ body{
   background-color: white;
   color: wrgb(53, 53, 53);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  scroll-behavior: smooth;
+}
+
+html{
+  scroll-behavior: smooth;
 }
 
 header {
   text-align: center;
+  background-color: white;
+  z-index: 3;
   width: 100%;
+  transition: top 0.5s ease;
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   padding: 15px 0 15px 0;
+  
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
   margin: 0;
   font-weight: 450;
+  
+}
+
+a{
+  text-decoration: none;
 }
 
 nav a {
-  text-decoration: none;
   padding: 0.2rem 5rem;
   font-size: 20px;
   transition: color 0.3s;
-  color:rgb(59, 59, 59)
+  color:rgb(59, 59, 59);
+}
+
+main > section{
+  position: relative;
+  top: 4rem;
+  z-index: 2;
 }
 
 .submain{
@@ -151,7 +170,17 @@ nav a:hover {
 .container{
   padding: 2rem 25% 2rem 25%;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+  color: white;
   background-image: linear-gradient(to bottom right, rgb(25, 25, 25), rgb(59, 59, 59));
+}
+
+.container > h2, .container > p{
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.container > p{
+  margin-bottom: 4rem;
 }
 
 .tec-div{
@@ -197,10 +226,12 @@ nav a:hover {
   display: flex;
   justify-content: center;
   color: white;
+  text-decoration: none;
 }
 
 .ds div:hover a p, .bd div:hover a p, .py div:hover a p, .fe div:hover a p{
-  color: #ff6f61; 
+  color: #ff6f61;
+  text-decoration: none;
 }
 
 .tec-div img{
@@ -221,13 +252,13 @@ nav a:hover {
 
 .square{
   height: 25rem;
-  width: 30rem;
+  width: 55%;
   background-color: #555;
 }
 
 .squares{
   height: 25rem;
-  width: 50%;
+  width: 45%;
 }
 
 .squares > div{
@@ -251,12 +282,9 @@ nav a:hover {
 }
 
 .mas{
-  text-align: center;
-  font-size: larger;
-  margin: 0;
-  align-self: center;
-  align-items: center;
-  justify-self: center;
+  margin: 0 0 1rem 0 ;
+  font-weight: 500;
+  font-size: 20px;
 }
 
 .mas p{
@@ -266,7 +294,10 @@ nav a:hover {
 
 /* footer */
 footer{
+  display: flex;
+  justify-content: space-between;
   padding: 1rem 25% 1rem 25%;
+  margin-top: 4rem;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
   background-image: linear-gradient(to bottom right, rgb(25, 25, 25), rgb(59, 59, 59));
 }
@@ -277,7 +308,7 @@ footer{
     font-size: 16px;
     text-align: center;
     text-decoration: none;
-    background-color: #ff6f61;
+    background-color: rgb(80, 80, 80);
     color: #ffffff;
     border-radius: 5px;
     border: none;
@@ -291,4 +322,21 @@ footer{
 
 .button:active {
     background-color: #e6574d;
+}
+
+.social{
+  display: flex;
+}
+
+.social img{
+  padding: 0.5rem 0rem 0px 0.5rem;
+  filter: grayscale(100%);
+  width: 2rem;
+  height: 2rem;
+  object-fit: scale-down;
+  margin: 0 0.5rem 0 0.5rem;
+}
+
+.social img:hover{
+  filter: grayscale(0%);
 }
