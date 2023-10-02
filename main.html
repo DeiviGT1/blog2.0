@@ -34,8 +34,12 @@
       </div>
     </section>
     <section class="experience">
-
+      <div class="exp">
+        <h1> EXPERIENCE </h1>
+        <p>Navigating My Professional Journey</p>
+      </div>
       <div class="white-section">
+        
         <div class="info-job">
           <h2 class="job-busissnes">S.O.S. Llaves y claves</h2>
           
@@ -254,9 +258,12 @@
   </section>
   <section class="proyectos" id="proyectos">
       <div class="white-section">
-          <h1 class="job">
-            Proyectos
+        <div class="exp">
+          <h1>
+            PROJECTS
           </h1> 
+          <p>Bringing Ideas to Life</p>
+        </div>
         </div>
         <div class="white-section">
           <div class="square"></div>
@@ -299,7 +306,8 @@ let prevScrollPos = window.pageYOffset;
 
 window.addEventListener('scroll', function() {
   const currentScrollPos = window.pageYOffset;
-
+// create a const to get the current width of the screen
+  const width = window.innerWidth;
   if (prevScrollPos > currentScrollPos) {
     // Scrolling up, show the header
     document.querySelector('header').style.top = '0';
@@ -311,8 +319,13 @@ window.addEventListener('scroll', function() {
       document.querySelector('header').style.top = '0';
       return;
     } else {
-    document.querySelector('header').style.top = '-100px'; // Adjust to match header height
-    document.querySelector('header').style.position = 'fixed';
+      if (width > 1100){
+      document.querySelector('header').style.top = '-100px'; // Adjust to match header height
+      document.querySelector('header').style.position = 'fixed';
+    } else{
+      document.querySelector('header').style.top = '-175px'; // Adjust to match header height
+      document.querySelector('header').style.position = 'fixed';
+    }
   }
 }
 

@@ -75,6 +75,9 @@ main > section{
   img{
     display: none;
   }
+  .about{
+    margin-top: 6rem;
+  }
   .aboutme{
     flex-direction: column;
     align-items: center;
@@ -138,6 +141,17 @@ nav a:hover {
   padding: 2rem 25% 1rem 25%;
 }
 
+.exp{
+  margin-top: 3rem;
+  display:grid;
+  justify-content: center;
+}
+
+.exp h1{
+  display: flex;
+  justify-content: center;
+}
+
 .info-job *{
   margin: 0.5rem;
 }
@@ -168,8 +182,21 @@ nav a:hover {
   margin-left: 1rem;
 }
 
+@media (max-width: 1100px) {
+  .white-section{
+    display: block;
+    text-align: center;
+  }
+  .info-job{
+      display: inline-block;
+    }
+  .job-tasks{
+    margin-left: 0;
+  }
+}
+
 .container{
-  padding: 2rem 25% 2rem 25%;
+  padding: 2rem 25% 4rem 25%;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
   color: white;
   background-image: linear-gradient(to bottom right, rgb(25, 25, 25), rgb(59, 59, 59));
@@ -251,6 +278,25 @@ nav a:hover {
   padding: 0 1.5rem 0 1.5rem;
 }
 
+@media (max-width: 1100px) {
+  .tec-div{
+    row-gap: 4rem;
+  }
+  .ds, .bd, .py, .fe {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 0.5rem;
+  }
+  .item img{
+    width: 1.5rem;
+    height: 1.5rem;
+    display: inline-block;
+    margin-right: 1rem;
+  }
+  .ds div, .bd div, .py div, .fe div{
+    display:flex;
+  }
+}
+
 .square{
   height: 25rem;
   width: 55%;
@@ -267,7 +313,6 @@ nav a:hover {
   justify-content: space-between;
   padding: 0 0 0 0;
   height: 50%;
-
 }
 
 .square2{
@@ -292,6 +337,29 @@ nav a:hover {
   margin: 0;
 }
 
+@media (max-width: 1100px) {
+  .proyectos .white-section{
+    text-align: center;
+  }
+  .square{
+    height: 15rem;
+    width: 100%;
+    background-color: #555;
+  }
+  
+  .squares{
+    height: 30rem;
+    width: 100%;
+    display: block;
+  }
+  
+  .squares > div{
+    padding: 0 0 0 0;
+    height: 50%;
+    width: 100%;
+  }
+  
+}
 
 /* footer */
 footer{
