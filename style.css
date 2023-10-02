@@ -24,8 +24,6 @@ nav {
   display: flex;
   justify-content: space-between;
   padding: 15px 0 15px 0;
-  
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
   margin: 0;
   font-weight: 450;
   
@@ -119,21 +117,24 @@ nav a:hover {
   height: 30%;
   object-fit: cover;
   border-radius: 5%;
+  align-self: center;
 }
 
 .aboutme{
   display: flex;
   justify-content: space-between;
-  padding: 0 1.5rem 0 1.5rem;
+  padding: 0 0rem 0 0rem;
 }
 
 .aboutme p{
   align-self: center;
   font-size: 18px;
+  padding: 0 2rem 0 2rem;
 }
 
 .white-section{
   display: flex;
+  justify-content: center;
   padding: 2rem 25% 1rem 25%;
 }
 

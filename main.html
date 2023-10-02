@@ -45,15 +45,20 @@
           <h3 class="job-name">Asistente administrativo</h3>
           <ul>
             <li>
-              Manejo de inventarios, tanto registro de entrada como
-              desalida
+              Supervision and control of the strategic distribution of units to
+              different warehouses. 
+            </li>
+            <li>Execution of data migration from the system to the data warehouse
+              in SQL, ensuring data integrity and quality throughout the process.
             </li>
             <li>
-              Respondiendo llamadas y correos electrónicos, filtrando y
-              reenviando información importante.
+              Design and development of automation solutions using VBA and
+              Python to streamline process development, improve efficiency, and
+              reduce errors.
             </li>
-            <li>Atención al cliente</li>
-            <li>Desarrollo y ejecución de estrategias de mercadeo</li>
+            <li>
+              Development of dynamic reports in Power BI.
+            </li>
           </ul>
         </div>
       </div>
@@ -67,18 +72,14 @@
         <div class="job-tasks">
           <h3 class="job-name">S.A. Ecommerce</h3>
           <ul>
-            <li>Negotiation with carriers for optimal agreements.</li>
             <li>
-              Entrega de informes y análisis del servicio de Ecommerce
-            </li>
-            <li>Reporte de pagos realizados por las transportadoras</li>
-            <li>
-              Ayudar en el proceso de compra, incluyendo la verificación
-              de inventario y la gestión de pagos.
+              Negotiation with carriers for optimal agreements.
             </li>
             <li>
-              Ayudar en el seguimiento del estado de los pedidos y en la
-              gestión de devoluciones y cambios.
+              Delivery of reports and analysis of the Ecommerce service.
+            </li>
+            <li>Reporting of payments made by carriers, ensuring transparency and
+              compliance with established financial agreements.
             </li>
           </ul>
         </div>
@@ -149,8 +150,7 @@
                 <p>python</p>
               </div>
             </a>
-          </div>
-          
+          </div> 
         </div>
         <p>Bases de datos</p>
         <div class="bd">
@@ -267,7 +267,7 @@
         </div>
         <div class="white-section">
           <div class="mas">
-            <a href="https://github.com/DeiviGT1" target="_blank">
+            <a href="https://github.com/DeiviGT1?tab=repositories" target="_blank">
               <p>Ver mas</p>
             </a>
           </div>
@@ -306,9 +306,15 @@ window.addEventListener('scroll', function() {
     document.querySelector('header').style.position = 'fixed';
   } else {
     // Scrolling down, hide the header
+    // if im  in the top of the website ignore the code
+    if (currentScrollPos < 10) {
+      document.querySelector('header').style.top = '0';
+      return;
+    } else {
     document.querySelector('header').style.top = '-100px'; // Adjust to match header height
     document.querySelector('header').style.position = 'fixed';
   }
+}
 
   prevScrollPos = currentScrollPos;
 });
