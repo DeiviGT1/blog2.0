@@ -51,41 +51,7 @@ main > section{
   padding: 0 1.5rem 0 1.5rem;
 }
 
-@media (max-width: 1024px) {
-  nav {
-    flex-direction: column;
-  }
-  nav div{
-    display: flex;
-    flex-direction: column;
-  }
-  nav a {
-    padding: 1.25rem 0;
-  }
-  .submain{
-    padding: 0.2rem 0;
-  }
-  .title{
-    flex-direction: column;
-    align-items: center;
-  }
-  .title h1{
-    margin: 0.5rem 0;
-  }
-  img{
-    display: none;
-  }
-  .about{
-    margin-top: 6rem;
-  }
-  .aboutme{
-    flex-direction: column;
-    align-items: center;
-  }
-  .aboutme p{
-    width: 100%;
-  }
-}
+
 
 nav a:hover {
   color: #ff6f61;
@@ -182,19 +148,6 @@ nav a:hover {
   margin-left: 1rem;
 }
 
-@media (max-width: 1024px) {
-  .white-section{
-    display: block;
-    text-align: center;
-  }
-  .info-job{
-      display: inline-block;
-    }
-  .job-tasks{
-    margin-left: 0;
-  }
-}
-
 .container{
   padding: 2rem 25% 4rem 25%;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
@@ -278,28 +231,6 @@ nav a:hover {
   padding: 0 1.5rem 0 1.5rem;
 }
 
-@media (max-width: 1024px) {
-  .tec-div{
-    text-align: center;
-    display: block;
-  }
-  .ds, .bd, .py, .fe {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 1rem;
-    margin: 1rem 0 3rem 0;
-    
-  }
-  .item img{
-    width: 1.5rem;
-    height: 1.5rem;
-    display: inline-block;
-    margin-right: 1rem;
-  }
-  .ds div, .bd div, .py div, .fe div{
-    display:flex;
-  }
-}
-
 .square{
   height: 25rem;
   width: 55%;
@@ -338,30 +269,6 @@ nav a:hover {
 
 .mas p{
   margin: 0;
-}
-
-@media (max-width: 1024px) {
-  .proyectos .white-section{
-    text-align: center;
-  }
-  .square{
-    height: 15rem;
-    width: 100%;
-    background-color: #555;
-  }
-  
-  .squares{
-    height: 30rem;
-    width: 100%;
-    display: block;
-  }
-  
-  .squares > div{
-    padding: 0 0 0 0;
-    height: 50%;
-    width: 100%;
-  }
-  
 }
 
 /* footer */
@@ -411,4 +318,93 @@ footer{
 
 .social img:hover{
   filter: grayscale(0%);
+}
+
+@media (max-width: 1024px) {
+  nav {
+    flex-direction: column;
+  }
+  nav div{
+    display: flex;
+    flex-direction: column;
+  }
+  nav a {
+    padding: 1.25rem 0;
+  }
+  .submain{
+    padding: 0.2rem 0;
+  }
+  .title{
+    flex-direction: column;
+    align-items: center;
+  }
+  .title h1{
+    margin: 0.5rem 0;
+  }
+  img{
+    display: none;
+  }
+  .about{
+    margin-top: 6rem;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+  .aboutme{
+    flex-direction: column;
+    align-items: center;
+  }
+  .aboutme p{
+    width: 100%;
+  }
+  .container{
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+  .white-section{
+    display: block;
+    text-align: center;
+  }
+  .info-job{
+      display: inline-block;
+    }
+  .job-tasks{
+    margin-left: 0;
+  }
+  .tec-div{
+    text-align: center;
+    display: block;
+  }
+  .ds, .bd, .py, .fe {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1rem;
+    margin: 1rem 0 3rem 0;
+    
+  }
+  .item img{
+    width: 1.5rem;
+    height: 1.5rem;
+    display: inline-block;
+    margin-right: 1rem;
+  }
+  .ds div, .bd div, .py div, .fe div{
+    display:flex;
+  }
+  .proyectos .white-section{
+    text-align: center;
+  }
+  .square{
+    height: 15rem;
+    width: 100%;
+    background-color: #555;
+  }
+  
+  .squares{
+    height: 30rem;
+    width: 100%;
+    display: block;
+  }
+  
+  .squares > div{
+    padding: 0 0 0 0;
+    height: 50%;
+    width: 100%;
+  }
 }
