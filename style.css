@@ -269,6 +269,11 @@ nav a:hover {
 
 .mas p{
   margin: 0;
+  color: #555;
+}
+
+.mas p:hover{
+  color:#e6574d
 }
 
 /* footer */
@@ -293,6 +298,8 @@ footer{
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    height: 100%;
+    width: 100%;
 }
 
 .button:hover {
@@ -340,6 +347,7 @@ footer{
   }
   .title h1{
     margin: 0.5rem 0;
+    text-align: center;
   }
   img{
     display: none;
@@ -351,6 +359,7 @@ footer{
   .aboutme{
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
   .aboutme p{
     width: 100%;
@@ -391,13 +400,13 @@ footer{
     text-align: center;
   }
   .square{
-    height: 15rem;
+    height: 10rem;
     width: 100%;
     background-color: #555;
   }
   
   .squares{
-    height: 30rem;
+    height: 20rem;
     width: 100%;
     display: block;
   }
@@ -406,5 +415,19 @@ footer{
     padding: 0 0 0 0;
     height: 50%;
     width: 100%;
+  }
+  footer{
+    display: block;
+    box-shadow: none;
+  }
+  footer > div{
+    height: 50%;
+  }
+  .social{
+    margin-top: 1rem;
+    justify-content: space-between;
+  }
+  .social img{
+    display: flex;
   }
 }
