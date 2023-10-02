@@ -288,7 +288,8 @@ footer{
 
 .button {
     display: inline-block;
-    padding: 0px 5rem;
+    width: 100%;
+    padding: 0px 2rem;
     font-size: 16px;
     text-align: center;
     text-decoration: none;
@@ -299,7 +300,6 @@ footer{
     cursor: pointer;
     transition: background-color 0.3s ease;
     height: 100%;
-    width: 100%;
 }
 
 .button:hover {
@@ -427,7 +427,20 @@ footer{
     margin-top: 1rem;
     justify-content: space-between;
   }
+  .social a{
+    display: flex;
+    justify-content: center;
+  }
   .social img{
     display: flex;
+  }
+  footer a{
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+  .button p{
+    width: 90%;
+    text-align: center;
   }
 }
