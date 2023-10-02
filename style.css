@@ -346,7 +346,7 @@ footer{
   }
   .about{
     margin-top: 6rem;
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    box-shadow:none;
   }
   .aboutme{
     flex-direction: column;
@@ -356,7 +356,7 @@ footer{
     width: 100%;
   }
   .container{
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: none;
   }
   .white-section{
     display: block;
@@ -373,7 +373,7 @@ footer{
     display: block;
   }
   .ds, .bd, .py, .fe {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     row-gap: 1rem;
     margin: 1rem 0 3rem 0;
     
