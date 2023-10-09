@@ -444,3 +444,37 @@ footer{
     text-align: center;
   }
 }
+.sub{
+  display: flex;
+  align-items: center;
+}
+
+.header__mode {
+  align-items: center;
+  display: grid;
+  justify-items: center;
+  margin-top: 0.4rem;
+  place-items: center;
+}
+
+.mode__toggle {
+    align-items: center;
+    background-color: #555;
+    border-radius: 0.9rem;
+    display: flex;
+    height: 1.8rem;
+    justify-content: space-around;
+    position: relative;
+    width: 100%;
+    width: 3.6rem;
+}
+.mode__toggle--checkbox {
+  cursor: pointer;
+  height: 1.8rem;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 3.6rem;
+  z-index: 1;
+}
