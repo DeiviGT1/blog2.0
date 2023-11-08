@@ -231,51 +231,40 @@ nav a:hover {
   padding: 0 1.5rem 0 1.5rem;
 }
 
-.square{
-  height: 25rem;
-  width: 55%;
-  border-left: solid black 0.4rem;
-  border-right: solid black 0.1rem;
-  border-bottom: solid black 0.4rem;
-  border-top: solid black 0.4rem;
+.pro{
+  display: block; 
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 25% 1rem 25%;
 }
 
-.squares{
-  height: 25rem;
-  width: 45%;
+.pro div{
+  justify-self: center;
 }
 
-.squares > div{
+.muestra{
+  text-align: center;
+  border-top: #555 solid;
+}
+
+.muestra div{
   display: flex;
-  justify-content: space-between;
-  border: solid black 0.2rem;
-  padding: 0 0 0 0;
-  height: 50%;
+  text-align: left;
+  align-items: center;
+  margin-bottom: 5%;
 }
 
-.square3 img{
-  height: 100%;
-  width: 100%;
+.muestra p{
+  width: 50%;
+  margin-right: 5%;
+}
+
+.muestra video, .muestra img{
+  justify-self: center;
+  height: 0.28125%;
+  width: 50%;
   object-fit:cover;
-}
-
-.square3 img:hover{
-  height: 70%;
-  width: 70%;
-  object-fit: contain;
-  left: 15%;
-  top: 20%;
-  position: absolute;
-}
-
-.videos{
-  display: flex;
-}
-
-video{
-  height: 100%;
-  width: 100%;
-  object-fit:cover;
+  
 }
 
 .mas{
