@@ -1,7 +1,7 @@
 <h1 align="center"> Personal Blog </h1>
 
 <p align="center">
-  <img src="./src/assets/background.png" alt="Custom background image"/>
+  <img src="./assets/fondo (1).png" alt="Custom background image"/>
 </p>
 
 <br>
