@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /private-section/
+
+Sitemap: https://www.josedavidgt.com/sitemap.xml
