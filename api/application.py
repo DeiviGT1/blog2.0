@@ -3,7 +3,7 @@
 from flask import Flask
 
 # Crea una instancia de la aplicación Flask
-app = Flask(__name__, template_folder='templates', static_url_path="/static")
+app = Flask(__name__, template_folder='templates', static_folder='static', static_url_path='/songrecommender/static')
 app.secret_key = 'david'
 
 # Importa los módulos de la aplicación

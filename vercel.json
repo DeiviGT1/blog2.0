@@ -14,7 +14,15 @@
       "use": "@vercel/static"
     },
     {
-      "src": "assets/(.*)",
+      "src": "assets/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "sitemap.xml",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "robots.txt",
       "use": "@vercel/static"
     }
   ],
