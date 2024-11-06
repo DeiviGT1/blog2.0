@@ -1,8 +1,8 @@
 #controllers.py
 
 from flask import render_template, request, redirect, session, Blueprint
-from spotify import app_Authorization, search_song, user_Authorization
-from openaiapi import generar_respuesta
+from .spotify import app_Authorization, search_song, user_Authorization
+from .openaiapi import generar_respuesta
 from dotenv import load_dotenv
 
 
