@@ -8,10 +8,18 @@
     {
       "src": "index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "style.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/(.*)",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     { "src": "/songrecommender(.*)", "dest": "api/application.py" },
-    { "src": "/(.*)", "dest": "index.html" }
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }

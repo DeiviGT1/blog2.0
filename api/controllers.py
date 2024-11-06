@@ -6,8 +6,7 @@ from openaiapi import generar_respuesta
 from dotenv import load_dotenv
 
 
-
-mod = Blueprint('controllers', __name__, url_prefix='')
+mod = Blueprint('controllers', __name__, url_prefix='/songrecommender')
 
 #renders the web page
 @mod.route("/")
