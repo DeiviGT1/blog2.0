@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, url_for
 import os
 import json
 import requests
@@ -26,8 +26,7 @@ SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
 
 #Server-side Parameters
 def get_redirect_uri():
-    URL_URI = request.url_root
-    REDIRECT = f"{URL_URI}callback"
+    REDIRECT = url_for('controllers.callback', _external=True)
     return REDIRECT
 
 #Authorization of application with spotify

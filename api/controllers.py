@@ -1,6 +1,6 @@
 #controllers.py
 
-from flask import render_template, request, redirect, session, Blueprint
+from flask import render_template, request, redirect, session, Blueprint, url_for
 from .spotify import app_Authorization, search_song, user_Authorization
 from .openaiapi import generar_respuesta
 from dotenv import load_dotenv
@@ -25,10 +25,9 @@ def login():
 
 @mod.route("/callback")
 def callback():
-    
     header = user_Authorization()
     session["user"] = header
-    return redirect("/song")
+    return redirect(url_for('controllers.get_input'))
 
 @mod.route("/song", methods=["POST","GET"])
 def get_input():
