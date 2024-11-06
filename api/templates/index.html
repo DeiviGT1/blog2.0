@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css')}}">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <h1>Sonic Surprise</h1>
+        <h4>Descubre nuevas canciones recomendadas especialmente para ti</h4>
+        <form action = "login" method="post">
+            <label for="song">Canción: </label>
+            <input type="text" placeholder="No sabe igual" name="song">
+            <label for="artist">Artist: </label>
+            <input type="text" placeholder="Rels B" name="artist">
+            <input type = "submit" value = "Enviar">
+        </form>
+    </main>
+</body>
+</html>

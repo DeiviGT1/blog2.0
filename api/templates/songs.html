@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css')}}">
+  <title>Document</title>
+</head>
+<body>
+  <div id="header">
+    <a href="https://josedavidgt.com/" id="inicio" class="inicio">
+      <img src="../static/inicio.png" alt="favicon" class="logo"/>
+      <h1>Sonic Surprise</h1>
+    </a>
+    
+    <div>
+      <p>
+        Según la canción que seleccionaste, esta es una lista de las canciones
+        que muy probablemente te encantaran
+      </p>
+    </div>
+  </div>
+  <div class="mainDiv"></div>
+  <script>
+    var json_str = '{{ songs | tojson }}';
+    var json_obj = JSON.parse(json_str);
+    var mainDiv = document.querySelector('.mainDiv');
+    var list = document.createElement('ul');
+
+    for (var i = 0; i < json_obj.length; i++) {
+      var li = document.createElement('li');
+      var songName = json_obj[i].name;
+      var songArtist = json_obj[i].artist;
+      var songImage = json_obj[i].image;
+      var songUrl = json_obj[i].url;
+
+      var pSongName = document.createElement('a');
+      var Name = document.createElement('p');
+      pSongName.setAttribute('class', 'songName');
+      pSongName.setAttribute('href', songUrl)
+      Name.innerHTML = songName + " - " + songArtist;
+
+      var img = document.createElement('img');
+      img.setAttribute('src', songImage);
+
+      pSongName.appendChild(img);
+      pSongName.appendChild(Name);
+      li.appendChild(pSongName);
+      list.appendChild(li);  
+    }
+    mainDiv.appendChild(list);
+  </script>
+</body>
+</html>
