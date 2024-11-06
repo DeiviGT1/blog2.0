@@ -471,3 +471,6 @@ footer{
     position: absolute;
   }
 }
+.muestra {
+  cursor: pointer;
+}

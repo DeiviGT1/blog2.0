@@ -137,11 +137,11 @@
                 </video>
               </div>
             </div>
-            <div class="muestra">
+            <div class="muestra" onclick="window.location.href='/songrecommender';">
               <h3>OpenAI API</h3>
               <div>
                 <p>I developed this app with the aim of testing artificial intelligence with the OpenAI API. The app recommends songs based on the song provided by the user, along with their respective links.</p>
-                <video controls poster="assets/APIopenaipreview.png">
+                <video controls poster="assets/APIopenaipreview.png" onclick="event.stopPropagation();">
                   <source src="assets/APIopenai.mp4">
                 </video>
               </div>
