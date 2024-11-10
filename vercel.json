@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/application.py",
+      "src": "apiopenai/application.py",
       "use": "@vercel/python"
     },
     {
@@ -27,7 +27,24 @@
     }
   ],
   "routes": [
-    { "src": "/songrecommender(.*)", "dest": "api/application.py" },
+    { "src": "/songrecommender(.*)", "dest": "apiopenai/application.py" },
     { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "redirects": [
+    {
+      "source": "http://josedavidgt.com/:path*",
+      "destination": "https://www.josedavidgt.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "http://www.josedavidgt.com/:path*",
+      "destination": "https://www.josedavidgt.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "https://josedavidgt.com/:path*",
+      "destination": "https://www.josedavidgt.com/:path*",
+      "permanent": true
+    }
   ]
 }
