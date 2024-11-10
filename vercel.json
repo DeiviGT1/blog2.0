@@ -6,28 +6,53 @@
       "use": "@vercel/python"
     },
     {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "style.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "assets/**/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "sitemap.xml",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "robots.txt",
+      "src": "public/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/songrecommender(.*)", "dest": "apiopenai/application.py" },
-    { "src": "/(.*)", "dest": "/$1" }
+    {
+      "src": "/songrecommender(.*)",
+      "dest": "apiopenai/application.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.josedavidgt.com"
+        }
+      ],
+      "destination": "https://josedavidgt.com/",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.josedavidgt.com"
+        }
+      ],
+      "destination": "https://josedavidgt.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "https://josedavidgt.com/(.*)",
+      "has": [
+        {
+          "type": "protocol",
+          "value": "http"
+        }
+      ],
+      "destination": "https://josedavidgt.com/$1",
+      "permanent": true
+    }
   ]
 }
