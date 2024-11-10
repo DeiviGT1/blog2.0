@@ -42,17 +42,6 @@
       ],
       "destination": "https://josedavidgt.com/$1",
       "permanent": true
-    },
-    {
-      "source": "https://josedavidgt.com/(.*)",
-      "has": [
-        {
-          "type": "protocol",
-          "value": "http"
-        }
-      ],
-      "destination": "https://josedavidgt.com/$1",
-      "permanent": true
     }
   ]
 }
