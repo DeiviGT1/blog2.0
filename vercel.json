@@ -26,23 +26,20 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
-    { "src": "/songrecommender(.*)", "dest": "apiopenai/application.py" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "rewrites": [
+    { "source": "/songrecommender(.*)", "destination": "/apiopenai/application.py" },
+    { "source": "/(.*)", "destination": "/$1" }
   ],
   "redirects": [
     {
-      "source": "http://josedavidgt.com/:path*",
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "josedavidgt.com" }],
       "destination": "https://www.josedavidgt.com/:path*",
       "permanent": true
     },
     {
-      "source": "http://www.josedavidgt.com/:path*",
-      "destination": "https://www.josedavidgt.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "https://josedavidgt.com/:path*",
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.josedavidgt.com" }],
       "destination": "https://www.josedavidgt.com/:path*",
       "permanent": true
     }
