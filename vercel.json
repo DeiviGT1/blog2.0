@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "builds": [
     {
       "src": "apiopenai/application.py",
@@ -22,25 +22,18 @@
   ],
   "redirects": [
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.josedavidgt.com"
-        }
-      ],
-      "destination": "https://josedavidgt.com/",
+      "source": "http://josedavidgt.com/:path*",
+      "destination": "https://josedavidgt.com/:path*",
       "permanent": true
     },
     {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.josedavidgt.com"
-        }
-      ],
-      "destination": "https://josedavidgt.com/$1",
+      "source": "http://www.josedavidgt.com/:path*",
+      "destination": "https://josedavidgt.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "https://www.josedavidgt.com/:path*",
+      "destination": "https://josedavidgt.com/:path*",
       "permanent": true
     }
   ]
