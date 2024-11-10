@@ -6,11 +6,15 @@
       "use": "@vercel/python"
     },
     {
-      "src": "spotify/application.py",
-      "use": "@vercel/python"
+      "src": "index.html",
+      "use": "@vercel/static"
     },
     {
-      "src": "public/**",
+      "src": "style.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/**/*",
       "use": "@vercel/static"
     },
     {
@@ -22,42 +26,8 @@
       "use": "@vercel/static"
     }
   ],
-  "rewrites": [
-    {
-      "source": "/songrecommender(.*)",
-      "destination": "/apiopenai/application.py"
-    },
-    {
-      "source": "/spotify(.*)",
-      "destination": "/spotify/application.py"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/public/$1"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "josedavidgt.com"
-        }
-      ],
-      "destination": "https://www.josedavidgt.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.josedavidgt.com"
-        }
-      ],
-      "destination": "https://www.josedavidgt.com/:path*",
-      "permanent": true
-    }
+  "routes": [
+    { "src": "/songrecommender(.*)", "dest": "apiopenai/application.py" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
