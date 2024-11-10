@@ -6,15 +6,11 @@
       "use": "@vercel/python"
     },
     {
-      "src": "index.html",
-      "use": "@vercel/static"
+      "src": "spotify/application.py",
+      "use": "@vercel/python"
     },
     {
-      "src": "style.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "assets/**/*",
+      "src": "public/**",
       "use": "@vercel/static"
     },
     {
@@ -27,19 +23,39 @@
     }
   ],
   "rewrites": [
-    { "source": "/songrecommender(.*)", "destination": "/apiopenai/application.py" },
-    { "source": "/(.*)", "destination": "/$1" }
+    {
+      "source": "/songrecommender(.*)",
+      "destination": "/apiopenai/application.py"
+    },
+    {
+      "source": "/spotify(.*)",
+      "destination": "/spotify/application.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/public/$1"
+    }
   ],
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "josedavidgt.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "josedavidgt.com"
+        }
+      ],
       "destination": "https://www.josedavidgt.com/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.josedavidgt.com" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.josedavidgt.com"
+        }
+      ],
       "destination": "https://www.josedavidgt.com/:path*",
       "permanent": true
     }
