@@ -1,40 +1,33 @@
 {
-  "version": 3,
+  "version": 2,
   "builds": [
     {
       "src": "apiopenai/application.py",
       "use": "@vercel/python"
     },
     {
-      "src": "public/**/*",
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "style.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "assets/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "sitemap.xml",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "robots.txt",
       "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/songrecommender(.*)",
-      "dest": "apiopenai/application.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    }
-  ],
-  "redirects": [
-    {
-      "source": "http://josedavidgt.com/:path*",
-      "destination": "https://josedavidgt.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "http://www.josedavidgt.com/:path*",
-      "destination": "https://josedavidgt.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "https://www.josedavidgt.com/:path*",
-      "destination": "https://josedavidgt.com/:path*",
-      "permanent": true
-    }
+    { "src": "/songrecommender(.*)", "dest": "apiopenai/application.py" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
