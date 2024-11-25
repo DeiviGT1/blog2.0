@@ -11,8 +11,5 @@
         "src": "/(.*)",
         "dest": "run.py"
       }
-    ],
-    "functions": {
-      "maxDuration": 10
-    }
+    ]
   }
