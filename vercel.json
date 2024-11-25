@@ -13,7 +13,6 @@
       }
     ],
     "functions": {
-      "runtime": "@vercel/python",
       "maxDuration": 10
     }
   }
