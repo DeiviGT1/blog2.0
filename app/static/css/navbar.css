@@ -1,0 +1,241 @@
+/* app/static/css/navbar.css */
+
+/* Estilos de la Barra Lateral */
+.sidebar {
+    align-content: center;
+    width: 30%;
+    min-width: 200px; /* Para asegurar que no sea demasiado pequeña en pantallas pequeñas */
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+    position: fixed; /* Fija la barra lateral */
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto; /* Permite desplazamiento si el contenido excede la altura */
+    background-color: var(--sidebar-bg-color);
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.sidebar-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: color 0.5s;
+}
+x
+.sidebar-header > div {
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.sidebar-header img {
+    height: 80%;
+    transition: filter 0.5s, opacity 0.5s;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--main-text-color); /* Usar variable en lugar de color fijo */
+    transition: color 0.5s;
+}
+
+.sidebar-header {
+    font-weight: lighter;
+}
+
+.components {
+    padding: 0;
+    margin-top: 20px;
+}
+
+.components .nav-item {
+    margin: 10px 0;
+}
+
+.components .nav-link {
+    color: var(--main-text-color);
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    display: block;
+    transition: background 0.3s, color 0.3s;
+}
+
+.components .nav-link:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--hover-text-color);
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+/* Ajustes para el Contenido Principal */
+.content {
+    margin-left: 30%; /* Igual al ancho de la barra lateral */
+    width: 70%;
+    min-height: 100vh;
+    background-color: var(--content-bg-color);
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.content > div {
+    margin: 0 10%;
+}
+
+/* Responsive: Ajustes para Pantallas Pequeñas */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .content {
+        margin-left: 0;
+        width: 100%;
+    }
+    .navbar-header-logo, .components .nav-link {
+        text-align: center;
+    }
+}
+
+.footer {
+    background-color: var(--footer-bg-color);
+    transition: background-color 0.5s, color 0.5s;
+}
+
+/* Muted Text */
+.text-muted {
+    color: var(--muted-text-color);
+    transition: color 0.5s;
+}
+
+/* Estilos para el Toggle Slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+/* Cambiar el color del slider cuando está activo */
+input:checked + .slider {
+    background-color: #5A6D7C;
+}
+
+/* Mover el círculo cuando está activo */
+input:checked + .slider::before {
+    transform: translateX(26px);
+}
+
+/* Posicionar los íconos de sol y luna */
+.slider .sun-icon,
+.slider .moon-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #f39c12; /* Color del sol */
+    transition: color 0.4s;
+}
+
+.slider .moon-icon {
+    right: 10px;
+    color: #f1c40f; /* Color de la luna */
+}
+
+/* Cambiar los colores de los íconos cuando está activo */
+input:checked + .slider .sun-icon {
+    color: #f1c40f;
+}
+
+input:checked + .slider .moon-icon {
+    color: #f39c12;
+}
+
+/* Opcional: Ocultar los íconos cuando no están en el estado correspondiente */
+.slider .sun-icon {
+    opacity: 1;
+}
+
+.slider .moon-icon {
+    opacity: 1;
+}
+
+input:checked + .slider .sun-icon {
+    opacity: 1;
+}
+
+input:not(:checked) + .slider .moon-icon {
+    opacity: 1;
+}
+
+.rotating-card .back-image {
+    transform: rotateY(180deg);
+}
+
+.components .nav-link.active {
+    background-color: var(--hover-bg-color);
+    color: var(--hover-text-color);
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .sidebar-header {
+        flex-direction: column;
+        align-items: center;
+    }
+    .sidebar-header h3, .sidebar-header h4, .sidebar-header p {
+        font-size: 1rem;
+    }
+    .components {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0;
+    }
+    .components .nav-item {
+        margin: 5px 0;
+    }
+    .content {
+        margin-left: 0;
+        width: 100%;
+    }
+    .invert-button-container {
+        margin-bottom: 20px;
+    }
+}

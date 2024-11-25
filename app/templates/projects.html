@@ -1,0 +1,65 @@
+<!-- app/templates/projects.html -->
+<div class="content-wrapper-projects wrapper">
+    <div class="personal-projects container section">
+        <h2 class="my-4">Personal Projects</h2>
+        <ul class="project-list list-unstyled">
+            <!-- Project 1 -->
+            <a href="/openai" 
+            class="project-link" 
+            data-project="1"
+            data-title="Sales Dashboard"
+            data-description="An interactive dashboard developed with Power BI to visualize and analyze monthly sales, facilitating strategic decision-making."
+            data-image="{{ url_for('static', filename='images/LOGOS/LOGO-IMAGOTIPO@4x.webp') }}">
+                <li class="project-item">
+                    <p>SONIC SURPRISE</p>
+                </li>
+            </a>
+            
+            <!-- Project 2 -->
+            <a href="/playlists" 
+            class="project-link" 
+            data-project="2"
+            data-title="E-commerce Website"
+            data-description="A responsive e-commerce platform built with React and Node.js, featuring user authentication, product management, and payment integration."
+            data-image="{{ url_for('static', filename='images/projects/ecommerce-website-preview.webp') }}">
+                <li class="project-item">
+                    <p>PLAYLISTS QUALIFIER</p>
+                </li>
+            </a>
+            
+            <!-- Project 3 -->
+            <a href="#" 
+            class="project-link" 
+            data-project="3"
+            data-title="Data Mining Tool"
+            data-description="A data mining tool developed in Python that utilizes advanced algorithms to uncover patterns and trends within large datasets, driving actionable business intelligence."
+            data-image="{{ url_for('static', filename='images/projects/data-mining-tool-preview.webp') }}">
+                <li class="project-item">
+                    <p>PROJECT 3</p>
+                </li>
+            </a>
+
+            <!-- Project 4 -->
+            <a href="https://www.elgatotuerto.com" 
+            class="project-link" 
+            data-project="3"
+            data-title="Data Mining Tool"
+            data-description="A data mining tool developed in Python that utilizes advanced algorithms to uncover patterns and trends within large datasets, driving actionable business intelligence."
+            data-image="{{ url_for('static', filename='images/projects/data-mining-tool-preview.webp') }}"
+            target="_blank">
+             <li class="project-item">
+                 <p>GATO TUERTO WEBSITE</p>
+             </li>
+         </a>
+        </ul>
+        
+        <!-- Preview Container (Initially Hidden) -->
+        <div id="project-preview" class="project-preview">
+            <img src="" alt="Project Preview" class="project-preview-image img-fluid">
+            <div class="project-preview-description">
+                <h5 id="preview-title">Project Title</h5>
+                <p id="preview-description">Project description goes here.</p>
+            </div>
+        </div>
+    </div>
+</div>

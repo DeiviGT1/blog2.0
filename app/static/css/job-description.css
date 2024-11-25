@@ -1,0 +1,29 @@
+/* app/static/css/job-description.css */
+
+.professional-description{
+    font-weight: 200;
+    font-size: larger;
+}
+
+.professional-description {
+    background-color: var(--content-bg-color);
+    padding: 0;
+    border-radius: 8px;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.professional-description h4,
+.professional-description p,
+.professional-description ul li {
+    color: var(--main-text-color);
+}
+
+@media (max-width: 768px) {
+    .professional-description {
+        padding: 15px;
+    }
+
+    .professional-description p {
+        font-size: large;
+    }
+}

@@ -1,0 +1,44 @@
+<!-- app/templates/projects/spotify/playlist.html -->
+
+{% extends "base.html" %}
+
+{% block titulo %}Resultados de tu Análisis de Playlists{% endblock %}
+
+{% block head %}
+<!-- Incluir estilos adicionales específicos para esta página -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/projects/spotify/styles.css') }}"
+/>
+{% endblock %}
+
+{% block contenido %}
+<div class="content-wrapper wrapper">
+  <div id="header">
+    <h1>Spotify Playlist Analyzer</h1>
+    <a href="{{ url_for('main.playlists_logout') }}" id="cerrar-sesion">Cerrar sesión</a>
+  </div>
+
+  <!-- Elemento oculto para almacenar los datos codificados -->
+  <div
+    id="playlist-data"
+    data-playlist="{{ avg_per_playlist_base64 }}"
+    style="display: none;"
+  ></div>
+
+  <div id="playlist"></div>
+  <p>
+    * Los puntajes se calculan con base al puntaje que Spotify le asigna a cada
+    una de las canciones teniendo en cuenta la cantidad de oyentes que estas
+    tienen.
+  </p>
+
+  <!-- Esto es solo para verificar que los datos se pasan -->
+  <p>avg_per_playlist_base64: {{ avg_per_playlist_base64 }}</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Incluir el script externo -->
+<script src="{{ url_for('static', filename='js/playlist.js') }}"></script>
+{% endblock %}

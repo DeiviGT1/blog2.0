@@ -1,0 +1,27 @@
+<!-- app/templates/projects/spotify/index.html -->
+
+{% extends "base.html" %}
+
+{% block head %}
+<!-- Incluir estilos adicionales específicos para esta página -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/projects/spotify/styles.css') }}"
+/>
+{% endblock %}
+
+{% block titulo %}Spotify Playlist Analyzer{% endblock %}
+
+{% block contenido %}
+<div class="content-wrapper wrapper">
+  <div class="container">
+    <h1>¡Tu música es única y especial!</h1>
+    <p>Descubre qué tan popular es tu playlist con nuestro promedio de popularidad. ¡Inicia sesión en Spotify ahora!</p>
+    <a href="/playlists/login">
+      <button class="btn btn-primary">
+        Ingresa con Spotify
+      </button>
+    </a>
+  </div>
+</div>
+{% endblock %}

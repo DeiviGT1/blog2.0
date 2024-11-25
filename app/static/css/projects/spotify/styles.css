@@ -1,0 +1,113 @@
+/* Estilos para la página de inicio de Spotify */
+
+.content-wrapper.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  
+  .container h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+  
+  .container p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+  }
+  
+  .container a button {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    color: black;
+  }
+  
+  /* Estilos para la página de resultados */
+  
+  #header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  #header h1 {
+    font-size: 2em;
+  }
+  
+  #cerrar-sesion {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 1em;
+    color: var(--main-text-color);
+    text-decoration: none;
+  }
+  
+  #cerrar-sesion:hover {
+    text-decoration: underline;
+  }
+  
+  #playlist {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .playlist-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .playlist-item {
+    background-color: var(--content-bg-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    transition: background-color 0.5s, color 0.5s;
+  }
+  
+  .playlist-item h3 {
+    margin-bottom: 15px;
+  }
+  
+  .progress-bar-container {
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .progress-bar {
+    background-color: #5A6D7C;
+    height: 100%;
+    transition: width 0.5s;
+  }
+  
+  .comentario-div {
+    display: flex;
+    align-items: center;
+  }
+  
+  .spotify-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  .comentario-div a {
+    color: var(--main-text-color);
+    text-decoration: none;
+  }
+  
+  .comentario-div a:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .container h1 {
+      font-size: 2em;
+    }
+  
+    .playlist-item {
+      padding: 15px;
+    }
+  }

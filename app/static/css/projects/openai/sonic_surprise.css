@@ -1,0 +1,105 @@
+/* app/static/css/projects/openai/sonic_surprise.css */
+
+/* Contenedor del Formulario */
+.content-wrapper-professional-description {
+    background-color: var(--content-bg-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 40px auto; /* Añadido margen superior e inferior para mejor espaciamiento */
+    display: flex; /* Añadido para centrar el contenido */
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Títulos */
+.content-wrapper-professional-description h1.display-4 {
+    font-size: 2.5rem;
+    color: var(--main-text-color);
+    margin-bottom: 20px;
+    text-align: center; /* Asegura que el título esté centrado */
+}
+
+.content-wrapper-professional-description h4.mb-4 {
+    font-size: 1.5rem;
+    color: var(--muted-text-color);
+    margin-bottom: 30px;
+    text-align: center; /* Asegura que el subtítulo esté centrado */
+}
+
+/* Estilos del Formulario */
+form.form-inline {
+    width: 100%; /* Asegura que el formulario ocupe todo el ancho disponible del contenedor */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Grupos de Formulario */
+.form-group {
+    width: 100%;
+    max-width: 400px; /* Limita el ancho de los campos para una mejor apariencia */
+    margin-bottom: 20px;
+}
+
+/* Campos de Entrada */
+.form-group input.form-control {
+    width: 100%;
+    padding: 12px 20px; /* Ajuste del padding para mejor usabilidad */
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+}
+
+/* Efecto al Enfocar */
+.form-group input.form-control:focus {
+    border-color: var(--hover-bg-color);
+    box-shadow: 0 0 5px rgba(90, 109, 124, 0.5);
+    outline: none;
+}
+
+/* Botón de Envío */
+button.btn-secondary {
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-color);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 150px; /* Fija un ancho consistente para el botón */
+}
+
+/* Efecto Hover en el Botón */
+button.btn-secondary:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--hover-text-color);
+    transform: translateY(-2px);
+}
+
+/* Responsividad */
+@media (max-width: 576px) {
+    .content-wrapper-professional-description {
+        padding: 20px 10px;
+        margin: 20px auto; /* Ajuste del margen en pantallas pequeñas */
+    }
+
+    .content-wrapper-professional-description h1.display-4 {
+        font-size: 2rem;
+    }
+
+    .content-wrapper-professional-description h4.mb-4 {
+        font-size: 1.3rem;
+    }
+
+    button.btn-secondary {
+        width: 100%; /* Hace que el botón ocupe todo el ancho en pantallas pequeñas */
+    }
+
+    .form-group {
+        max-width: 100%; /* Permite que los campos ocupen todo el ancho disponible */
+    }
+}

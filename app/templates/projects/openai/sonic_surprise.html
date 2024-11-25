@@ -1,0 +1,27 @@
+<!-- app/templates/sonic_surprise.html -->
+{% extends "base.html" %}
+
+{% block titulo %}Sonic Surprise - Recomendaciones de Canciones{% endblock %}
+
+{% block contenido %}
+<!-- Incluir el CSS específico para Sonic Surprise -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/projects/openai/sonic_surprise.css') }}">
+
+<div class="content-wrapper-professional-description section wrapper">
+    <div class="container section">
+        <h1 class="display-4">Sonic Surprise</h1>
+        <h4 class="mb-4">Descubre nuevas canciones recomendadas especialmente para ti</h4>
+        <form action="login" method="post" class="form-inline justify-content-center">
+            <div class="form-group mb-2">
+                <label for="song" class="sr-only">Canción:</label>
+                <input type="text" class="form-control" id="song" name="song" placeholder="No sabe igual" required>
+            </div>
+            <div class="form-group mb-2">
+                <label for="artist" class="sr-only">Artista:</label>
+                <input type="text" class="form-control" id="artist" name="artist" placeholder="Rels B" required>
+            </div>
+            <button type="submit" class="btn btn-secondary mb-2">Enviar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
