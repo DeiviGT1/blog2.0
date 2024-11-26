@@ -1,6 +1,14 @@
 // app/static/js/playlist.js
 
 document.addEventListener("DOMContentLoaded", function() {
+  // Select the element with ID 'playlist-data'
+  var playlistDataElement = document.getElementById('playlist-data');
+  if (!playlistDataElement) {
+    console.error("Element with ID 'playlist-data' not found.");
+    return;
+  }
+
+
   var dataBase64 = playlistDataElement.getAttribute('data-playlist');
   if (!dataBase64) {
     console.error('El atributo data-playlist está vacío');
@@ -30,9 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
     playlistContainer.innerHTML = "<p>No se encontraron playlists con canciones.</p>";
     return;
   }
-
-  console.log('Playlist data:', data);
-
+  
   var playlistContainer = document.getElementById("playlist");
   var list = document.createElement("ul");
 

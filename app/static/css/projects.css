@@ -1,4 +1,4 @@
-/* projects.css */
+/* app/static/css/projects.css */
 
 /* Estilos para la lista de proyectos */
 .personal-projects .project-list {
@@ -17,7 +17,10 @@
     position: relative;
     cursor: pointer;
     transition: color 0.3s ease;
-    
+}
+
+.personal-projects{
+    position: relative;
 }
 
 .personal-projects .project-link:hover {
@@ -26,7 +29,7 @@
 
 /* Contenedor de previsualización */
 .project-preview {
-    position: fixed; /* Changed from absolute to fixed */
+    position: absolute;
     display: none;
     width: 300px;
     background-color: #fff;

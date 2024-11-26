@@ -1,4 +1,10 @@
 <!-- app/templates/projects.html -->
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/projects.css') }}"
+/>
+
 <div class="content-wrapper-projects wrapper">
     <div class="personal-projects container section">
         <h2 class="my-4">Personal Projects</h2>
@@ -9,7 +15,7 @@
             data-project="1"
             data-title="Sales Dashboard"
             data-description="An interactive dashboard developed with Power BI to visualize and analyze monthly sales, facilitating strategic decision-making."
-            data-image="{{ url_for('static', filename='images/LOGOS/LOGO-IMAGOTIPO@4x.webp') }}">
+            data-image="{{ url_for('static', filename='images/projects/sonic_surprise.png') }}">
                 <li class="project-item">
                     <p>SONIC SURPRISE</p>
                 </li>
@@ -21,7 +27,7 @@
             data-project="2"
             data-title="E-commerce Website"
             data-description="A responsive e-commerce platform built with React and Node.js, featuring user authentication, product management, and payment integration."
-            data-image="{{ url_for('static', filename='images/projects/ecommerce-website-preview.webp') }}">
+            data-image="{{ url_for('static', filename='images/projects/playlists_qualifier.png') }}">
                 <li class="project-item">
                     <p>PLAYLISTS QUALIFIER</p>
                 </li>
@@ -33,7 +39,7 @@
             data-project="3"
             data-title="Data Mining Tool"
             data-description="A data mining tool developed in Python that utilizes advanced algorithms to uncover patterns and trends within large datasets, driving actionable business intelligence."
-            data-image="{{ url_for('static', filename='images/projects/data-mining-tool-preview.webp') }}">
+            data-image="{{ url_for('static', filename='images/projects/x.png') }}">
                 <li class="project-item">
                     <p>PROJECT 3</p>
                 </li>
@@ -45,7 +51,7 @@
             data-project="3"
             data-title="Data Mining Tool"
             data-description="A data mining tool developed in Python that utilizes advanced algorithms to uncover patterns and trends within large datasets, driving actionable business intelligence."
-            data-image="{{ url_for('static', filename='images/projects/data-mining-tool-preview.webp') }}"
+            data-image="{{ url_for('static', filename='images/projects/gato_tuerto.png') }}"
             target="_blank">
              <li class="project-item">
                  <p>GATO TUERTO WEBSITE</p>
