@@ -121,7 +121,7 @@ def playlists_callback():
     df = pd.DataFrame(avg_dicts)
     avg_per_playlist = df.groupby(["playlist_name", "playlist_url"]).mean(numeric_only=True)["popularity"]
 
-    for row in avg_per_playlist.iteritems():
+    for row in avg_per_playlist.items():
         final_result.append({
             "playlist_name": row[0][0],
             "playlist_url": row[0][1],
