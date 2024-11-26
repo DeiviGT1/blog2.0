@@ -18,9 +18,7 @@
     cursor: pointer;
     transition: color 0.3s ease;
 }
-.personal-projects{
-    position: relative;
-}
+
 
 .personal-projects .project-link:hover {
     color: #007bff; /* Cambia el color al hacer hover */
@@ -117,6 +115,10 @@
     
     /* Aumentar ligeramente el tamaño del texto */
     transform: scale(1.05); /* Aumenta el tamaño al 105% */
+}
+
+.personal-projects{
+    position: relative;
 }
 
 @media (max-width: 768px) {
