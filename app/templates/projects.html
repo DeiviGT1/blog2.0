@@ -1,62 +1,100 @@
 <!-- app/templates/projects.html -->
 
+<!-- Remove the external CSS link since we'll be using internal styles -->
 <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='css/projects.css') }}"
+rel="stylesheet"
+href="{{ url_for('static', filename='css/projects.css') }}"
 />
+
+
 
 <div class="content-wrapper-projects wrapper">
     <div class="personal-projects container section">
         <h2 class="my-4">Personal Projects</h2>
         <ul class="project-list list-unstyled">
             <!-- Project 1 -->
-            <a href="/openai" 
-            class="project-link" 
-            data-project="1"
-            data-title="SONIC SURPRISE"
-            data-description="It is a project that uses OpenAI's GPT-4o to generate a recommendations of songs based on a song that the user sends."
-            data-image="{{ url_for('static', filename='images/projects/sonic_surprise.png') }}">
-                <li class="project-item">
-                    <p>SONIC SURPRISE</p>
-                </li>
-            </a>
+            <li class="project-item">
+                <div class="project-left">
+                    <a href="/openai" 
+                       class="project-link" 
+                       data-project="1"
+                       data-title="SONIC SURPRISE"
+                       data-description="It is a project that uses OpenAI's GPT-4o to generate a recommendations of songs based on a song that the user sends."
+                       data-image="{{ url_for('static', filename='images/projects/sonic_surprise.png') }}">
+                        <p>SONIC SURPRISE</p>
+                    </a>
+                </div>
+                <div class="project-right">
+                    <ul class="sub-project-list">
+                        <li class="sub-project-item ai-hover">AI</li>
+                        <li class="sub-project-item python-hover">Python</li>
+                        <li class="sub-project-item python-hover">Frontend</li>
+                    </ul>
+                </div>
+            </li>
             
             <!-- Project 2 -->
-            <a href="/playlists" 
-            class="project-link" 
-            data-project="2"
-            data-title="PLAYLISTS QUALIFIER"
-            data-description="It is a project that uses the API of spotify and get a proper qualification for each user playlist based on spotify data."
-            data-image="{{ url_for('static', filename='images/projects/playlists_qualifier.png') }}">
-                <li class="project-item">
-                    <p>PLAYLISTS QUALIFIER</p>
-                </li>
-            </a>
+            <li class="project-item">
+                <div class="project-left">
+                    <a href="/playlists" 
+                       class="project-link" 
+                       data-project="2"
+                       data-title="PLAYLISTS QUALIFIER"
+                       data-description="It is a project that uses the Spotify API to provide proper qualifications for each user playlist based on Spotify data."
+                       data-image="{{ url_for('static', filename='images/projects/playlists_qualifier.png') }}">
+                        <p>PLAYLISTS QUALIFIER</p>
+                    </a>
+                </div>
+                <div class="project-right">
+                    <ul class="sub-project-list">
+                        <li class="sub-project-item backend-hover">Backend</li>
+                        <li class="sub-project-item python-hover">Python</li>
+                    </ul>
+                </div>
+            </li>
             
             <!-- Project 3 -->
-            <a href="#" 
-            class="project-link" 
-            data-project="3"
-            data-title="ANALYTICS STOCKS"
-            data-description="This is a tool that allows you to analyze the data of the stock best companies per country and each country rates of the last year."
-            data-image="{{ url_for('static', filename='images/projects/power_bi_analytics.png') }}">
-                <li class="project-item">
-                    <p>ANALYTICS STOCKS</p>
-                </li>
-            </a>
+            <li class="project-item">
+                <div class="project-left">
+                    <a href="#" 
+                       class="project-link" 
+                       data-project="3"
+                       data-title="ANALYTICS STOCKS"
+                       data-description="This is a tool that allows you to analyze the data of the best stock companies per country and each country's rates over the last year."
+                       data-image="{{ url_for('static', filename='images/projects/power_bi_analytics.png') }}">
+                        <p>ANALYTICS STOCKS</p>
+                    </a>
+                </div>
+                <div class="project-right">
+                    <ul class="sub-project-list">
+                        <li class="sub-project-item powerbi-hover">Power BI</li>
+                        <li class="sub-project-item excel-hover">Excel</li>
+                        <li class="sub-project-item sql-hover">SQL</li>
+                    </ul>
+                </div>
+            </li>
 
             <!-- Project 4 -->
-            <a href="https://www.elgatotuerto.com" 
-            class="project-link" 
-            data-project="3"
-            data-title="GATO TUERTO WEBSITE"
-            data-description="A liquor store website that allows you to buy the best liquors in the market."
-            data-image="{{ url_for('static', filename='images/projects/gato_tuerto.png') }}"
-            target="_blank">
-             <li class="project-item">
-                 <p>GATO TUERTO WEBSITE</p>
-             </li>
-         </a>
+            <li class="project-item">
+                <div class="project-left">
+                    <a href="https://www.elgatotuerto.com" 
+                       class="project-link" 
+                       data-project="4"
+                       data-title="GATO TUERTO WEBSITE"
+                       data-description="A liquor store website that allows you to buy the best liquors in the market."
+                       data-image="{{ url_for('static', filename='images/projects/gato_tuerto.png') }}"
+                       target="_blank">
+                        <p>GATO TUERTO WEBSITE</p>
+                    </a>
+                </div>
+                <div class="project-right">
+                    <ul class="sub-project-list">
+                        <li class="sub-project-item react-hover">React</li>
+                        <li class="sub-project-item javascript-hover">JavaScript</li>
+                        <li class="sub-project-item mongodb-hover">MongoDB</li>
+                    </ul>
+                </div>
+            </li>
         </ul>
         
         <!-- Preview Container (Initially Hidden) -->

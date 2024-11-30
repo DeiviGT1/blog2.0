@@ -2,10 +2,10 @@
 
 {% extends "base.html" %}
 
-{% block titulo %}Resultados de tu Análisis de Playlists{% endblock %}
+{% block titulo %}Your Playlist Analysis Results{% endblock %}
 
 {% block head %}
-<!-- Incluir estilos adicionales específicos para esta página -->
+<!-- Include additional styles specific to this page -->
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='css/projects/spotify/styles.css') }}"
@@ -16,10 +16,10 @@
 <div class="content-wrapper wrapper">
   <div id="header">
     <h1>Spotify Playlist Analyzer</h1>
-    <a href="{{ url_for('main.playlists_logout') }}" id="cerrar-sesion">Cerrar sesión</a>
+    <a href="{{ url_for('main.playlists_logout') }}" id="logout">Logout</a>
   </div>
 
-  <!-- Elemento oculto para almacenar los datos codificados -->
+  <!-- Hidden element to store encoded data -->
   <div
     id="playlist-data"
     data-playlist="{{ avg_per_playlist_base64 }}"
@@ -28,17 +28,15 @@
 
   <div id="playlist"></div>
   <p>
-    * Los puntajes se calculan con base al puntaje que Spotify le asigna a cada
-    una de las canciones teniendo en cuenta la cantidad de oyentes que estas
-    tienen.
+    * The scores are calculated based on the popularity score that Spotify assigns to each song, considering the number of listeners they have.
   </p>
 
-  <!-- Esto es solo para verificar que los datos se pasan -->
+  <!-- This is only to verify that the data is being passed -->
   <p>avg_per_playlist_base64: {{ avg_per_playlist_base64 }}</p>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<!-- Incluir el script externo -->
+<!-- Include the external script -->
 <script src="{{ url_for('static', filename='js/playlist.js') }}"></script>
 {% endblock %}
