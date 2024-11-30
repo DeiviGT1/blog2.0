@@ -96,6 +96,8 @@
 
     /* Añadir transición para un cambio suave en el fondo y transformación */
     transition: background 0.5s ease, transform 0.5s ease;
+
+    text-align: left;
 }
 
 /* Nuevo estilo para el hover */
