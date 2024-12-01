@@ -122,11 +122,16 @@
       </div>
     </div>
 
+    <!-- Modal de Contacto -->
+    {% include 'modal.html' %}
+
+
     <!-- Scripts de Bootstrap y dependencias -->
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/projects.js') }}"></script>
     <script src="{{ url_for('static', filename='js/rotate-image.js') }}"></script>
     <script src="{{ url_for('static', filename='js/scrollspy.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 
     <!-- Bloque para scripts adicionales -->
     {% block scripts %}
