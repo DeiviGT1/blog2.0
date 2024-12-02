@@ -17,6 +17,10 @@
     border-bottom: #000 solid 1px;
 }
 
+.project-left{
+    cursor: pointer;
+}
+
 .project-left,
 .project-right {
     width: 48%; /* Aproximadamente la mitad, con espacio entre ellas */
@@ -84,7 +88,9 @@
 .project-preview-image {
     width: 100%;
     height: auto;
+    max-height: 50vh;
     border-radius: 5px;
+    object-fit: contain;
 }
 
 .project-preview-description {
@@ -186,14 +192,34 @@
     border-color: yellow;
 }
 
+/* MongoDB Hover */
 .mongodb-hover:hover {
     color: #13aa52;
     border-color: #13aa52;
 }
 
+/* SQL Hover */
 .sql-hover:hover {
     color: #336791;
     border-color: #336791;
+}
+
+/* Swift Hover */
+.swift-hover:hover {
+    color: #F05138;
+    border-color: #F05138;
+}
+
+/* Firebase Hover */
+.firebase-hover:hover {
+    color: #FFCA28;
+    border-color: #FFCA28;
+}
+
+/* XCode Hover */
+.xcode-hover:hover {
+    color: #1575F9;
+    border-color: #1575F9;
 }
 
 /* Responsividad*/
