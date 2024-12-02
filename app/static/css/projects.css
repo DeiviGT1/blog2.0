@@ -75,7 +75,7 @@
     padding: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    pointer-events: none; /* Evita interferencias con el mouse */
+    /* Eliminar pointer-events: none; */
     transition: opacity 0.3s ease;
     opacity: 0;
 }
