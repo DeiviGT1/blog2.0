@@ -1,7 +1,5 @@
 /* app/static/css/modal.css */
 
-/* app/static/css/modal.css */
-
 /* Estilos para el Modal */
 .modal {
     display: none; /* Oculto por defecto */
@@ -13,19 +11,17 @@
     height: 100%; /* Alto completo */
     overflow: auto; /* Habilita el scroll si es necesario */
     background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-
-    /* Flexbox para centrar el contenido */
-    display: flex;
-    justify-content: center; /* Centrado horizontal */
-    align-items: center; /* Centrado vertical */
     padding: 20px; /* Espacio alrededor para márgenes horizontales */
     box-sizing: border-box; /* Incluir padding en el ancho total */
+    /* Removed display: flex and related properties */
 }
 
 /* Mostrar el Modal cuando tiene la clase 'show' */
 .modal.show {
-    display: flex;
-    animation: fadeIn 0.3s ease-in-out;
+    display: flex; /* Mostrar el modal */
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    animation: fadeIn 0.3s ease-in-out; /* Animación de aparición */
 }
 
 /* Animación de desvanecimiento */
@@ -36,7 +32,7 @@
 
 /* Contenido del Modal */
 .modal-content {
-    background-color: var(--content-bg-color);
+    background-color: var(--content-bg-color, #fff); /* Color de fondo con valor predeterminado */
     padding: 20px;
     border: 1px solid #888;
     width: 100%; /* Ancho completo dentro del contenedor flex */
@@ -78,6 +74,6 @@
     .modal-content {
         width: 90%; /* Más ancho en pantallas pequeñas */
         max-width: none; /* Sin límite de ancho para adaptarse mejor */
-        margin: 20% auto; /* Ajustar margen superior para centrar mejor */
+        /* Removed margin: 20% auto; since Flexbox handles centering */
     }
 }

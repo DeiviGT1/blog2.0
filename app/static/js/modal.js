@@ -1,57 +1,41 @@
 // app/static/js/modal.js
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Función para determinar si el dispositivo es móvil basado en el userAgent y ancho de ventana
-    function isMobileDevice() {
-        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && window.innerWidth <= 768;
-    }
-
-    // Obtener elementos del DOM
-    var modal = document.getElementById("mobileModal");
-    var closeButton = document.querySelector(".close-button");
-
-    // Función para mostrar el modal
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('mobileModal');
+    const closeButton = modal.querySelector('.close-button');
+  
+    // Function to show the modal
     function showModal() {
-        modal.style.display = "flex";
-        modal.classList.add("show");
-        // Establecer el foco en el contenido del modal para accesibilidad
-        modal.querySelector('.modal-content').focus();
+      modal.style.display = 'block';
     }
-
-    // Función para ocultar el modal
+  
+    // Function to hide the modal
     function hideModal() {
-        modal.style.display = "none";
-        modal.classList.remove("show");
-        // Marcar que el modal ha sido mostrado y cerrado por el usuario
-        localStorage.setItem('mobileModalClosed', 'true');
+      modal.style.display = 'none';
     }
-
-    // Mostrar el modal si es dispositivo móvil y el usuario no lo ha cerrado antes
-    if (isMobileDevice() && !localStorage.getItem('mobileModalClosed')) {
+  
+    // Function to check viewport width and toggle modal
+    function checkViewport() {
+      if (window.innerWidth < 768) {
         showModal();
+      } else {
+        hideModal();
+      }
     }
-
-    // Cerrar el modal al hacer clic en el botón de cerrar
-    closeButton.addEventListener("click", hideModal);
-
-    // Cerrar el modal al hacer clic fuera del contenido del modal
-    window.addEventListener("click", function(event) {
-        if (event.target == modal) {
-            hideModal();
-        }
+  
+    // Initial check on page load
+    checkViewport();
+  
+    // Event listener for the close button
+    closeButton.addEventListener('click', hideModal);
+  
+    // Optional: Hide modal when clicking outside the modal content
+    window.addEventListener('click', function (event) {
+      if (event.target === modal) {
+        hideModal();
+      }
     });
-
-    // Opcional: Cerrar el modal al presionar la tecla Esc
-    window.addEventListener("keydown", function(event) {
-        if (event.key === "Escape") {
-            hideModal();
-        }
-    });
-
-    // Opcional: Manejar rotación de pantalla
-    window.addEventListener("resize", function() {
-        if (!isMobileDevice()) {
-            hideModal();
-        }
-    });
-});
+  
+    // Optional: Listen for window resize events to toggle modal dynamically
+    window.addEventListener('resize', checkViewport);
+  });
