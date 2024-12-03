@@ -1,6 +1,6 @@
 /* app/static/css/projects/openai/recommendations.css */
 
-/* Estilos Generales para la Página de Recomendaciones */
+
 .content-wrapper-recomendation {
     padding: 40px 20px;
     background-color: var(--content-bg-color);
@@ -8,7 +8,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para el Encabezado */
+
 #header {
     margin-bottom: 30px;
 }
@@ -24,7 +24,7 @@
     color: var(--muted-text-color);
 }
 
-/* Estilos para la Lista de Recomendaciones */
+
 .mainDiv ul.list-group {
     list-style: none;
     padding: 0;
@@ -43,7 +43,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para los Enlaces de Canciones */
+
 .mainDiv ul.list-group li.list-group-item a.songName {
     display: flex;
     align-items: center;
@@ -56,7 +56,7 @@
     color: var(--hover-text-color);
 }
 
-/* Estilos para las Imágenes de las Canciones */
+
 .mainDiv ul.list-group li.list-group-item a.songName img.song-image {
     width: 120px;
     height: 120px;
@@ -70,14 +70,14 @@
     transform: scale(1.05);
 }
 
-/* Estilos para el Nombre y Artista de la Canción */
+
 .mainDiv ul.list-group li.list-group-item a.songName p {
     font-size: 1.1rem;
     font-weight: 500;
     margin: 0;
 }
 
-/* Responsividad para Dispositivos Móviles */
+
 @media (max-width: 576px) {
     .content-wrapper-professional-description {
         padding: 20px 10px;

@@ -1,3 +1,6 @@
+// app/static/js/scrollspy.js
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const sections = document.querySelectorAll("div[id]");
     const navLinks = document.querySelectorAll(".components .nav-link");
@@ -21,5 +24,5 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     window.addEventListener('scroll', changeActiveLink);
-    changeActiveLink(); // Llamada inicial
+    changeActiveLink(); 
 });

@@ -1,17 +1,16 @@
 /* app/static/css/navbar.css */
 
-/* Estilos de la Barra Lateral */
 .sidebar {
     align-content: center;
     width: 30%;
-    min-width: 200px; /* Para asegurar que no sea demasiado pequeña en pantallas pequeñas */
-    height: 100vh; /* Ocupa toda la altura de la ventana */
-    position: fixed; /* Fija la barra lateral */
+    min-width: 200px; 
+    height: 100vh; 
+    position: fixed; 
     top: 0;
     left: 0;
     padding-top: 20px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    overflow-y: auto; /* Permite desplazamiento si el contenido excede la altura */
+    overflow-y: auto; 
     background-color: var(--sidebar-bg-color);
     transition: background-color 0.5s, color 0.5s;
 }
@@ -37,7 +36,7 @@ x
 .sidebar-header h3 {
     margin: 0;
     font-size: 1.2rem;
-    color: var(--main-text-color); /* Usar variable en lugar de color fijo */
+    color: var(--main-text-color); 
     transition: color 0.5s;
 }
 
@@ -69,9 +68,9 @@ x
     border-radius: 4px;
 }
 
-/* Ajustes para el Contenido Principal */
+
 .content {
-    margin-left: 30%; /* Igual al ancho de la barra lateral */
+    margin-left: 30%; 
     width: 70%;
     min-height: 100vh;
     background-color: var(--content-bg-color);
@@ -82,7 +81,7 @@ x
     margin: 0 10%;
 }
 
-/* Responsive: Ajustes para Pantallas Pequeñas */
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
@@ -103,13 +102,13 @@ x
     transition: background-color 0.5s, color 0.5s;
 }
 
-/* Muted Text */
+
 .text-muted {
     color: var(--muted-text-color);
     transition: color 0.5s;
 }
 
-/* Estilos para el Toggle Slider */
+
 .switch {
     position: relative;
     display: inline-block;
@@ -147,33 +146,33 @@ x
     border-radius: 50%;
 }
 
-/* Cambiar el color del slider cuando está activo */
+
 input:checked + .slider {
     background-color: #5A6D7C;
 }
 
-/* Mover el círculo cuando está activo */
+
 input:checked + .slider::before {
     transform: translateX(26px);
 }
 
-/* Posicionar los íconos de sol y luna */
+
 .slider .sun-icon,
 .slider .moon-icon {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     font-size: 16px;
-    color: #f39c12; /* Color del sol */
+    color: #f39c12; 
     transition: color 0.4s;
 }
 
 .slider .moon-icon {
     right: 10px;
-    color: #f1c40f; /* Color de la luna */
+    color: #f1c40f; 
 }
 
-/* Cambiar los colores de los íconos cuando está activo */
+
 input:checked + .slider .sun-icon {
     color: #f1c40f;
 }
@@ -182,7 +181,7 @@ input:checked + .slider .moon-icon {
     color: #f39c12;
 }
 
-/* Opcional: Ocultar los íconos cuando no están en el estado correspondiente */
+
 .slider .sun-icon {
     opacity: 1;
 }

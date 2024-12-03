@@ -1,7 +1,7 @@
 /* app/static/css/styles.css */
 
 :root {
-    --main-bg-color: #fff; /* Fondo predeterminado */
+    --main-bg-color: #fff; 
     --main-text-color: #5A6D7C;
     --hover-bg-color: #5A6D7C;
     --hover-text-color: #fff;
@@ -14,19 +14,19 @@
 }
 
 body.inverted {
-    --main-bg-color: #333; /* Fondo en modo oscuro */
+    --main-bg-color: #333; 
     --main-text-color: rgb(244, 244, 244);
     --hover-bg-color: rgb(244, 244, 244);
     --hover-text-color: #5A6D7C;
     --footer-bg-color: #5A6D7C;
-    --sidebar-bg-color: #444; /* Ya definido en navbar.css */
+    --sidebar-bg-color: #444; 
     --content-bg-color: #333;
     --muted-text-color: #ddd;
     --btn-secondary-bg: #ddd;
     --btn-secondary-color: #5A6D7C;
 }
 
-/* Universal Styles */
+
 
 html {
     scroll-behavior: smooth;

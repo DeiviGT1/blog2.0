@@ -1,8 +1,6 @@
 /* app/static/css/rotating-image.css */
 
 
-/* Estilos para centrar la imagen y rotar desde el centro */
-
 .rotating-container {
     width: 150px;
     height: 150px;
@@ -18,7 +16,7 @@
     height: 100%;
     transform-style: preserve-3d;
     transition: transform 0.3s ease;
-    transform-origin: center; /* Rota desde el centro */
+    transform-origin: center; 
 }
 
 .front-image{
@@ -37,18 +35,18 @@
 }
 
 
-/* Hide both images by default */
+
 .rotating-card .dark-mode,
 .rotating-card .light-mode {
     display: none;
 }
 
-/* Show the dark-mode image when inverted (dark mode is active) */
+
 body.inverted .rotating-card .dark-mode {
     display: block;
 }
 
-/* Show the light-mode image when not inverted (light mode is active) */
+
 body:not(.inverted) .rotating-card .light-mode {
     display: block;
 }

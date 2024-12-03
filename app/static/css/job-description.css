@@ -1,6 +1,5 @@
 /* app/static/css/job-description.css */
 
-/* Contenedor de la descripción profesional */
 .professional-description {
     background-color: var(--content-bg-color);
     padding: 20px;
@@ -11,7 +10,6 @@
     color: var(--main-text-color);
 }
 
-/* Estilos para títulos, párrafos y listas dentro de la descripción profesional */
 .professional-description h2,
 .professional-description h3,
 .professional-description h4,
@@ -20,28 +18,25 @@
     margin-bottom: 1em;
 }
 
-/* Estilos específicos para los títulos */
 .professional-description h2 {
-    font-size: 2rem; /* Aproximadamente 32px */
+    font-size: 2rem; /* 32px */
     margin-bottom: 0.5em;
 }
 
 .professional-description h3 {
-    font-size: 1.75rem; /* Aproximadamente 28px */
+    font-size: 1.75rem; /* 28px */
     margin-bottom: 0.5em;
 }
 
 .professional-description h4 {
-    font-size: 1.5rem; /* Aproximadamente 24px */
+    font-size: 1.5rem; /* 24px */
     margin-bottom: 0.5em;
 }
 
-/* Estilos para párrafos */
 .professional-description p {
     font-size: 1.25rem; /* 16px */
 }
 
-/* Estilos para elementos de lista */
 .professional-description ul {
     padding-left: 1.5em;
 }
@@ -52,13 +47,11 @@
     margin-bottom: 0.5em;
 }
 
-/* Responsividad para dispositivos con ancho máximo de 768px */
 @media (max-width: 768px) {
     .professional-description {
         padding: 15px;
     }
 
-    /* Ajustar tamaños de fuente para pantallas pequeñas */
     .professional-description h2 {
         font-size: 1.75rem; /* 28px */
     }
@@ -73,17 +66,15 @@
 
     .professional-description p,
     .professional-description ul li {
-        font-size: 0.95rem; /* Aproximadamente 15px */
+        font-size: 0.95rem; 
     }
 }
 
-/* Responsividad adicional para pantallas muy pequeñas */
 @media (max-width: 480px) {
     .professional-description {
         padding: 10px;
     }
 
-    /* Ajustar tamaños de fuente para pantallas muy pequeñas */
     .professional-description h2 {
         font-size: 1.5rem; /* 24px */
     }

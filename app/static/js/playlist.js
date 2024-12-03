@@ -30,10 +30,8 @@ document.addEventListener("DOMContentLoaded", function() {
     return;
   }
 
-  // Verificar que los datos existen
   if (!data || data.length === 0) {
     console.error('No se encontraron datos de playlists.');
-    // Puedes mostrar un mensaje en la página si lo deseas
     var playlistContainer = document.getElementById("playlist");
     playlistContainer.innerHTML = "<p>No se encontraron playlists con canciones.</p>";
     return;
@@ -87,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
     comentarioLink.textContent = Comentario;
     comentarioLink.className = "comentario";
 
-    // Construir estructura
     progressBarContainer.appendChild(progressBar);
     comentarioDiv.appendChild(spotifyLogo);
     comentarioDiv.appendChild(comentarioLink);

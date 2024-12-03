@@ -2,10 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const invertToggle = document.getElementById('invertToggle');
-    const avatarImages = document.querySelectorAll('.invertible-image'); // Seleccionar todas las imágenes invertibles
+    const avatarImages = document.querySelectorAll('.invertible-image'); 
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 
-    // Función para aplicar el esquema de colores
     function applyColorScheme() {
         const savedPreference = localStorage.getItem("colorScheme");
         if (savedPreference === "inverted") {
@@ -30,10 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Aplicar el esquema de colores al cargar la página
     applyColorScheme();
 
-    // Escuchar el cambio en el toggle para invertir colores
     invertToggle.addEventListener('change', function() {
         if (invertToggle.checked) {
             document.body.classList.add('inverted');

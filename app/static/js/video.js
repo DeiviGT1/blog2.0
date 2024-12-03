@@ -1,3 +1,6 @@
+// app/static/js/video.js
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const videoOverlay = document.getElementById("video-overlay");
   const videoPlayer = document.getElementById("video-player");

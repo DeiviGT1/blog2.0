@@ -5,11 +5,10 @@
     align-items: center;
 }
 
-/* Contact container CSS */
 .contact-container {
     text-align: center;
     max-width: 600px;
-    margin: 0 auto; /* Horizontal centering */
+    margin: 0 auto; 
 }
 
 .contact-container {
