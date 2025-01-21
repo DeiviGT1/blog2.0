@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block titulo %}ELO - Gráficos Dinámicos{% endblock %}
+
+{% block contenido %}
+<div class="charts-container">
+  <h2>ELO - Gráficos Dinámicos</h2>
+
+  <!-- FORMULARIO PRINCIPAL -->
+  <form method="POST" class="charts-form">
+    <input type="hidden" name="action" value="generate_charts">
+
+    <!-- Grupo 1: Selección de Equipo y Países -->
+    <div class="form-row">
+      <!-- Selección de equipo para la tendencia ELO -->
+      <div class="form-group col-half">
+        <label for="team_trend_club">Equipo para Tendencia ELO:</label>
+        <select name="team_trend_club" id="team_trend_club">
+          <option value="">-- Selecciona --</option>
+          {% for t in clubs %}
+            <option value="{{ t }}" {% if selected_team_trend == t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Selección de país para Bar Chart -->
+      <div class="form-group col-half">
+        <label for="country_bar">País para Top 5 (Bar Chart):</label>
+        <select name="country_bar" id="country_bar">
+          <option value="">-- Selecciona --</option>
+          {% for c in countries %}
+            <option value="{{ c }}" {% if selected_country_bar == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Grupo 2: Selección de país para Ranking -->
+    <div class="form-row">
+      <div class="form-group col-full">
+        <label for="country_rank">País para Ranking (Evolución):</label>
+        <select name="country_rank" id="country_rank">
+          <option value="">-- Selecciona --</option>
+          {% for c in countries %}
+            <option value="{{ c }}" {% if selected_country_rank == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Grupo 3: Opciones adicionales (checkboxes) -->
+    <div class="form-row">
+      <div class="form-group col-half checkbox-group">
+        <input type="checkbox" id="show_violin" name="show_violin" {% if show_violin %}checked{% endif %}>
+        <label for="show_violin">Mostrar Violin Plot</label>
+      </div>
+      <div class="form-group col-half checkbox-group">
+        <input type="checkbox" id="show_heatmap" name="show_heatmap" {% if show_heatmap %}checked{% endif %}>
+        <label for="show_heatmap">Mostrar Heatmap</label>
+      </div>
+    </div>
+
+    <!-- Botón de envío -->
+    <div class="form-row">
+      <div class="form-group col-full">
+        <button type="submit" class="btn-submit">Generar Gráficos</button>
+      </div>
+    </div>
+  </form>
+
+  <hr>
+
+  <!-- SECCIÓN: TEAM TREND CHART -->
+  {% if team_trend_image_base64 %}
+  <div class="chart" id="team-trend-chart-section">
+    <h3>Tendencia del ELO - {{ selected_team_trend }}</h3>
+    <img src="data:image/png;base64,{{ team_trend_image_base64 }}" alt="Team Trend Chart">
+    <div class="conclusions" id="team-trend-conclusions">
+      <button class="ai-btn"
+              data-chart-type="team_trend_chart"
+              data-country-bar="{{ selected_country_bar }}"
+              data-country-rank="{{ selected_country_rank }}"
+              data-team-trend="{{ selected_team_trend }}"
+              data-show-violin="{{ 'on' if show_violin else '' }}"
+              data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+        Generar conclusiones con IA (Tendencia)
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- SECCIÓN: BAR CHART -->
+  {% if bar_image_base64 %}
+  <div class="chart" id="bar-chart-section">
+    <h3>Top 5 Equipos - {{ selected_country_bar }}</h3>
+    <img src="data:image/png;base64,{{ bar_image_base64 }}" alt="Bar Chart">
+    <div class="conclusions" id="bar-chart-conclusions">
+      <button class="ai-btn" 
+              data-chart-type="bar_chart"
+              data-country-bar="{{ selected_country_bar }}"
+              data-country-rank="{{ selected_country_rank }}"
+              data-show-violin="{{ 'on' if show_violin else '' }}"
+              data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+        Generar conclusiones con IA (Bar)
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- SECCIÓN: RANKING CHART -->
+  {% if rank_image_base64 %}
+  <div class="chart" id="ranking-chart-section">
+    <h3>Evolución del Ranking - {{ selected_country_rank }}</h3>
+    <img src="data:image/png;base64,{{ rank_image_base64 }}" alt="Ranking Chart">
+    <div class="conclusions" id="ranking-chart-conclusions">
+      <button class="ai-btn"
+              data-chart-type="ranking_chart"
+              data-country-bar="{{ selected_country_bar }}"
+              data-country-rank="{{ selected_country_rank }}"
+              data-show-violin="{{ 'on' if show_violin else '' }}"
+              data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+        Generar conclusiones con IA (Ranking)
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- SECCIÓN: VIOLIN CHART -->
+  {% if violin_image_base64 %}
+  <div class="chart" id="violin-chart-section">
+    <h3>Distribución de ELO por País (Violin)</h3>
+    <img src="data:image/png;base64,{{ violin_image_base64 }}" alt="Violin Chart">
+    <div class="conclusions" id="violin-conclusions">
+      <button class="ai-btn"
+              data-chart-type="violin_plot"
+              data-country-bar="{{ selected_country_bar }}"
+              data-country-rank="{{ selected_country_rank }}"
+              data-show-violin="{{ 'on' if show_violin else '' }}"
+              data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+        Generar conclusiones con IA (Violin)
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- SECCIÓN: HEATMAP -->
+  {% if heatmap_image_base64 %}
+  <div class="chart" id="heatmap-section">
+    <h3>Heatmap de ELO (Club vs Año)</h3>
+    <img src="data:image/png;base64,{{ heatmap_image_base64 }}" alt="Heatmap">
+    <div class="conclusions" id="heatmap-conclusions">
+      <button class="ai-btn"
+              data-chart-type="heatmap"
+              data-country-bar="{{ selected_country_bar }}"
+              data-country-rank="{{ selected_country_rank }}"
+              data-show-violin="{{ 'on' if show_violin else '' }}"
+              data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+        Generar conclusiones con IA (Heatmap)
+      </button>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- Script AJAX para generar conclusiones con IA -->
+  <script>
+    // Dentro del bloque de scripts en charts.html
+document.addEventListener("DOMContentLoaded", function() {
+  const aiButtons = document.querySelectorAll(".ai-btn");
+  
+  aiButtons.forEach(btn => {
+    btn.addEventListener("click", async function(e) {
+      e.preventDefault();
+      
+      const chartType   = btn.getAttribute("data-chart-type");
+      const countryBar  = btn.getAttribute("data-country-bar") || "";
+      const countryRank = btn.getAttribute("data-country-rank") || "";
+      const teamTrend   = btn.getAttribute("data-team-trend") || "";
+      const showViolin  = btn.getAttribute("data-show-violin") === "on";
+      const showHeatmap = btn.getAttribute("data-show-heatmap") === "on";
+      
+      // Obtener el valor del slider. Si está marcado, usaremos el valor del input ("en")
+      // y de lo contrario definiremos "es".
+      
+      const payload = {
+        chart_type: chartType,
+        country_bar: countryBar,
+        country_rank: countryRank,
+        team_trend: teamTrend,
+        show_violin: showViolin,
+        show_heatmap: showHeatmap,
+      };
+      
+      try {
+        const response = await fetch("/generate_conclusions_ajax", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        const text = data.conclusions || "Sin conclusiones";
+        
+        let conclusionsDivId = "";
+        if (chartType === "bar_chart") conclusionsDivId = "bar-chart-conclusions";
+        if (chartType === "ranking_chart") conclusionsDivId = "ranking-chart-conclusions";
+        if (chartType === "violin_plot") conclusionsDivId = "violin-conclusions";
+        if (chartType === "heatmap") conclusionsDivId = "heatmap-conclusions";
+        if (chartType === "team_trend_chart") conclusionsDivId = "team-trend-conclusions";
+        
+        if (conclusionsDivId) {
+          const conclusionsDiv = document.getElementById(conclusionsDivId);
+          if (conclusionsDiv) {
+            conclusionsDiv.innerHTML = `
+              <h4>Conclusiones IA:</h4>
+              <div>${text}</div>
+            `;
+          }
+        }
+      } catch (err) {
+        console.error("Error generando conclusiones con IA:", err);
+      }
+    });
+  });
+});
+  </script>
+{% endblock %}

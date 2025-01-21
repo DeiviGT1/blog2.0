@@ -1,0 +1,182 @@
+/* app/static/css/dashboard.css */
+
+/* Container general */
+.charts-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background-color: var(--content-bg-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.charts-container h2 {
+  margin-bottom: 1.5rem;
+  color: var(--main-text-color);
+}
+
+/* Estilos para el formulario reorganizado */
+.charts-form {
+  margin-bottom: 2rem;
+}
+
+/* Filas y columnas para agrupar campos */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.col-half {
+  flex: 0 0 48%;
+}
+
+.col-full {
+  flex: 0 0 100%;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: var(--main-text-color);
+}
+
+.charts-form select,
+.charts-form input[type="checkbox"] {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Checkbox en línea */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-group label {
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+/* Botón de envío */
+.btn-submit {
+  background-color: var(--hover-bg-color);
+  color: var(--hover-text-color);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+/* Estilos para cada bloque de gráfico */
+.chart {
+  margin-bottom: 2rem;
+}
+
+.chart h3 {
+  margin-bottom: 1rem;
+  color: var(--main-text-color);
+}
+
+.chart img {
+  max-width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Área de conclusiones */
+.conclusions {
+  margin-top: 1rem;
+}
+
+.conclusions button {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.conclusions button:hover {
+  opacity: 0.9;
+}
+
+/* Estilos para el slider de idioma */
+.language-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.language-slider .language-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+}
+
+.language-slider .language-option img {
+  width: 40px;
+  height: auto;
+}
+
+/* Estilo del switch (copiado y adaptado de ejemplos comunes) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin: 0 1rem;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider.round {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider.round {
+  background-color: #5A6D7C;
+}
+
+input:checked + .slider.round:before {
+  transform: translateX(26px);
+}
