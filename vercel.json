@@ -12,10 +12,5 @@
       "src": "/(.*)",
       "dest": "run.py"
     }
-  ],
-  "functions": {
-    "api/**/*.py": {
-      "excludeFiles": "venv/**"
-    }
-  }
+  ]
 }
