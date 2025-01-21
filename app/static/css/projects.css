@@ -164,6 +164,16 @@
     border-color: yellow;
 }
 
+.gcp-hover:hover {
+    color: #4285F4; 
+    border-color: #4285F4;
+}
+
+.aws-hover:hover {
+    color: #FF9900; 
+    border-color: #FF9900;
+}
+
 .mongodb-hover:hover {
     color: #13aa52;
     border-color: #13aa52;
