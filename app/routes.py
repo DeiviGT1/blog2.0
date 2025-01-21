@@ -7,14 +7,14 @@ import pandas as pd
 import base64
 import json
 from .python.dashboard.data import load_data
-from .python.dashboard.plotting import (
-    plot_top_teams_country,
-    plot_ranking_evolution,
-    plot_violin_elo,
-    plot_heatmap_elo,
-    obtener_ranking_por_pais,
-    plot_team_trend_chart
-)
+# from .python.dashboard.plotting import (
+#     plot_top_teams_country,
+#     plot_ranking_evolution,
+#     plot_violin_elo,
+#     plot_heatmap_elo,
+#     obtener_ranking_por_pais,
+#     plot_team_trend_chart
+# )
 from .python.dashboard.ai import generate_conclusions  # Lógica para IA con requests
 
 
@@ -154,109 +154,109 @@ def playlists_logout():
     session.clear()
     return redirect("/playlists")
 
-@main_bp.route("/dashboard", methods=["GET", "POST"])
-def dashboard():
-    # Listas para los selects
-    countries_list = sorted(df['country'].unique())
-    clubs_list = sorted(df['club'].unique())
+# @main_bp.route("/dashboard", methods=["GET", "POST"])
+# def dashboard():
+#     # Listas para los selects
+#     countries_list = sorted(df['country'].unique())
+#     clubs_list = sorted(df['club'].unique())
 
-    # Variables de control
-    selected_country_bar = None
-    selected_country_rank = None
-    selected_team_trend = None
-    show_violin = False
-    show_heatmap = False
+#     # Variables de control
+#     selected_country_bar = None
+#     selected_country_rank = None
+#     selected_team_trend = None
+#     show_violin = False
+#     show_heatmap = False
 
-    # Imágenes en base64 para los gráficos (inicialmente None)
-    bar_image_base64 = None
-    rank_image_base64 = None
-    violin_image_base64 = None
-    heatmap_image_base64 = None
-    team_trend_image_base64 = None
+#     # Imágenes en base64 para los gráficos (inicialmente None)
+#     bar_image_base64 = None
+#     rank_image_base64 = None
+#     violin_image_base64 = None
+#     heatmap_image_base64 = None
+#     team_trend_image_base64 = None
 
-    if request.method == "POST":
-        action = request.form.get("action")
-        if action == "generate_charts":
-            # Obtener datos del formulario
-            selected_country_bar = request.form.get("country_bar")
-            selected_country_rank = request.form.get("country_rank")
-            selected_team_trend = request.form.get("team_trend_club")
-            show_violin = (request.form.get("show_violin") == "on")
-            show_heatmap = (request.form.get("show_heatmap") == "on")
+#     if request.method == "POST":
+#         action = request.form.get("action")
+#         if action == "generate_charts":
+#             # Obtener datos del formulario
+#             selected_country_bar = request.form.get("country_bar")
+#             selected_country_rank = request.form.get("country_rank")
+#             selected_team_trend = request.form.get("team_trend_club")
+#             show_violin = (request.form.get("show_violin") == "on")
+#             show_heatmap = (request.form.get("show_heatmap") == "on")
 
-            # Generación de gráficos
-            if selected_country_bar:
-                bar_image_base64 = plot_top_teams_country(df, selected_country_bar)
-            if selected_country_rank:
-                rank_image_base64 = plot_ranking_evolution(df, selected_country_rank)
-            if show_violin:
-                violin_image_base64 = plot_violin_elo(df)
-            if show_heatmap:
-                heatmap_image_base64 = plot_heatmap_elo(df)
-            if selected_team_trend:
+#             # Generación de gráficos
+#             if selected_country_bar:
+#                 bar_image_base64 = plot_top_teams_country(df, selected_country_bar)
+#             if selected_country_rank:
+#                 rank_image_base64 = plot_ranking_evolution(df, selected_country_rank)
+#             if show_violin:
+#                 violin_image_base64 = plot_violin_elo(df)
+#             if show_heatmap:
+#                 heatmap_image_base64 = plot_heatmap_elo(df)
+#             if selected_team_trend:
                 
-                team_trend_image_base64 = plot_team_trend_chart(df, selected_team_trend)
+#                 team_trend_image_base64 = plot_team_trend_chart(df, selected_team_trend)
 
-    return render_template(
-        "projects/dashboard/dashboard.html",
-        countries=countries_list,
-        clubs=clubs_list,
-        selected_country_bar=selected_country_bar,
-        selected_country_rank=selected_country_rank,
-        selected_team_trend=selected_team_trend,
-        show_violin=show_violin,
-        show_heatmap=show_heatmap,
-        bar_image_base64=bar_image_base64,
-        rank_image_base64=rank_image_base64,
-        violin_image_base64=violin_image_base64,
-        heatmap_image_base64=heatmap_image_base64,
-        team_trend_image_base64=team_trend_image_base64
-    )
+#     return render_template(
+#         "projects/dashboard/dashboard.html",
+#         countries=countries_list,
+#         clubs=clubs_list,
+#         selected_country_bar=selected_country_bar,
+#         selected_country_rank=selected_country_rank,
+#         selected_team_trend=selected_team_trend,
+#         show_violin=show_violin,
+#         show_heatmap=show_heatmap,
+#         bar_image_base64=bar_image_base64,
+#         rank_image_base64=rank_image_base64,
+#         violin_image_base64=violin_image_base64,
+#         heatmap_image_base64=heatmap_image_base64,
+#         team_trend_image_base64=team_trend_image_base64
+#     )
 
-@main_bp.route("/generate_conclusions_ajax", methods=["POST"])
-def generate_conclusions_ajax():
-    data = request.get_json()
+# @main_bp.route("/generate_conclusions_ajax", methods=["POST"])
+# def generate_conclusions_ajax():
+#     data = request.get_json()
 
-    chart_type = data.get("chart_type")
-    country_bar = data.get("country_bar")
-    country_rank = data.get("country_rank")
-    team_trend = data.get("team_trend")
-    show_violin = data.get("show_violin", False)
-    show_heatmap = data.get("show_heatmap", False)
+#     chart_type = data.get("chart_type")
+#     country_bar = data.get("country_bar")
+#     country_rank = data.get("country_rank")
+#     team_trend = data.get("team_trend")
+#     show_violin = data.get("show_violin", False)
+#     show_heatmap = data.get("show_heatmap", False)
 
-    chart_df = None
-    extra_info = {}  # Se añade el idioma
+#     chart_df = None
+#     extra_info = {}  # Se añade el idioma
 
-    if chart_type == "bar_chart" and country_bar:
-        df_country = df[df['country'] == country_bar]
-        top5 = (df_country.groupby('club')['elo'].mean()
-                .reset_index()
-                .sort_values('elo', ascending=False)
-                .head(5))
-        chart_df = top5
-        extra_info['country'] = country_bar
+#     if chart_type == "bar_chart" and country_bar:
+#         df_country = df[df['country'] == country_bar]
+#         top5 = (df_country.groupby('club')['elo'].mean()
+#                 .reset_index()
+#                 .sort_values('elo', ascending=False)
+#                 .head(5))
+#         chart_df = top5
+#         extra_info['country'] = country_bar
 
-    elif chart_type == "ranking_chart" and country_rank:
-        ranking_df_proc = obtener_ranking_por_pais(df, country_rank, top_n=5)
-        chart_df = ranking_df_proc
-        extra_info['country'] = country_rank
+#     elif chart_type == "ranking_chart" and country_rank:
+#         ranking_df_proc = obtener_ranking_por_pais(df, country_rank, top_n=5)
+#         chart_df = ranking_df_proc
+#         extra_info['country'] = country_rank
 
-    elif chart_type == "violin_plot":
-        chart_df = df
+#     elif chart_type == "violin_plot":
+#         chart_df = df
 
-    elif chart_type == "heatmap":
-        pivot_elo = df.pivot_table(index='club', columns='year', values='elo', aggfunc='mean')
-        heatmap_df = pivot_elo.reset_index()
-        chart_df = heatmap_df
+#     elif chart_type == "heatmap":
+#         pivot_elo = df.pivot_table(index='club', columns='year', values='elo', aggfunc='mean')
+#         heatmap_df = pivot_elo.reset_index()
+#         chart_df = heatmap_df
 
-    elif chart_type == "team_trend_chart" and team_trend:
-        df_team = df[df['club'] == team_trend]
-        chart_df = df_team
-        extra_info['team'] = team_trend
+#     elif chart_type == "team_trend_chart" and team_trend:
+#         df_team = df[df['club'] == team_trend]
+#         chart_df = df_team
+#         extra_info['team'] = team_trend
 
-    if chart_df is not None and not chart_df.empty:
-        text = generate_conclusions(chart_type, chart_df, extra_info)
-    else:
-        text = "No se encontraron datos para este gráfico."
+#     if chart_df is not None and not chart_df.empty:
+#         text = generate_conclusions(chart_type, chart_df, extra_info)
+#     else:
+#         text = "No se encontraron datos para este gráfico."
 
-    return jsonify({"conclusions": text})
+#     return jsonify({"conclusions": text})
