@@ -12,10 +12,5 @@
         "src": "/(.*)",
         "dest": "run.py"
       }
-    ],
-    "functions": {
-      "api/**": {
-        "excludeFiles": "{.next,*.cache,node_modules,public,app}/**"
-      }
-    }
+    ]
   }
