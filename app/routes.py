@@ -22,7 +22,7 @@ from dotenv import load_dotenv
 
 # Crear un Blueprint llamado 'main'
 main_bp = Blueprint('main', __name__)
-df = load_data("app/static/csv/Eloratings.csv")
+df = load_data("app/static/csv/EloRatings.csv")
 
 @main_bp.route('/')
 def index():
