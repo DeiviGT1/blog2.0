@@ -1,252 +1,225 @@
-/* app/static/css/projects.css */
+/* Ejemplo de CSS para proyectos con menú desplegable */
 
-/* Project list styles */
-.personal-projects .project-list {
-    padding: 0;
+/* Contenedor general de proyectos */
+.content-wrapper-projects.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh;
+    place-content: center;
+    padding: 1rem;
+  }
+  
+  /* Contenedor principal */
+  .personal-projects.container.section {
+    margin-top: 2rem;
+  }
+  
+  /* Menú desplegable (details/summary) */
+  details {
+    margin-bottom: 1rem;
+    border: 1px solid var(--muted-text-color);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    background-color: var(--content-bg-color);
+    color: var(--main-text-color);
+    transition: background-color 0.5s, color 0.5s;
+  }
+  
+  details[open] {
+    background-color: rgba(0,0,0,0.05); /* Ajusta según tu gusto */
+  }
+  
+  summary {
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: transform 0.3s;
+  }
+  
+  /* Oculta el marcador de la lista en Chrome/Safari */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  /* Lista de proyectos */
+  .project-list {
     list-style-type: none;
-}
-
-.personal-projects .project-item {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Cada proyecto */
+  .project-item {
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    height: 100px;
-    padding: 0 5%;
-    color: #809dff;
-    border-bottom: 1px solid #000;
-}
-
-.project-left {
-    cursor: pointer;
-}
-
-.project-left,
-.project-right {
-    width: 48%;
-}
-
-.project-right .sub-project-list {
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--muted-text-color);
+    padding-bottom: 0.5rem;
+    transition: border-color 0.5s;
+  }
+  
+  /* Sección izquierda del proyecto (título, enlace) */
+  .project-left {
+    flex: 1;
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Sección derecha del proyecto (etiquetas) */
+  .project-right {
+    flex: 1;
+    text-align: right;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Enlace principal del proyecto */
+  .project-link {
+    color: var(--main-text-color);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+  .project-link:hover {
+    color: var(--hover-bg-color);
+  }
+  
+  /* Lista de subproyectos/tecnologías */
+  .sub-project-list {
+    display: inline-flex;
     list-style-type: none;
     padding: 0;
-    display: flex;
-    gap: 10px;
-}
-
-.sub-project-item {
-    padding: 5px 10px;
-    border-radius: 3px;
-    font-size: 1.5rem;
-    color: var(--muted-text-color);
-    border: 1px solid var(--muted-text-color);
-    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-.sub-project-item:hover {
-    transform: scale(1.1);
-    color: white;
-    background-color: inherit;
-    filter: grayscale(0%);
-}
-
-.personal-projects .project-link {
-    font-size: 2.5rem;
-    color: #fff;
-    text-decoration: none;
-    position: relative;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.project-link > p {
     margin: 0;
-}
-
-/* Project preview container */
-.project-preview {
-    position: absolute;
+  }
+  .sub-project-item {
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--hover-bg-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: var(--hover-bg-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .sub-project-item:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--hover-text-color);
+  }
+  
+  /* Video Overlay */
+  #video-overlay.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  #video-overlay.hidden {
     display: none;
-    width: 300px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-    opacity: 0;
-}
-
-.project-preview.visible {
-    display: block;
-    opacity: 1;
-}
-
-.project-preview-image {
+  }
+  
+  .video-container {
+    position: relative;
+    max-width: 80%;
+    max-height: 80%;
+    background-color: #000;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .video-player {
     width: 100%;
     height: auto;
-    max-height: 50vh;
-    border-radius: 5px;
-    object-fit: contain;
-}
-
-.project-preview-description {
-    margin-top: 10px;
-}
-
-.project-preview-description h5 {
-    margin-bottom: 5px;
-}
-
-.project-preview-description p {
-    margin: 0;
-    color: red;
-}
-
-.project-item > .project-left > p {
-    background: linear-gradient(to top right, rgb(42, 42, 42), rgb(177, 177, 177));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    -webkit-text-stroke: 1px black;
-    font-weight: 900;
-    transition: background 0.5s ease, transform 0.5s ease;
+  }
+  
+  .close-video {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+  
+  /* Contenedor de vista previa de proyectos */
+  #project-preview.project-preview {
+    display: none; /* inicialmente oculto */
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .project-preview-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .project-preview-description {
     text-align: left;
-}
+  }
 
-/* Base styles for sub-project items */
-.sub-project-item {
-    color: var(--muted-text-color);
-    border: 1px solid var(--muted-text-color);
-    padding: 5px 10px;
-    border-radius: 4px;
-    transition: color 0.3s ease, border-color 0.3s ease;
-    cursor: default;
-    display: inline-block;
-    margin-right: 5px;
-    margin-bottom: 5px;
-}
-
-/* Hover styles for various tags */
-.ai-hover:hover {
-    color: #f0f0f0;
-    border-color: #f0f0f0;
-}
-
-.python-hover:hover {
-    color: #0066CC;
-    border-color: #0066CC;
-}
-
-.backend-hover:hover {
-    color: #00008B;
-    border-color: #00008B;
-}
-
-.powerbi-hover:hover {
-    color: yellow;
-    border-color: yellow;
-}
-
-.excel-hover:hover {
-    color: green;
-    border-color: green;
-}
-
-.react-hover:hover {
-    color: #61DAFB;
-    border-color: #61DAFB;
-}
-
-.javascript-hover:hover {
-    color: yellow;
-    border-color: yellow;
-}
-
-.gcp-hover:hover {
-    color: #4285F4; 
-    border-color: #4285F4;
-}
-
-.aws-hover:hover {
-    color: #FF9900; 
-    border-color: #FF9900;
-}
-
-.mongodb-hover:hover {
-    color: #13aa52;
-    border-color: #13aa52;
-}
-
-.sql-hover:hover {
-    color: #336791;
-    border-color: #336791;
-}
-
-.swift-hover:hover {
-    color: #F05138;
-    border-color: #F05138;
-}
-
-.firebase-hover:hover {
-    color: #FFCA28;
-    border-color: #FFCA28;
-}
-
-.xcode-hover:hover {
-    color: #1575F9;
-    border-color: #1575F9;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-    .personal-projects .project-list .project-item {
-        flex-direction: column;
-        height: auto;
+  /* Contenedor de vista previa de proyectos */
+#project-preview.project-preview {
+    position: absolute;         /* Para poder ubicarlo con left y top */
+    z-index: 999;               /* Para que aparezca encima del contenido */
+    display: none;              /* Inicialmente oculto, se maneja con JS */
+    background-color: var(--content-bg-color);;     /* Fondo para que se distinga */
+    border: 1px solid #ccc;     /* Borde suave */
+    border-radius: 8px;         /* Esquinas redondeadas */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    padding: 1rem;
+    transition: opacity 0.3s ease; /* Suaviza la aparición/desaparición */
+    max-width: 300px;           /* Ajusta el ancho máximo según tu preferencia */
+    pointer-events: auto;       /* Permite que entre/salga el mouse para JS */
+  }
+  
+  /* Cuando está visible, se hace el cambio de opacidad */
+  #project-preview.visible {
+    display: block; /* El JS primero hace display:block y luego añade .visible */
+    opacity: 1;
+  }
+  
+  /* Imagen dentro del contenedor de preview */
+  .project-preview-image {
+    width: 100%;        /* Para que la imagen se escale al ancho del contenedor */
+    height: auto;
+    max-height: 200px;  /* Fija una altura máxima si lo deseas */
+    object-fit: contain; /* Evita deformar la imagen */
+    margin-bottom: 1rem;
+  }
+  
+  /* Descripción del proyecto */
+  .project-preview-description {
+    text-align: left;
+  }
+  
+  /* Ajusta posicionamiento si deseas que siga el mouse o esté en un lugar fijo */
+  /* Adaptaciones responsivas */
+  @media (max-width: 768px) {
+    .project-item {
+      flex-direction: column;
+      text-align: center;
+      border: none; /* por si quieres simplificar la vista en móvil */
     }
-
+  
     .project-left,
     .project-right {
-        width: 100%;
+      text-align: center;
+      margin-bottom: 1rem;
     }
-
-    .personal-projects .project-link {
-        font-size: 1.3rem;
+  
+    details {
+      padding: 0.5rem;
     }
-
-    .project-item {
-        padding: 10px;
+    summary {
+      font-size: 1rem;
     }
-
-    .project-item > .project-left > p {
-        font-size: 1.2rem;
-        -webkit-text-stroke: 0.5px black;
-    }
-
-    .personal-projects .project-list {
-        flex-direction: column;
-        padding: 0;
-    }
-
-    .sub-project-item {
-        font-size: 0.9rem;
-    }
-
-    .sub-project-list {
-        justify-self: center;
-    }
-
-    .project-preview {
-        width: 95%;
-        max-width: none;
-    }
-
-    .project-item > div {
-        padding: 10px 0;
-    }
-}
-
-.personal-projects {
-    position: relative;
-}
+  }

@@ -1,99 +1,80 @@
-// app/static/js/projects.js
-
 document.addEventListener('DOMContentLoaded', function () {
-    const projectLefts = document.querySelectorAll('.project-left');
+    // Seleccionamos todos los enlaces de proyectos
+    const projectLinks = document.querySelectorAll('.project-link');
+  
+    // Selección del contenedor de preview y sus elementos
     const previewContainer = document.getElementById('project-preview');
-    const previewImage = document.querySelector('.project-preview-image');
+    const previewImage = previewContainer.querySelector('.project-preview-image');
     const previewTitle = document.getElementById('preview-title');
     const previewDescription = document.getElementById('preview-description');
-
-    let isMouseOverProjectLeft = false;
-    let isMouseOverPreview = false;
-
+  
+    /**
+     * Muestra el preview con la información del proyecto.
+     */
     function showPreview(link) {
-        const projectTitle = link.getAttribute('data-title');
-        const projectDescription = link.getAttribute('data-description');
-        const projectImage = link.getAttribute('data-image');
-
-        if (projectImage && projectTitle && projectDescription) {
-            previewImage.src = projectImage;
-            previewImage.alt = `${projectTitle} Preview`;
-            previewTitle.textContent = projectTitle;
-            previewDescription.textContent = projectDescription;
-            previewContainer.style.display = 'block';
-            setTimeout(() => {
-                previewContainer.classList.add('visible');
-            }, 10);
-        }
+      const projectTitle = link.getAttribute('data-title');
+      const projectDescription = link.getAttribute('data-description');
+      const projectImage = link.getAttribute('data-image');
+  
+      previewImage.src = projectImage || '';
+      previewImage.alt = (projectTitle || 'Project') + ' Preview';
+      previewTitle.textContent = projectTitle || 'Untitled Project';
+      previewDescription.textContent = projectDescription || 'No description provided.';
+  
+      // Mostramos el contenedor (sin animaciones, directamente)
+      previewContainer.style.display = 'block';
     }
-
+  
+    /**
+     * Oculta el preview inmediatamente.
+     */
     function hidePreview() {
-        previewContainer.classList.remove('visible');
-        previewContainer.addEventListener('transitionend', function handler(event) {
-        }, { once: true });
+      previewContainer.style.display = 'none';
     }
-
-    function movePreview(e, container) {
-        const previewWidth = previewContainer.offsetWidth;
-        const previewHeight = previewContainer.offsetHeight;
-        const containerRect = container.getBoundingClientRect();
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-
-        let x = e.clientX - containerRect.left + 15;
-        let y = e.clientY - containerRect.top + 15;
-
-        if (x + previewWidth > containerWidth) {
-            x = e.clientX - containerRect.left - previewWidth - 15;
-        }
-
-        if (y + previewHeight > containerHeight) {
-            y = e.clientY - containerRect.top - previewHeight - 15;
-        }
-
-        previewContainer.style.left = `${x}px`;
-        previewContainer.style.top = `${y}px`;
+  
+    /**
+     * Ajusta la posición del contenedor de preview para que siga el ratón.
+     * @param {MouseEvent} e
+     */
+    function positionPreview(e) {
+      const offsetX = 10; // Ajusta a tu gusto
+      const offsetY = 10;
+  
+      // Usamos pageX/pageY para considerar el scroll vertical
+      let x = e.pageX + offsetX;
+      let y = e.pageY + offsetY;
+  
+      const containerWidth = previewContainer.offsetWidth;
+      const containerHeight = previewContainer.offsetHeight;
+  
+      // Ajustar para no salirse por la derecha
+      if (x + containerWidth > document.documentElement.clientWidth) {
+        x = e.pageX - containerWidth - offsetX;
+      }
+      // Ajustar para no salirse por debajo
+      if (y + containerHeight > document.documentElement.clientHeight) {
+        y = e.pageY - containerHeight - offsetY;
+      }
+  
+      previewContainer.style.left = x + 'px';
+      previewContainer.style.top = y + 'px';
     }
-
-    projectLefts.forEach(left => {
-        const link = left.querySelector('.project-link');
-        if (!link) return;
-
-        left.addEventListener('mouseenter', function (e) {
-            isMouseOverProjectLeft = true;
-            showPreview(link);
-        });
-
-        left.addEventListener('mousemove', function (e) {
-            const container = document.querySelector('.personal-projects');
-            movePreview(e, container);
-        });
-
-        left.addEventListener('mouseleave', function () {
-            isMouseOverProjectLeft = false;
-            if (!isMouseOverPreview) {
-                hidePreview();
-            }
-        });
-
-        link.addEventListener('click', function (e) {
-            const projectLink = link.getAttribute('href');
-            if (projectLink && projectLink !== '#') {
-                window.location.href = projectLink;
-            } else {
-                e.preventDefault();
-            }
-        });
+  
+    // Para cada enlace de proyecto
+    projectLinks.forEach(link => {
+      // Al poner el mouse sobre el enlace
+      link.addEventListener('mouseenter', function () {
+        showPreview(link);
+      });
+  
+      // Al mover el mouse dentro del enlace, actualizamos la posición
+      link.addEventListener('mousemove', function (e) {
+        positionPreview(e);
+      });
+  
+      // Al salir del enlace, ocultamos el preview inmediatamente
+      link.addEventListener('mouseleave', function () {
+        hidePreview();
+      });
     });
-
-    previewContainer.addEventListener('mouseenter', function() {
-        isMouseOverPreview = true;
-    });
-
-    previewContainer.addEventListener('mouseleave', function() {
-        isMouseOverPreview = false;
-        if (!isMouseOverProjectLeft) {
-            hidePreview();
-        }
-    });
-});
+  });

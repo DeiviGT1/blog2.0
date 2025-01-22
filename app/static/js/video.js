@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const videoPlayer = document.getElementById("video-player");
   const closeVideo = document.getElementById("close-video");
 
-  // Selecciona todos los elementos con clase 'project-link' y data-project='5' o '3'
-  const projectLinks = document.querySelectorAll(".project-link[data-project='5'], .project-link[data-project='3']");
+  const projectLinks = document.querySelectorAll(".project-link[data-project='6'], .project-link[data-project='3'],  .project-link[data-project='7']");
 
   // Verifica si hay elementos seleccionados
   if (projectLinks.length > 0) {
@@ -25,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   } else {
-    console.warn("No se encontraron elementos .project-link con data-project='5' o '3'.");
+    console.warn("No se encontraron elementos .project-link con data-project='6' o '3' o '7'.");
   }
 
   // Maneja el evento de cierre del video

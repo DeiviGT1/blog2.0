@@ -1,0 +1,252 @@
+/* app/static/css/projects.css */
+
+/* Project list styles */
+.personal-projects .project-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+.personal-projects .project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    height: 100px;
+    padding: 0 5%;
+    color: #809dff;
+    border-bottom: 1px solid #000;
+}
+
+.project-left {
+    cursor: pointer;
+}
+
+.project-left,
+.project-right {
+    width: 48%;
+}
+
+.project-right .sub-project-list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.sub-project-item {
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 1.5rem;
+    color: var(--muted-text-color);
+    border: 1px solid var(--muted-text-color);
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.sub-project-item:hover {
+    transform: scale(1.1);
+    color: white;
+    background-color: inherit;
+    filter: grayscale(0%);
+}
+
+.personal-projects .project-link {
+    font-size: 2.5rem;
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.project-link > p {
+    margin: 0;
+}
+
+/* Project preview container */
+.project-preview {
+    position: absolute;
+    display: none;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.project-preview.visible {
+    display: block;
+    opacity: 1;
+}
+
+.project-preview-image {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+    border-radius: 5px;
+    object-fit: contain;
+}
+
+.project-preview-description {
+    margin-top: 10px;
+}
+
+.project-preview-description h5 {
+    margin-bottom: 5px;
+}
+
+.project-preview-description p {
+    margin: 0;
+    color: red;
+}
+
+.project-item > .project-left > p {
+    background: linear-gradient(to top right, rgb(42, 42, 42), rgb(177, 177, 177));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    -webkit-text-stroke: 1px black;
+    font-weight: 900;
+    transition: background 0.5s ease, transform 0.5s ease;
+    text-align: left;
+}
+
+/* Base styles for sub-project items */
+.sub-project-item {
+    color: var(--muted-text-color);
+    border: 1px solid var(--muted-text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    cursor: default;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+/* Hover styles for various tags */
+.ai-hover:hover {
+    color: #f0f0f0;
+    border-color: #f0f0f0;
+}
+
+.python-hover:hover {
+    color: #0066CC;
+    border-color: #0066CC;
+}
+
+.backend-hover:hover {
+    color: #00008B;
+    border-color: #00008B;
+}
+
+.powerbi-hover:hover {
+    color: yellow;
+    border-color: yellow;
+}
+
+.excel-hover:hover {
+    color: green;
+    border-color: green;
+}
+
+.react-hover:hover {
+    color: #61DAFB;
+    border-color: #61DAFB;
+}
+
+.javascript-hover:hover {
+    color: yellow;
+    border-color: yellow;
+}
+
+.gcp-hover:hover {
+    color: #4285F4; 
+    border-color: #4285F4;
+}
+
+.aws-hover:hover {
+    color: #FF9900; 
+    border-color: #FF9900;
+}
+
+.mongodb-hover:hover {
+    color: #13aa52;
+    border-color: #13aa52;
+}
+
+.sql-hover:hover {
+    color: #336791;
+    border-color: #336791;
+}
+
+.swift-hover:hover {
+    color: #F05138;
+    border-color: #F05138;
+}
+
+.firebase-hover:hover {
+    color: #FFCA28;
+    border-color: #FFCA28;
+}
+
+.xcode-hover:hover {
+    color: #1575F9;
+    border-color: #1575F9;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .personal-projects .project-list .project-item {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .project-left,
+    .project-right {
+        width: 100%;
+    }
+
+    .personal-projects .project-link {
+        font-size: 1.3rem;
+    }
+
+    .project-item {
+        padding: 10px;
+    }
+
+    .project-item > .project-left > p {
+        font-size: 1.2rem;
+        -webkit-text-stroke: 0.5px black;
+    }
+
+    .personal-projects .project-list {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .sub-project-item {
+        font-size: 0.9rem;
+    }
+
+    .sub-project-list {
+        justify-self: center;
+    }
+
+    .project-preview {
+        width: 95%;
+        max-width: none;
+    }
+
+    .project-item > div {
+        padding: 10px 0;
+    }
+}
+
+.personal-projects {
+    position: relative;
+}
