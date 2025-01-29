@@ -11,33 +11,33 @@
 {% endblock %}
 
 {% block titulo %}
-  ELO - Gráficos Dinámicos
+  ELO - Dynamic Charts
 {% endblock %}
 
 {% block contenido %}
 <div class="charts-container">
-  <h2>ELO - Gráficos Dinámicos</h2>
+  <h2>ELO - Dynamic Charts</h2>
 
-  <!-- Incluir el formulario principal -->
+  <!-- Include the main form -->
   {% include "projects/dashboard/charts_form.html" %}
 
   <hr>
 
-  <!-- Incluir las secciones de cada gráfico -->
+  <!-- Include each chart section -->
   {% include "projects/dashboard/charts_sections.html" %}
 </div>
 
-<!-- Modal para indicar que se están cargando los gráficos -->
+<!-- Modal to indicate that charts are loading -->
 <div id="modal_update_charts" class="modal_update_charts">
   <div class="modal_update_charts-content">
     <div class="modal_update_charts-body">
       <div class="spinner"></div>
-      <p>Cargando gráficos, por favor espere...</p>
+      <p>Loading charts, please wait...</p>
     </div>
   </div>
 </div>
 
-<!-- Estilos para el modal -->
+<!-- Styles for the modal -->
 <style>
 
 </style>
