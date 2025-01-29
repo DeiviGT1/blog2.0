@@ -1,0 +1,50 @@
+<!-- app/templates/projects/dashboard/elo_dynamic_charts.html -->
+
+{% extends "main/base.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/dashboard/modal-update-charts.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/dashboard/buttons.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/dashboard/charts.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/dashboard/forms.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/dashboard/layout.css') }}">
+{% endblock %}
+
+{% block titulo %}
+  ELO - Gráficos Dinámicos
+{% endblock %}
+
+{% block contenido %}
+<div class="charts-container">
+  <h2>ELO - Gráficos Dinámicos</h2>
+
+  <!-- Incluir el formulario principal -->
+  {% include "projects/dashboard/charts_form.html" %}
+
+  <hr>
+
+  <!-- Incluir las secciones de cada gráfico -->
+  {% include "projects/dashboard/charts_sections.html" %}
+</div>
+
+<!-- Modal para indicar que se están cargando los gráficos -->
+<div id="modal_update_charts" class="modal_update_charts">
+  <div class="modal_update_charts-content">
+    <div class="modal_update_charts-body">
+      <div class="spinner"></div>
+      <p>Cargando gráficos, por favor espere...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Estilos para el modal -->
+<style>
+
+</style>
+{% endblock %}
+
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/dashboard/charts_update.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dashboard/charts_ai.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,144 @@
+/* Estilos para el formulario reorganizado */
+.charts-form {
+  background-color: var(--content-bg-color);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+/* Filas y columnas para agrupar campos */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Agrupación de formularios */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Columnas de mitad y completa */
+.col-half {
+  flex: 1 1 45%;
+}
+
+.col-full {
+  flex: 1 1 100%;
+}
+
+/* Estilos de etiquetas */
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--main-text-color);
+  font-size: 1rem;
+}
+
+/* Estilos de select y checkboxes */
+.charts-form select,
+.charts-form input[type="checkbox"] {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Efecto de enfoque para select y checkboxes */
+.charts-form select:focus,
+.charts-form input[type="checkbox"]:focus {
+  border-color: var(--hover-bg-color);
+  box-shadow: 0 0 5px rgba(90, 109, 124, 0.5);
+  outline: none;
+}
+
+/* Checkbox en línea mejorado */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox-group label {
+  margin-left: 0.6rem;
+  font-weight: 500;
+  color: var(--main-text-color);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.checkbox-group label:hover {
+  color: var(--hover-bg-color);
+}
+
+/* Contenedor de checkboxes con scroll personalizado */
+#teams-checkbox-container {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Scrollbar personalizado para webkit */
+#teams-checkbox-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#teams-checkbox-container::-webkit-scrollbar-track {
+  background:var(--footer-bg-color);
+  border-radius: 3px;
+}
+
+#teams-checkbox-container::-webkit-scrollbar-thumb {
+  background: var(--hover-bg-color);
+  border-radius: 3px;
+}
+
+/* Estilos para los select */
+.charts-form select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,<svg fill="%235A6D7C" height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 7l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* Eliminar flecha por defecto en IE y Edge */
+.charts-form select::-ms-expand {
+  display: none;
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+  .col-half {
+    flex: 1 1 100%;
+  }
+
+  .charts-form {
+    padding: 1.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.95rem;
+  }
+
+  .charts-form select,
+  .charts-form input[type="checkbox"] {
+    font-size: 0.9rem;
+  }
+}

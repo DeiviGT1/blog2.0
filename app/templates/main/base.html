@@ -7,41 +7,15 @@
     <title>{% block titulo %}Mi Portafolio{% endblock %}</title>
     <!-- Font Awesome -->
     <!-- CSS Personalizado -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/styles.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/navbar.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/toogle-mode.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/rotating-image.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/contact.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/job-description.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/projects/openai/recommendations.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/projects.css') }}"
-    />
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/dashboard/dashboard.css') }}">
-  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/styles.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/navbar.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/toogle-mode.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/rotating-image.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/contact.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/job-description.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/openai/recommendations.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/projects.css') }}"/>
+    
 
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}">
     <link rel="canonical" href="https://www.josedavidgt.com/">
@@ -127,15 +101,14 @@
     </div>
 
     <!-- Modal de Contacto -->
-    {% include 'modal.html' %}
+    {% include 'main/modal.html' %}
 
 
     <!-- Scripts de Bootstrap y dependencias -->
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/projects.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/rotate-image.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/scrollspy.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/rotate-image.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/scrollspy.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/modal.js') }}"></script>
 
     <!-- Bloque para scripts adicionales -->
     {% block scripts %}

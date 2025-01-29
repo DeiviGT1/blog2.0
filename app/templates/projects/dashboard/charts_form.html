@@ -1,0 +1,61 @@
+<!-- app/templates/projects/dashboard/charts_form.html -->
+<form class="charts-form">
+  <!-- Grupo 1: Selección de Equipos y Países -->
+  <div class="form-row">
+    <!-- Selección de equipos para la tendencia ELO (Checkboxes) -->
+    <div class="form-group col-half">
+      <label>Equipos para Tendencia ELO:</label>
+      <div id="teams-checkbox-container">
+        {% for t in clubs %}
+          <div class="checkbox-item">
+            <input type="checkbox"
+                   id="team_{{ loop.index }}"
+                   name="teams_select"
+                   value="{{ t }}"
+                   {% if t in selected_teams_trend %}checked{% endif %}>
+            <label for="team_{{ loop.index }}">{{ t }}</label>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Selección de país para Bar Chart y Grupo 2: Ranking -->
+    <div class="form-group col-half">
+      <!-- Selección de país para Bar Chart -->
+      <label for="country_bar">País para Top 5 (Bar Chart):</label>
+      <select name="country_bar" id="country_bar">
+        <option value="">-- Selecciona --</option>
+        {% for c in countries %}
+          <option value="{{ c }}" {% if selected_country_bar == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+      
+      <!-- Selección de país para Ranking -->
+      <label for="country_rank" class="mt-1">País para Ranking (Evolución):</label>
+      <select name="country_rank" id="country_rank">
+        <option value="">-- Selecciona --</option>
+        {% for c in countries %}
+          <option value="{{ c }}" {% if selected_country_rank == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- Grupo 3: Opciones adicionales (checkboxes) -->
+  <div class="form-row">
+    <div class="form-group col-half checkbox-group">
+      <input type="checkbox"
+             id="violin_check"
+             name="show_violin"
+             {% if show_violin %}checked{% endif %}>
+      <label for="violin_check">Mostrar Violin Plot</label>
+    </div>
+    <div class="form-group col-half checkbox-group">
+      <input type="checkbox"
+             id="heatmap_check"
+             name="show_heatmap"
+             {% if show_heatmap %}checked{% endif %}>
+      <label for="heatmap_check">Mostrar Heatmap</label>
+    </div>
+  </div>
+</form>

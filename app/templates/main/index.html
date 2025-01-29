@@ -1,5 +1,5 @@
 <!-- app/templates/index.html -->
-{% extends "base.html" %}
+{% extends "main/base.html" %}
 
 {% block titulo %}Inicio - Mi Portafolio{% endblock %}
 
@@ -22,17 +22,17 @@
     
         <!-- Descripción Profesional -->
         <div id="about" class="professional-description">
-            {% include 'job-description.html' %}
+            {% include 'main/job-description.html' %}
         </div>
     
         <!-- Proyectos Personales -->
         <div id="projects" class="projects-section">
-            {% include 'projects.html' %}
+            {% include 'main/projects.html' %}
         </div>
     
         <!-- Contacto -->
         <div id="contact" class="contact-section">
-            {% include 'contact.html' %}
+            {% include 'main/contact.html' %}
         </div>
     
         <hr class="my-4">

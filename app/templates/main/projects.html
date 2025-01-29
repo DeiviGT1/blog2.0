@@ -1,12 +1,12 @@
-<!-- app/templates/projects_new.html -->
+<!-- app/templates/projects.html -->
 
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='css/projects.css') }}"
+  href="{{ url_for('static', filename='css/main/projects.css') }}"
 />
 <link
   rel="stylesheet"
-  href="{{ url_for('static', filename='css/video.css') }}"
+  href="{{ url_for('static', filename='css/main/video.css') }}"
 />
 
 <div class="content-wrapper-projects wrapper">
@@ -14,7 +14,7 @@
     <h2 class="my-4">Personal Projects</h2>
 
     <!-- Menú Desplegable: Data Science -->
-    <details>
+    <details open>
       <summary>Data Science</summary>
       <ul class="project-list list-unstyled">
         <!-- Project 1: SONIC SURPRISE -->
@@ -90,7 +90,7 @@
         <li class="project-item">
           <div class="project-left">
             <a
-              href="/dashboard"
+              href="/dashboard_index"
               class="project-link"
               data-project="4"
               data-title="FOOTBALL DASHBOARD"
@@ -112,7 +112,7 @@
     </details>
 
     <!-- Menú Desplegable: Web Development -->
-    <details>
+    <details open>
       <summary>Web Development</summary>
       <ul class="project-list list-unstyled">
         <!-- Project 5: GATO TUERTO WEBSITE -->
@@ -142,7 +142,7 @@
     </details>
 
     <!-- Menú Desplegable: Mobile Development -->
-    <details>
+    <details open>
       <summary>Mobile Development</summary>
       <ul class="project-list list-unstyled">
         <!-- Project 6: MOTIVAI -->
@@ -222,4 +222,8 @@
   </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/video.js') }}"></script>
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/main/video.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main/projects.js') }}"></script>
+{% endblock %}

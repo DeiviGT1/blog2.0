@@ -1,0 +1,102 @@
+<!-- app/templates/projects/dashboard/charts_sections.html -->
+
+<!-- SECCIÓN: TEAM TREND CHART -->
+<div class="chart" id="trend-chart-container"
+     style="{{ 'display: block;' if trend_chart else 'display: none;' }}">
+  <h3 id="trend-chart-title">
+    Tendencia del ELO
+    {% if selected_teams_trend %}
+      - {{ selected_teams_trend | join(', ') }}
+    {% endif %}
+  </h3>
+  <img id="trend_chart_img"
+       src="{{ 'data:image/png;base64,' + trend_chart if trend_chart else '' }}"
+       alt="Team Trend Chart">
+  <div class="conclusions" id="team-trend-conclusions">
+    <button class="ai-btn"
+            data-chart-type="team_trend_chart"
+            data-country-bar="{{ selected_country_bar }}"
+            data-country-rank="{{ selected_country_rank }}"
+            data-team-trend="{{ selected_teams_trend | join(', ') }}"
+            data-show-violin="{{ 'on' if show_violin else '' }}"
+            data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+      Generar conclusiones con IA (Tendencia)
+    </button>
+  </div>
+</div>
+
+<!-- SECCIÓN: BAR CHART -->
+<div class="chart" id="bar-chart-container"
+     style="{{ 'display: block;' if bar_chart else 'display: none;' }}">
+  <h3>Top 5 Equipos - {{ selected_country_bar }}</h3>
+  <img id="bar_chart_img"
+       src="{{ 'data:image/png;base64,' + bar_chart if bar_chart else '' }}"
+       alt="Bar Chart">
+  <div class="conclusions" id="bar-chart-conclusions">
+    <button class="ai-btn" 
+            data-chart-type="bar_chart"
+            data-country-bar="{{ selected_country_bar }}"
+            data-country-rank="{{ selected_country_rank }}"
+            data-show-violin="{{ 'on' if show_violin else '' }}"
+            data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+      Generar conclusiones con IA (Bar)
+    </button>
+  </div>
+</div>
+
+<!-- SECCIÓN: RANKING CHART -->
+<div class="chart" id="ranking-chart-container"
+     style="{{ 'display: block;' if rank_chart else 'display: none;' }}">
+  <h3>Evolución del Ranking - {{ selected_country_rank }}</h3>
+  <img id="rank_chart_img"
+       src="{{ 'data:image/png;base64,' + rank_chart if rank_chart else '' }}"
+       alt="Ranking Chart">
+  <div class="conclusions" id="ranking-chart-conclusions">
+    <button class="ai-btn"
+            data-chart-type="ranking_chart"
+            data-country-bar="{{ selected_country_bar }}"
+            data-country-rank="{{ selected_country_rank }}"
+            data-show-violin="{{ 'on' if show_violin else '' }}"
+            data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+      Generar conclusiones con IA (Ranking)
+    </button>
+  </div>
+</div>
+
+<!-- SECCIÓN: VIOLIN CHART -->
+<div class="chart" id="violin-chart-container"
+     style="{{ 'display: block;' if violin_chart else 'display: none;' }}">
+  <h3>Distribución de ELO por País (Violin)</h3>
+  <img id="violin_chart_img"
+       src="{{ 'data:image/png;base64,' + violin_chart if violin_chart else '' }}"
+       alt="Violin Chart">
+  <div class="conclusions" id="violin-conclusions">
+    <button class="ai-btn"
+            data-chart-type="violin_plot"
+            data-country-bar="{{ selected_country_bar }}"
+            data-country-rank="{{ selected_country_rank }}"
+            data-show-violin="{{ 'on' if show_violin else '' }}"
+            data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+      Generar conclusiones con IA (Violin)
+    </button>
+  </div>
+</div>
+
+<!-- SECCIÓN: HEATMAP -->
+<div class="chart" id="heatmap-chart-container"
+     style="{{ 'display: block;' if heatmap_chart else 'display: none;' }}">
+  <h3>Heatmap de ELO (Club vs Año)</h3>
+  <img id="heatmap_chart_img"
+       src="{{ 'data:image/png;base64,' + heatmap_chart if heatmap_chart else '' }}"
+       alt="Heatmap">
+  <div class="conclusions" id="heatmap-conclusions">
+    <button class="ai-btn"
+            data-chart-type="heatmap"
+            data-country-bar="{{ selected_country_bar }}"
+            data-country-rank="{{ selected_country_rank }}"
+            data-show-violin="{{ 'on' if show_violin else '' }}"
+            data-show-heatmap="{{ 'on' if show_heatmap else '' }}">
+      Generar conclusiones con IA (Heatmap)
+    </button>
+  </div>
+</div>
