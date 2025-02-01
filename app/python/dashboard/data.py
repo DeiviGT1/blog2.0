@@ -1,21 +1,6 @@
-## app/data.py
+# app/python/dashboard/data.py
 
 import pandas as pd
-
-def filter_top_teams_by_country(df, n=5):
-    """
-    Filtra el DataFrame para conservar solo las filas correspondientes a los n equipos
-    con mayor promedio de ELO en cada país.
-    """
-    # Calcular el promedio de ELO por país y equipo
-    avg_elo = df.groupby(['country', 'club'])['elo'].mean().reset_index()
-    # Ordenar de forma descendente por el promedio de ELO dentro de cada país
-    avg_elo_sorted = avg_elo.sort_values(['country', 'elo'], ascending=[True, False])
-    # Seleccionar los n equipos con mejor promedio de ELO por país
-    top_n_by_country = avg_elo_sorted.groupby('country').head(n)
-    # Filtrar el DataFrame original
-    df_filtered = pd.merge(df, top_n_by_country[['country', 'club']], on=['country', 'club'], how='inner')
-    return df_filtered
 
 def load_data(file_path):
     """
@@ -62,7 +47,7 @@ def load_data(file_path):
     }
     
     # Agregar la columna "color" al DataFrame usando map
-    df['color'] = df['club'].map(club_colors)
+    df['color'] = df['club'].map(club_colors).fillna('#000000')
     df['date'] = pd.to_datetime(df['date'])
     df['year'] = df['date'].dt.year
 
@@ -72,8 +57,5 @@ def load_data(file_path):
     # Filtrar países
     countries = ['ESP', 'ITA', 'ENG', 'GER', 'FRA']
     df = df[df['country'].isin(countries)]
-    
-    # Filtrar top 5 equipos por país
-    df = filter_top_teams_by_country(df, n=5)
 
     return df

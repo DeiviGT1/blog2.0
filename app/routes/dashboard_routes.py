@@ -45,22 +45,20 @@ def update_charts():
     show_violin = data.get("show_violin", False)
     show_heatmap = data.get("show_heatmap", False)
     teams = data.get("teams", [])
-
-    # Crear una copia del DataFrame para evitar modificar el original
+    num_teams = int(data.get("num_teams", 5))
+    
+    # Crear una copia del DataFrame y convertir las columnas datetime a string
     df_copy = df.copy()
-
-    # Identificar y convertir todas las columnas de tipo datetime a cadenas
     datetime_columns = df_copy.select_dtypes(include=['datetime', 'datetime64[ns]']).columns
     for col in datetime_columns:
-        df_copy[col] = df_copy[col].dt.strftime('%Y-%m-%d')  # Puedes ajustar el formato según tus necesidades
+        df_copy[col] = df_copy[col].dt.strftime('%Y-%m-%d')
 
-    # Generar los gráficos utilizando tus funciones de plotting
+    # Generar los gráficos pasando el parámetro num_teams donde corresponda
     trend_chart = get_plot_team_trend_chart(df_copy, teams) if teams else None
-    bar_chart = get_plot_top_teams_country(df_copy, country_bar) if country_bar else None
-    rank_chart = get_plot_ranking_evolution(df_copy, country_rank) if country_rank else None
+    bar_chart = get_plot_top_teams_country(df_copy, country_bar, num_teams=num_teams) if country_bar else None
+    rank_chart = get_plot_ranking_evolution(df_copy, country_rank, num_teams=num_teams) if country_rank else None
     violin_chart = get_plot_violin_elo(df_copy) if show_violin else None
     heatmap_chart = get_plot_heatmap_elo(df_copy) if show_heatmap else None
-
 
     return jsonify({
         "trend_chart": trend_chart,
@@ -93,7 +91,7 @@ def generate_conclusions_ajax():
         top5 = (df_country.groupby('club')['elo'].mean()
                 .reset_index()
                 .sort_values('elo', ascending=False)
-                .head(5))
+                .head(4))
         chart_df = top5
         extra_info['country'] = country_bar
 

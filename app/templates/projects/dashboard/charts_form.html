@@ -30,6 +30,11 @@
         {% endfor %}
       </select>
       
+      <!-- Nuevo slider para seleccionar la cantidad de equipos -->
+      <label for="num_teams">Number of Teams: <span id="num_teams_value">5</span></label>
+      <input type="range" id="num_teams" name="num_teams" min="1" max="20" value="5"
+            oninput="document.getElementById('num_teams_value').innerText = this.value">
+
       <!-- Country selection for Ranking -->
       <label for="country_rank" class="mt-1">Country for Ranking (Evolution):</label>
       <select name="country_rank" id="country_rank">

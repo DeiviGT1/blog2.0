@@ -1,4 +1,4 @@
-# app/ai.py
+# app/python/dashboard/ai.py
 
 import os
 import json
@@ -76,7 +76,6 @@ def build_user_prompt(chart_type, df_summary, extra_info):
         extra_info = {}
 
     # Determinar el idioma; por defecto, español ("es")
-
     intro = "Below are the processed (and filtered) data used in the chart:"
     bullet_instruction = "Generate 5 bullet point conclusions (short and concise) discussing the league or the teams in the dataframe."
 
@@ -92,10 +91,8 @@ def build_user_prompt(chart_type, df_summary, extra_info):
         lines.append(f"Chart Type: Bar Chart (Top 5) - Country: {country}.")
     elif chart_type == "ranking_chart":
         country = extra_info.get("country", "")
-        if language == "en":
-            lines.append(f"Chart Type: Ranking Evolution (Top 5) - Country: {country}.")
-        else:
-            lines.append(f"Tipo de gráfico: Evolución de Ranking (Top 5) - País: {country}.")
+        # Asumiendo idioma español por defecto
+        lines.append(f"Tipo de gráfico: Evolución de Ranking (Top 5) - País: {country}.")
     elif chart_type == "violin_plot":
         lines.append("Chart Type: Violin Plot (ELO vs country).")
     elif chart_type == "heatmap":

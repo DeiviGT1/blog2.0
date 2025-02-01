@@ -1,3 +1,5 @@
+// app/static/js/dashboard/charts_update.js
+
 // Función principal para actualizar los gráficos
 async function updateCharts() {
   // Obtener referencia al modal
@@ -16,6 +18,7 @@ async function updateCharts() {
     // Obtener un array de valores seleccionados de los checkboxes de equipos
     const teamCheckboxes = document.querySelectorAll('input[name="teams_select"]:checked');
     const selectedTeams = Array.from(teamCheckboxes).map(cb => cb.value);
+    const numTeams = document.getElementById("num_teams").value;
 
     // 2) Preparar payload
     const payload = {
@@ -23,7 +26,8 @@ async function updateCharts() {
       country_rank: countryRank,
       show_violin: violinCheck,
       show_heatmap: heatmapCheck,
-      teams: selectedTeams
+      teams: selectedTeams,
+      num_teams: numTeams,
     };
 
     // 3) Hacer POST a /update_charts
@@ -165,12 +169,14 @@ document.addEventListener("DOMContentLoaded", function() {
   const violinCheck = document.getElementById("violin_check");
   const heatmapCheck = document.getElementById("heatmap_check");
   const teamsCheckboxContainer = document.getElementById("teams-checkbox-container");
+  const numTeams = document.getElementById("num_teams");
 
   if (countryBarSelect) countryBarSelect.addEventListener("change", updateCharts);
   if (countryRankSelect) countryRankSelect.addEventListener("change", updateCharts);
   if (violinCheck) violinCheck.addEventListener("change", updateCharts);
   if (heatmapCheck) heatmapCheck.addEventListener("change", updateCharts);
   if (teamsCheckboxContainer) teamsCheckboxContainer.addEventListener("change", updateCharts);
+  if (numTeams) numTeams.addEventListener("change", updateCharts);
 
   // Llamar al inicio para actualizar
   updateCharts();
