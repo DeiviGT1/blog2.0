@@ -1,26 +1,26 @@
 // app/static/js/dashboard/charts_update.js
 
-// Función principal para actualizar los gráficos
+// Main function to update the charts
 async function updateCharts() {
-  // Obtener referencia al modal
+  // Get a reference to the modal
   const modal = document.getElementById('modal_update_charts');
 
   try {
-    // Mostrar el modal antes de iniciar la carga
+    // Show the modal before starting the loading process
     modal.classList.add('active');
 
-    // 1) Leer valores del DOM
+    // 1) Read values from the DOM
     const countryBar = document.getElementById("country_bar").value;
     const countryRank = document.getElementById("country_rank").value;
     const violinCheck = document.getElementById("violin_check").checked;
     const heatmapCheck = document.getElementById("heatmap_check").checked;
 
-    // Obtener un array de valores seleccionados de los checkboxes de equipos
+    // Get an array of selected team checkbox values
     const teamCheckboxes = document.querySelectorAll('input[name="teams_select"]:checked');
     const selectedTeams = Array.from(teamCheckboxes).map(cb => cb.value);
     const numTeams = document.getElementById("num_teams").value;
 
-    // 2) Preparar payload
+    // 2) Prepare the payload
     const payload = {
       country_bar: countryBar,
       country_rank: countryRank,
@@ -30,36 +30,36 @@ async function updateCharts() {
       num_teams: numTeams,
     };
 
-    // 3) Hacer POST a /update_charts
+    // 3) Make a POST request to /update_charts
     const resp = await fetch("/update_charts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    if (!resp.ok) throw new Error("Error HTTP " + resp.status);
+    if (!resp.ok) throw new Error("HTTP Error " + resp.status);
     const data = await resp.json();
-    console.log("Datos recibidos:", data);
+    console.log("Received data:", data);
 
-    // 4) Actualizar cada sección (imágenes y visibilidad)
-    // TENDENCIA
+    // 4) Update each section (images and visibility)
+    // TREND
     const trendContainer = document.getElementById("trend-chart-container");
     const trendImg = document.getElementById("trend_chart_img");
     const trendTitle = document.getElementById("trend-chart-title");
     if (data.trend_chart && trendContainer && trendImg) {
       trendContainer.style.display = "block";
       trendImg.src = "data:image/png;base64," + data.trend_chart;
-      // Actualiza título
+      // Update title
       if (selectedTeams.length > 0) {
-        trendTitle.textContent = "Tendencia del ELO - " + selectedTeams.join(", ");
+        trendTitle.textContent = "ELO Trend - " + selectedTeams.join(", ");
       } else {
-        trendTitle.textContent = "Tendencia del ELO";
+        trendTitle.textContent = "ELO Trend";
       }
     } else if (trendContainer && trendImg) {
       trendContainer.style.display = "none";
       trendImg.src = "";
     }
 
-    // BAR
+    // BAR CHART
     const barContainer = document.getElementById("bar-chart-container");
     const barImg = document.getElementById("bar_chart_img");
     if (data.bar_chart && barContainer && barImg) {
@@ -81,7 +81,7 @@ async function updateCharts() {
       rankImg.src = "";
     }
 
-    // VIOLIN
+    // VIOLIN PLOT
     const violinContainer = document.getElementById("violin-chart-container");
     const violinImg = document.getElementById("violin_chart_img");
     if (data.violin_chart && violinContainer && violinImg) {
@@ -103,20 +103,20 @@ async function updateCharts() {
       heatmapImg.src = "";
     }
 
-    // Ajustar data-* de IA para "Team Trend"
+    // Adjust data-* attributes for AI on "Team Trend"
     const trendBtn = document.querySelector("#team-trend-conclusions .ai-btn");
     if (trendBtn) {
       if (selectedTeams.length === 1) {
         trendBtn.setAttribute("data-team-trend", selectedTeams[0]);
       } else if (selectedTeams.length > 1) {
-        // Ajustar para varios equipos
+        // Adjust for multiple teams
         trendBtn.setAttribute("data-team-trend", selectedTeams.join(", "));
       } else {
         trendBtn.setAttribute("data-team-trend", "");
       }
     }
 
-    // Ajustar data-* de IA para "Bar Chart"
+    // Adjust data-* attributes for AI on "Bar Chart"
     const barBtn = document.querySelector("#bar-chart-conclusions .ai-btn");
     if (barBtn) {
       barBtn.setAttribute("data-country-bar", countryBar);
@@ -125,7 +125,7 @@ async function updateCharts() {
       barBtn.setAttribute("data-show-heatmap", heatmapCheck ? "on" : "");
     }
 
-    // Ajustar data-* de IA para "Ranking Chart"
+    // Adjust data-* attributes for AI on "Ranking Chart"
     const rankBtn = document.querySelector("#ranking-chart-conclusions .ai-btn");
     if (rankBtn) {
       rankBtn.setAttribute("data-country-bar", countryBar);
@@ -134,7 +134,7 @@ async function updateCharts() {
       rankBtn.setAttribute("data-show-heatmap", heatmapCheck ? "on" : "");
     }
 
-    // Ajustar data-* de IA para "Violin Plot"
+    // Adjust data-* attributes for AI on "Violin Plot"
     const violinBtn = document.querySelector("#violin-conclusions .ai-btn");
     if (violinBtn) {
       violinBtn.setAttribute("data-country-bar", countryBar);
@@ -143,7 +143,7 @@ async function updateCharts() {
       violinBtn.setAttribute("data-show-heatmap", heatmapCheck ? "on" : "");
     }
 
-    // Ajustar data-* de IA para "Heatmap"
+    // Adjust data-* attributes for AI on "Heatmap"
     const heatmapBtn = document.querySelector("#heatmap-conclusions .ai-btn");
     if (heatmapBtn) {
       heatmapBtn.setAttribute("data-country-bar", countryBar);
@@ -153,16 +153,16 @@ async function updateCharts() {
     }
 
   } catch (err) {
-    console.error("Error al actualizar gráficos:", err);
-    // Opcional: mostrar un mensaje de error al usuario
-    alert("Ocurrió un error al actualizar los gráficos. Por favor, intenta nuevamente.");
+    console.error("Error updating charts:", err);
+    // Optionally: show an error message to the user
+    alert("An error occurred while updating charts. Please try again.");
   } finally {
-    // Ocultar el modal después de que la carga haya finalizado o en caso de error
+    // Hide the modal after loading completes or in case of an error
     modal.classList.remove('active');
   }
 }
 
-// Listeners para que cada vez que cambie un select/checkbox, se actualicen gráficas
+// Listeners to update charts when any select/checkbox changes
 document.addEventListener("DOMContentLoaded", function() {
   const countryBarSelect = document.getElementById("country_bar");
   const countryRankSelect = document.getElementById("country_rank");
@@ -179,15 +179,15 @@ document.addEventListener("DOMContentLoaded", function() {
   if (teamsCheckboxContainer) teamsCheckboxContainer.addEventListener("change", updateCharts);
   if (numTeams) numTeams.addEventListener("change", updateCharts);
 
-  // Agregar listener al botón "Quitar selección" para actualizar gráficos tras borrar la selección
+  // Add listener to the "Clear selection" button to update charts after clearing selection
   if (clearTeamsBtn) {
     clearTeamsBtn.addEventListener("click", function() {
-      // Se asume que el código que limpia la selección ya se ejecuta (por ejemplo, mediante otro listener inline o aquí mismo)
-      // Esperamos un corto lapso para que los checkboxes se actualicen y luego llamamos a updateCharts
+      // It is assumed that the code to clear the selection is already executed (e.g., via another inline listener or here)
+      // Wait a short moment to allow checkboxes to update, then call updateCharts
       setTimeout(updateCharts, 0);
     });
   }
 
-  // Llamar al inicio para actualizar
+  // Call initially to update charts on page load
   updateCharts();
 });
