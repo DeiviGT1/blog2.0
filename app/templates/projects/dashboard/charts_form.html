@@ -2,9 +2,15 @@
 <form class="charts-form">
   <!-- Group 1: Team and Country Selection -->
   <div class="form-row">
-    <!-- Team selection for ELO Trend (Checkboxes) -->
+    <!-- Team selection for ELO Trend (Checkboxes with Filter and Clear Button) -->
     <div class="form-group col-half">
       <label>Teams for ELO Trend:</label>
+      <!-- Input para filtrar equipos -->
+      <input type="text" id="team-filter" placeholder="Buscar equipo..." class="form-control mb-2">
+
+      <!-- Botón para quitar todos los equipos seleccionados -->
+      <button type="button" id="clear-teams" class="btn btn-secondary btn-sm mb-2">Quitar selección</button>
+
       <div id="teams-checkbox-container">
         {% for t in clubs %}
           <div class="checkbox-item">
@@ -30,10 +36,7 @@
         {% endfor %}
       </select>
       
-      <!-- Nuevo slider para seleccionar la cantidad de equipos -->
-      <label for="num_teams">Number of Teams: <span id="num_teams_value">5</span></label>
-      <input type="range" id="num_teams" name="num_teams" min="1" max="20" value="5"
-            oninput="document.getElementById('num_teams_value').innerText = this.value">
+
 
       <!-- Country selection for Ranking -->
       <label for="country_rank" class="mt-1">Country for Ranking (Evolution):</label>
@@ -43,6 +46,11 @@
           <option value="{{ c }}" {% if selected_country_rank == c %}selected{% endif %}>{{ c }}</option>
         {% endfor %}
       </select>
+
+      <!-- Nuevo slider para seleccionar la cantidad de equipos -->
+      <label for="num_teams">Number of Teams: <span id="num_teams_value">5</span></label>
+      <input type="range" id="num_teams" name="num_teams" min="1" max="20" value="5"
+            oninput="document.getElementById('num_teams_value').innerText = this.value">
     </div>
   </div>
 
@@ -64,3 +72,29 @@
     </div>
   </div>
 </form>
+
+<!-- Script para el filtro y el botón de deselección -->
+<script>
+  // Filtro de equipos
+  document.getElementById('team-filter').addEventListener('input', function() {
+    const filterValue = this.value.toLowerCase();
+    const teamsContainer = document.getElementById('teams-checkbox-container');
+    const checkboxItems = teamsContainer.getElementsByClassName('checkbox-item');
+
+    // Mostrar u ocultar cada elemento según el valor del filtro
+    for (let i = 0; i < checkboxItems.length; i++) {
+      const labelText = checkboxItems[i].querySelector('label').innerText.toLowerCase();
+      checkboxItems[i].style.display = labelText.includes(filterValue) ? 'flex' : 'none';
+    }
+  });
+
+  // Botón para quitar la selección de todos los equipos
+  document.getElementById('clear-teams').addEventListener('click', function() {
+    const teamsContainer = document.getElementById('teams-checkbox-container');
+    const checkboxes = teamsContainer.querySelectorAll('input[type="checkbox"]');
+    
+    checkboxes.forEach(function(checkbox) {
+      checkbox.checked = false;
+    });
+  });
+</script>

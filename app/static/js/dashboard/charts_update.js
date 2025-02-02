@@ -170,6 +170,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const heatmapCheck = document.getElementById("heatmap_check");
   const teamsCheckboxContainer = document.getElementById("teams-checkbox-container");
   const numTeams = document.getElementById("num_teams");
+  const clearTeamsBtn = document.getElementById("clear-teams");
 
   if (countryBarSelect) countryBarSelect.addEventListener("change", updateCharts);
   if (countryRankSelect) countryRankSelect.addEventListener("change", updateCharts);
@@ -177,6 +178,15 @@ document.addEventListener("DOMContentLoaded", function() {
   if (heatmapCheck) heatmapCheck.addEventListener("change", updateCharts);
   if (teamsCheckboxContainer) teamsCheckboxContainer.addEventListener("change", updateCharts);
   if (numTeams) numTeams.addEventListener("change", updateCharts);
+
+  // Agregar listener al botón "Quitar selección" para actualizar gráficos tras borrar la selección
+  if (clearTeamsBtn) {
+    clearTeamsBtn.addEventListener("click", function() {
+      // Se asume que el código que limpia la selección ya se ejecuta (por ejemplo, mediante otro listener inline o aquí mismo)
+      // Esperamos un corto lapso para que los checkboxes se actualicen y luego llamamos a updateCharts
+      setTimeout(updateCharts, 0);
+    });
+  }
 
   // Llamar al inicio para actualizar
   updateCharts();

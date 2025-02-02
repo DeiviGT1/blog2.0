@@ -58,7 +58,7 @@ def update_charts():
     bar_chart = get_plot_top_teams_country(df_copy, country_bar, num_teams=num_teams) if country_bar else None
     rank_chart = get_plot_ranking_evolution(df_copy, country_rank, num_teams=num_teams) if country_rank else None
     violin_chart = get_plot_violin_elo(df_copy) if show_violin else None
-    heatmap_chart = get_plot_heatmap_elo(df_copy) if show_heatmap else None
+    heatmap_chart = get_plot_heatmap_elo(df_copy, num_teams=num_teams) if show_heatmap else None
 
     return jsonify({
         "trend_chart": trend_chart,
@@ -67,7 +67,7 @@ def update_charts():
         "violin_chart": violin_chart,
         "heatmap_chart": heatmap_chart
     })
-
+    
 @dashboard_bp.route("/generate_conclusions_ajax", methods=["POST"])
 def generate_conclusions_ajax():
     """

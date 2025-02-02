@@ -6,7 +6,7 @@ import logging
 import pandas as pd
 
 # URL base de tu microservicio de graficación en Cloud Run
-MICROSERVICE_URL = "https://microservice-plot-163142221066.us-central1.run.app"
+MICROSERVICE_URL = "https://microservice-plot-163142221066.us-east1.run.app"
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -116,10 +116,16 @@ def get_plot_violin_elo(df):
         logger.error(f"Error inesperado en plot_violin_elo: {err}")
     return None
 
-def get_plot_heatmap_elo(df):
+def get_plot_heatmap_elo(df, num_teams=5):
     df = convert_datetime_columns_to_str(df)
+    # Calcular el ELO promedio por club y seleccionar los top num_teams equipos
+    elo_mean = df.groupby('club')['elo'].mean().reset_index()
+    top_clubs = elo_mean.sort_values('elo', ascending=False).head(num_teams)['club'].tolist()
+    # Filtrar el DataFrame para incluir solo esos equipos
+    df_filtered = df[df['club'].isin(top_clubs)]
+    
     payload = {
-        "df": df.to_dict(orient="records")
+        "df": df_filtered.to_dict(orient="records")
     }
     url = f"{MICROSERVICE_URL}/plot_heatmap_elo"
     try:
