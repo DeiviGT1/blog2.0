@@ -64,14 +64,13 @@
   .project-left {
     flex: 1;
     text-align: left;
-    margin-bottom: 0.5rem;
   }
   
   /* Sección derecha del proyecto (etiquetas) */
   .project-right {
+    align-content: center;
     flex: 1;
     text-align: right;
-    margin-bottom: 0.5rem;
   }
   
   /* Enlace principal del proyecto */

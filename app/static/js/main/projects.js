@@ -37,25 +37,26 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param {MouseEvent} e
      */
     function positionPreview(e) {
-      const offsetX = 10; // Ajusta a tu gusto
-      const offsetY = 10;
-  
-      // Usamos pageX/pageY para considerar el scroll vertical
-      let x = e.pageX + offsetX;
-      let y = e.pageY + offsetY;
-  
-      const containerWidth = previewContainer.offsetWidth;
-      const containerHeight = previewContainer.offsetHeight;
-  
-      // Ajustar para no salirse por la derecha
-      if (x + containerWidth > document.documentElement.clientWidth) {
-        x = e.pageX - containerWidth - offsetX;
+      const offset = 10; // margen respecto al cursor
+      // Obtenemos las dimensiones actuales del preview
+      const previewRect = previewContainer.getBoundingClientRect();
+    
+      // Posicionamos en X de forma similar a lo que ya tenías
+      let x = e.pageX + offset;
+      if (x + previewRect.width > window.innerWidth) {
+        x = e.pageX - previewRect.width - offset;
       }
-      // Ajustar para no salirse por debajo
-      if (y + containerHeight > document.documentElement.clientHeight) {
-        y = e.pageY - containerHeight - offsetY;
+    
+      // Para la posición vertical usamos clientY, que da la posición dentro del viewport
+      let y;
+      // Si hay suficiente espacio debajo del cursor, mostramos el preview abajo
+      if (e.clientY + previewRect.height + offset < window.innerHeight) {
+        y = e.pageY + offset;
+      } else {
+        // Si no, lo mostramos arriba del cursor
+        y = e.pageY - previewRect.height - offset;
       }
-  
+    
       previewContainer.style.left = x + 'px';
       previewContainer.style.top = y + 'px';
     }
