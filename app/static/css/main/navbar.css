@@ -256,4 +256,7 @@ input:not(:checked) + .slider .moon-icon {
   .invert-button-container {
     margin-bottom: 20px;
   }
+  .sidebar-bottom{
+    display: none;
+  }
 }
