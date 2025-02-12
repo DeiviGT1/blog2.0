@@ -1,0 +1,152 @@
+<!-- app/templates/blogpost/projects/data-science/macros-excel.html -->
+
+{% extends "blogpost/base_blogpost.html" %}
+{% block extra_head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/blogpost/projects.css') }}"
+/>
+{% endblock %}
+{% block content %}
+<div class="jumbotron">
+  <div class="project-title">
+    <h1 class="display-4">Proyecto Macros Excel (VBA)</h1>
+    <h3 class="lead">Automatización y consolidación de datos en Excel</h3>
+  </div>
+
+  <div class="project-summary">
+
+    <p>
+      En este documento se explica de manera detallada la funcionalidad de las diferentes macros
+      escritas en VBA (Visual Basic for Applications) que se usaban en el entorno de Excel para
+      automatizar tareas de inventario, consolidación de datos, generación de reportes y filtros.
+    </p>
+
+    <div class="project-image-text">
+      <div>
+        <h2>1. Macro <code>Bodega()</code></h2>
+        <p>
+          <strong>Ubicación:</strong> Módulo <em>Bodega_de_datos</em><br/>
+          <strong>Objetivo principal:</strong> Procesar y consolidar la información de un archivo
+          “TCEDI” seleccionado por el usuario, crear una tabla dinámica con los datos y transferir resultados
+          a la “Plantilla preparación”, realizando además búsquedas en otros archivos para enriquecer la información.
+        </p>
+        <p>
+          <strong>Flujo general:</strong> Primero abre el archivo en la variable <code>ruta</code>, 
+          limpia columnas y luego pide al usuario seleccionar la TCEDI. Crea una columna con fórmulas 
+          de concatenación para identificar elementos y genera una tabla dinámica (con <code>PivotCaches</code>)
+          para resumir información. Copia el resultado a la “Plantilla preparación.xlsm”, realiza reemplazos 
+          (ej. <code>"B.Eco" &rarr; "B. eco"</code>), separa texto con la función <em>Texto en columnas</em>, 
+          y cierra archivos de apoyo (por ejemplo <em>item_extensiones.xlsx</em>). Finalmente deja los datos 
+          listos en la plantilla, con los campos “id_cia”, “concatenado”, etc. ya calculados.
+        </p>
+      </div>
+      <div class='project-image'>
+        <img
+          src="{{ url_for('static', filename='images/blogpost/macros-excel-1.png') }}"
+          alt="Procesamiento de datos en Excel"
+        />
+      </div>
+    </div>
+
+    <div class="project-image-text">
+      <div>
+        <h2>2. Macro <code>Consolidar_BDT()</code></h2>
+        <p>
+          <strong>Ubicación:</strong> Módulo <em>Módulo1</em><br/>
+          <strong>Objetivo principal:</strong> Unificar la información de despacho a partir de un archivo 
+          “T.Cedi” (seleccionado por el usuario), creando también una tabla dinámica y completando datos 
+          con un “Maestro de ítems”. Al final, copia los resultados en un libro central de consolidación 
+          (por ejemplo, <em>BDT.CEDI.xlsx</em>).
+        </p>
+        <p>
+          <strong>Flujo general:</strong> Solicita el archivo T.Cedi, lo abre con 
+          <code>Workbooks.OpenText</code> usando delimitadores, crea una columna para concatenar 
+          valores y genera una tabla dinámica para “Suma de Valor”. Aplica separaciones con 
+          <em>TextToColumns</em>, inserta columnas calculadas (año, mes en texto) y realiza búsquedas
+          con <code>XLOOKUP</code> o <code>VLOOKUP</code> en un “Maestro de ítems.txt”. Luego pega 
+          todo en <em>BDT.CEDI.xlsx</em> para tener un consolidado de datos de despacho.
+        </p>
+      </div>
+      <div class='project-image'>
+        <img
+          src="{{ url_for('static', filename='images/blogpost/macros-excel-2.png') }}"
+          alt="Consolidación de datos"
+        />
+      </div>
+    </div>
+
+    <h2>3. Macro <code>Disponbile()</code></h2>
+    <p>
+      <strong>Ubicación:</strong> Módulo <em>Disponible</em><br/>
+      <strong>Objetivo principal:</strong> Centralizar la disponibilidad de ítems en distintas bodegas 
+      (S, M, L, etc.), calcular inventario total y decidir cuántas unidades pueden enviarse (limitadas a 
+      250, según reglas de negocio). Posteriormente, formatea y ordena la hoja para dejarla lista para 
+      uso por parte del equipo.
+    </p>
+    <p>
+      <strong>Flujo general:</strong> Limpia columnas (A:Z), define los encabezados (Foto, Item, 
+      Calificación, Existencia total, etc.) y obtiene la información de la hoja “B034” a través de 
+      filtros. Inserta fórmulas para sumar unidades, usar <code>VLOOKUP</code> y marcar ítems nuevos 
+      o en “Lista negra”. También aplica una lógica para limitar la cantidad a enviar si el inventario 
+      sobrepasa las 250 unidades. Luego rompe los vínculos externos y ordena columnas para presentar 
+      el reporte final de disponibilidad.
+    </p>
+
+    <div class="project-image-text">
+      <div>
+        <h2>4. Macro <code>Listado()</code></h2>
+        <p>
+          <strong>Ubicación:</strong> Módulo <em>Listado</em><br/>
+          <strong>Objetivo principal:</strong> Generar un nuevo libro (p.ej. “LIST hombre.xlsx”) 
+          con la información final, formateada y con columnas como <em>FOTO, ITEM, GENERO, 
+          CATEGORÍA, INV TOTAL, S, M, L</em>. Aplica tabla dinámica y ordena la data 
+          para un reporte definitivo (hoja “FINAL” renombrada a “SALE”).
+        </p>
+        <p>
+          <strong>Flujo general:</strong> Crea un libro nuevo, copia datos desde “Importación SALE hombre” 
+          y los pega en la nueva hoja “SALE”. Realiza sumas para el inventario total, 
+          da formato (color, tipografía, bordes) y ordena por categoría y género. 
+          Abre un diálogo <code>SaveAs</code> para que el usuario elija el destino. 
+          Posteriormente, genera una tabla dinámica para validar datos, elimina hojas temporales 
+          y deja solo la hoja “FINAL”, que se nombra definitivamente “SALE”.
+        </p>
+      </div>
+      <div class='project-image'>
+        <img
+          src="{{ url_for('static', filename='images/blogpost/macros-excel-3.png') }}"
+          alt="Listado final"
+        />
+      </div>
+    </div>
+
+    <h2>5. Macros <code>VxP()</code> y <code>VxP_EC()</code></h2>
+    <p>
+      <strong>Ubicación:</strong> Módulo <em>VxP</em><br/>
+      <strong>Objetivo principal:</strong> Aplicar filtros y formato condicional 
+      (escalas de color) en todas las hojas de un libro, para resaltar filas donde 
+      ciertas columnas cumplan valores &gt; 3 o &lt; 0.2.
+    </p>
+    <p>
+      <strong>Flujo común:</strong> Recorre cada hoja (desde 1 hasta <code>WS_Count</code>), 
+      aplica <em>AutoFilter</em> en columnas clave (por ejemplo, la 11 y la 14) 
+      para dejar visible solo lo que cumpla 
+      <code>valor &gt; 3</code> y <code>valor &lt; 0.2</code>, 
+      y luego establece un <code>ColorScale</code> en columnas <code>N:P</code> o <code>N:S</code> 
+      para marcarlo con una gradación de 3 colores. La diferencia entre <code>VxP()</code> 
+      y <code>VxP_EC()</code> radica en que <code>VxP()</code> abarca <code>A:P</code> 
+      y <code>VxP_EC()</code> llega hasta <code>A:S</code>.
+    </p>
+
+
+    <p class="end-paragraph">
+      <strong>Conclusión General:</strong> Estas macros escritas en VBA permiten automatizar tareas 
+      de limpieza, consolidación y reporte de datos de manera rápida y eficiente, 
+      ahorrando tiempo y reduciendo errores en procesos manuales. Cada macro cumple 
+      un rol específico (bodega, consolidación, disponibilidad, generación de listado y filtros),
+      contribuyendo al flujo completo de trabajo en el manejo de inventarios y ventas.
+    </p>
+    
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+<!-- app/templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block titulo %}Mi Portafolio{% endblock %}</title>
+    <!-- Font Awesome -->
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/styles.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/navbar.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/toogle-mode.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/rotating-image.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/contact.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/job-description.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/openai/recommendations.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main/projects.css') }}"/>
+    
+
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}">
+    <link rel="canonical" href="https://www.josedavidgt.com/">
+
+    <!-- Bloque para estilos adicionales -->
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div class="d-flex">
+      <!-- Barra Lateral -->
+      <nav class="sidebar">
+        <div class="sidebar-top">
+          <a class="nav-link" href="{% if request.path == '/' %}#{% else %}{{ url_for('main.index') }}#{% endif %}">
+            <div class="sidebar-header text-center py-4">
+              <div class="rotating-container">
+                <div class="rotating-card">
+                  <!-- Front Image (Same in Both Modes) -->
+                  <img
+                    class="front-image"
+                    src="{{ url_for('static', filename='images/PP.png') }}"
+                    alt="Avatar Front"
+                  />
+                  <!-- Back Images (Different Depending on Mode) -->
+                  <img
+                    class="back-image invertible-image"
+                    src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}"
+                    data-default-src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}"
+                    data-inverted-src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}"
+                    alt="Avatar Back"
+                  />
+                </div>
+              </div>
+              <h3>Jose David GT</h3>
+              <h4 style="font-weight: 500">Data Engineer</h4>
+              <p>
+                I provide analytics with dynamic charts on Power BI to help you
+                understand your own business
+              </p>
+            </div>
+          </a>
+          <ul class="list-unstyled components">
+            <li class="nav-item">
+              <a class="nav-link" href="{% if request.path == '/' %}#about{% else %}{{ url_for('main.index') }}#about{% endif %}">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% if request.path == '/' %}#projects{% else %}{{ url_for('main.index') }}#projects{% endif %}">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% if request.path == '/' %}#contact{% else %}{{ url_for('main.index') }}#contact{% endif %}">Contact</a>
+            </li>
+          </ul>
+
+          <div class="invert-button-container">
+            <label class="switch">
+              <input type="checkbox" id="invertToggle" />
+              <span class="slider">
+                <i class="fas fa-sun sun-icon"></i>
+                <i class="fas fa-moon moon-icon"></i>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="sidebar-bottom">
+          <a class="blogpost-bottom" href="/blogpost">BlogPost</a>
+        </div>
+
+      </nav>
+
+      <!-- Contenido Principal -->
+      <div class="content flex-grow-1">
+        <!-- Main Content Block -->
+        {% block contenido %}
+        <!-- Aquí se inserta el contenido específico de cada página -->
+        {% endblock %}
+
+        <!-- Pie de Página -->
+        <footer class="footer mt-auto py-3">
+          <div class="container">
+            <span class="text-muted"
+              >© 2024 Jose David GT. All rights reserved.</span
+            >
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Modal de Contacto -->
+    {% include 'main/modal.html' %}
+
+
+    <!-- Scripts de Bootstrap y dependencias -->
+    <script src="{{ url_for('static', filename='js/main/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/rotate-image.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/scrollspy.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main/modal.js') }}"></script>
+
+    <!-- Bloque para scripts adicionales -->
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{% extends "blogpost/base_blogpost.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="introduction container">
+        <h1 class="display-4">Hello! I am Jose</h1>
+        <div class="subtitle">
+            <img class="invertible-image avatar-image" 
+                src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}" 
+                data-default-src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}" 
+                data-inverted-src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}" 
+                alt="Avatar">
+                <p class="lead">I engage in data mining, analyze data, create websites, and a bit more.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

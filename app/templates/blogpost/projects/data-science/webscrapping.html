@@ -1,0 +1,202 @@
+<!-- app/templates/blogpost/projects/data-science/webscraping.html -->
+
+{% extends "blogpost/base_blogpost.html" %}
+
+{% block extra_head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/blogpost/projects.css') }}"
+/>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+  <div class="project-title">
+    <h1 class="display-4">Proyecto de Web Scraping</h1>
+    <h3 class="lead">Automatización de recolección de datos con Selenium y Requests</h3>
+  </div>
+
+  <div class="project-summary">
+    <p>
+      Este proyecto integra diferentes aproximaciones de Web Scraping utilizando librerías como
+      <code>Selenium</code> y <code>BeautifulSoup</code>, así como herramientas auxiliares como 
+      <code>webdriver_manager</code>. Con ello se busca extraer datos de diversas páginas web
+      de manera automática y programática.
+    </p>
+
+    <p>
+      A continuación, se muestran algunos fragmentos de código donde se 
+      aplican buenas prácticas, como limpieza de texto, manejo de precios 
+      y scroll dinámico en sitios con contenido que se carga de forma parcial.
+    </p>
+
+    <!-- Bloque con imagen + texto (opcional) -->
+    <div class="project-image-text">
+      <div>
+        <img
+          src="{{ url_for('static', filename='images/blogpost/webscraping-1.png') }}"
+          alt="Ejemplo de Web Scraping"
+        />
+      </div>
+      <div>
+        <p>
+          Usar <strong>Selenium</strong> permite automatizar un navegador real para hacer login,
+          resolver pantallas intermedias y realizar clics. De esta manera se pueden extraer
+          datos de páginas que <em>renderizan</em> elementos de forma asíncrona y no se limitan
+          únicamente a HTML estático.
+        </p>
+      </div>
+    </div>
+
+    <!-- Ejemplo de código 1 -->
+    <h2>1. Clase <code>Web_driver()</code> y funciones auxiliares</h2>
+    <p>
+      Este fragmento de código inicializa un navegador Chrome, define la función 
+      <code>get_gender()</code> para determinar el género del producto a partir de la URL, 
+      así como métodos de limpieza de textos y precios:
+    </p>
+
+<pre><code>
+class Web_driver():
+    def __init__(self):
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+
+    def get_gender(self, pag):
+        # ... definición de lógica para 'hombre' | 'mujer' ...
+
+    def arreglar_texto(self, texto_in):
+        # ... elimina espacios y caracteres especiales ...
+
+    def arreglar_moneda(self, valor_in):
+        # ... limpieza de valores monetarios ...
+
+    def actualizar_altura(self, x_path):
+        # ... desplaza el scroll hasta la altura de un elemento ...
+</code></pre>
+
+    <!-- Ejemplo de código 2 -->
+    <h2>2. Scraping completo de productos</h2>
+    <p>
+      En la función <code>true()</code> se define el proceso de scrolling, recolección de 
+      URLs, productos (nombre, precio, imagen) y finalmente la creación de un
+      <code>DataFrame</code> para almacenar los resultados:
+    </p>
+
+<pre><code>
+def true(self):
+    print('=============True Scraping==============')
+    # Definición de las páginas a usar
+    url = ['https://trueshop.co/pages/hombre','https://trueshop.co/pages/mujer']
+    # ...
+    lista_diccionarios = []
+    for pagina in paginas_completo:
+        self.driver.get(pagina)
+        # ...
+        while True:
+            # scroll + extracción de items
+            # ...
+            lista_diccionarios.append({
+                'fecha': date.today(),
+                'foto': foto,
+                'item': foto,
+                'posición': posicion,
+                'marca': "True",
+                'pag': pagina,
+                'nombre': nombre,
+                'precio': precio_visible,
+                'precio descuento': precio_antiguo,
+                'categoria': categoria,
+                'genero': genero_item,
+                'link': link
+            })
+            # ...
+    return pd.DataFrame(lista_diccionarios)
+</code></pre>
+
+    <p>
+      De este modo se construye un dataframe que posteriormente puede ser exportado 
+      a formatos como CSV o Excel, facilitando el análisis posterior.
+    </p>
+
+    <!-- Bloque con imagen + texto (opcional) -->
+    <div class="project-image-text">
+      <div>
+        <p>
+          También se incluyen ejemplos de automatización de login en servicios de streaming:
+          <code>Prime Video</code> y <code>Star+</code>, para simular usuario, contraseña,
+          y extraer información de series, episodios y enlaces directos.
+        </p>
+      </div>
+      <div>
+        <img
+          src="{{ url_for('static', filename='images/blogpost/webscraping-2.png') }}"
+          alt="Scraping de servicios de streaming"
+        />
+      </div>
+    </div>
+
+    <!-- Ejemplo de código 3 -->
+    <h2>3. Automatización de login (Prime Video)</h2>
+    <p>
+      El siguiente ejemplo utiliza <code>Selenium</code> para:
+    </p>
+    <ul>
+      <li>Navegar a la página de <code>primevideo.com</code>.</li>
+      <li>Rellenar credenciales.</li>
+      <li>Ingresar el término de búsqueda.</li>
+      <li>Almacenar enlaces de cada episodio.</li>
+    </ul>
+
+<pre><code>
+driver = webdriver.Chrome()
+driver.get("https://www.primevideo.com/")
+
+# Hacer clic en el botón "login"
+login_button = driver.find_element(By.XPATH, './/a[@class="dv-copy-button"]')
+login_button.click()
+
+# Ingresar email
+email_field = driver.find_element(By.XPATH, './/input[@type="email"]')
+email_field.send_keys(user_name)
+
+# ...
+</code></pre>
+
+    <!-- Ejemplo de código 4 -->
+    <h2>4. Automatización de login (Star+)</h2>
+    <p>
+      Similarmente, para <strong>Star+</strong> se requiere manejar pantallas 
+      intermedias (botones de "Continuar", elección de perfil, etc.). Aquí se 
+      ilustra la secuencia de pasos:
+    </p>
+
+<pre><code>
+driver = webdriver.Chrome()
+driver.get("https://www.starplus.com")
+
+# ...
+path = './/a[@href="/login"]'
+login_button = driver.find_element(By.XPATH, path)
+login_button.click()
+
+# Continuar y aceptar
+path = './/button[@aria-label="Aceptar y continuar"]'
+continue_button = driver.find_element(By.XPATH, path)
+continue_button.click()
+
+# ...
+</code></pre>
+
+    <p class="end-paragraph">
+      Con esta aproximación, hemos automatizado la extracción de información en varios contextos: tiendas 
+      en línea y servicios de streaming. El uso de <code>Selenium</code> y <code>BeautifulSoup</code> 
+      permite adaptar el scraping a distintos escenarios, manejando logins, scroll infinito y parsing 
+      de HTML. De esta forma, se pueden generar datasets para posteriores análisis de negocio 
+      o simplemente para centralizar y administrar el contenido que más nos interesa.
+    </p>
+
+  </div> <!-- project-summary -->
+</div> <!-- jumbotron -->
+{% endblock %}
