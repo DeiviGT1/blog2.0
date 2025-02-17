@@ -54,6 +54,7 @@ def generar_respuesta(song_name, artista):
                 recomendaciones.append(song.strip())
         recomendaciones = list(set(recomendaciones))  # Eliminar duplicados
         return recomendaciones
+    
     else:
         print(f"Error: {response.status_code} - {response.text}")
         return []
