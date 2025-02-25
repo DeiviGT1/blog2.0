@@ -3,6 +3,10 @@
 
 {% block titulo %}Sonic Surprise - Recomendaciones de Canciones{% endblock %}
 
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/footer-projects.css') }}">
+{% endblock %}
+
 {% block contenido %}
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/openai/sonic_surprise.css') }}">
