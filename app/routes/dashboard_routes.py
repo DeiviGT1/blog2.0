@@ -1,8 +1,5 @@
 # app/routes/dashboard_routes.py
 from flask import Blueprint, render_template, request, jsonify
-import pandas as pd
-import base64
-import json
 from ..python.dashboard.data import load_data
 from ..python.microservice_helpers import (
     get_plot_top_teams_country,
