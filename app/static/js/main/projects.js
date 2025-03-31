@@ -1,16 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Seleccionamos todos los enlaces de proyectos
     const projectLinks = document.querySelectorAll('.project-link');
   
-    // Selección del contenedor de preview y sus elementos
     const previewContainer = document.getElementById('project-preview');
     const previewImage = previewContainer.querySelector('.project-preview-image');
     const previewTitle = document.getElementById('preview-title');
     const previewDescription = document.getElementById('preview-description');
   
-    /**
-     * Muestra el preview con la información del proyecto.
-     */
+    /*Muestra el preview con la información del proyecto.*/
     function showPreview(link) {
       const projectTitle = link.getAttribute('data-title');
       const projectDescription = link.getAttribute('data-description');
@@ -21,23 +17,16 @@ document.addEventListener('DOMContentLoaded', function () {
       previewTitle.textContent = projectTitle || 'Untitled Project';
       previewDescription.textContent = projectDescription || 'No description provided.';
   
-      // Mostramos el contenedor (sin animaciones, directamente)
       previewContainer.style.display = 'block';
     }
   
-    /**
-     * Oculta el preview inmediatamente.
-     */
     function hidePreview() {
       previewContainer.style.display = 'none';
     }
   
-    /**
-     * Ajusta la posición del contenedor de preview para que siga el ratón.
-     * @param {MouseEvent} e
-     */
+    /*Ajusta la posición del contenedor de preview para que siga el ratón.*/
     function positionPreview(e) {
-      const offset = 10; // margen respecto al cursor
+      const offset = 10;
       // Obtenemos las dimensiones actuales del preview
       const previewRect = previewContainer.getBoundingClientRect();
     
@@ -63,17 +52,14 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Para cada enlace de proyecto
     projectLinks.forEach(link => {
-      // Al poner el mouse sobre el enlace
       link.addEventListener('mouseenter', function () {
         showPreview(link);
       });
   
-      // Al mover el mouse dentro del enlace, actualizamos la posición
       link.addEventListener('mousemove', function (e) {
         positionPreview(e);
       });
   
-      // Al salir del enlace, ocultamos el preview inmediatamente
       link.addEventListener('mouseleave', function () {
         hidePreview();
       });
