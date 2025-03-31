@@ -1,9 +1,7 @@
 # app/python/microservice_helpers.py
 
 import requests
-import json
 import logging
-import pandas as pd
 
 # URL base de tu microservicio de graficación en Cloud Run
 MICROSERVICE_URL = "https://microservice-plot-163142221066.us-east1.run.app"

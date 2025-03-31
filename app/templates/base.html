@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main/rotating-image.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main/contact.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main/job-description.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/openai/recommendations.css') }}"/>
     
 
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}">
@@ -36,7 +35,11 @@
                   <!-- Front Image (Same in Both Modes) -->
                   <img
                     class="front-image"
-                    src="{{ url_for('static', filename='images/PP.png') }}"
+                    src="{{ url_for('static', filename='images/PP.webp') }}"
+                    srcset="{{ url_for('static', filename='images/PP.webp') }} 400w,
+                            {{ url_for('static', filename='images/PP.webp') }} 800w,
+                            {{ url_for('static', filename='images/PP.webp') }} 1200w"
+                    sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px"
                     alt="Avatar Front"
                   />
                   <!-- Back Images (Different Depending on Mode) -->

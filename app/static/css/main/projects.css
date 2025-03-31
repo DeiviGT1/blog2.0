@@ -1,6 +1,5 @@
 /* Ejemplo de CSS para proyectos con menú desplegable */
 
-/* Contenedor general de proyectos */
 .content-wrapper-projects.wrapper {
     display: flex;
     flex-direction: column;
@@ -10,12 +9,10 @@
     justify-content: flex-startgit ;
   }
   
-  /* Contenedor principal */
   .personal-projects.container.section {
     margin-top: 2rem;
   }
   
-  /* Menú desplegable (details/summary) */
   details {
     margin-bottom: 1rem;
     border: 1px solid var(--muted-text-color);
@@ -27,7 +24,7 @@
   }
   
   details[open] {
-    background-color: rgba(0,0,0,0.05); /* Ajusta según tu gusto */
+    background-color: rgba(0,0,0,0.05); 
   }
   
   summary {
@@ -37,19 +34,16 @@
     transition: transform 0.3s;
   }
 
-  /* Oculta el marcador de la lista en Chrome/Safari */
   summary::-webkit-details-marker {
     display: none;
   }
   
-  /* Lista de proyectos */
   .project-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
   }
   
-  /* Cada proyecto */
   .project-item {
     margin-bottom: 1rem;
     display: flex;
@@ -60,20 +54,17 @@
     transition: border-color 0.5s;
   }
   
-  /* Sección izquierda del proyecto (título, enlace) */
   .project-left {
     flex: 1;
     text-align: left;
   }
   
-  /* Sección derecha del proyecto (etiquetas) */
   .project-right {
     align-content: center;
     flex: 1;
     text-align: right;
   }
   
-  /* Enlace principal del proyecto */
   .project-link {
     color: var(--main-text-color);
     text-decoration: none;
@@ -84,7 +75,6 @@
     color: var(--hover-bg-color);
   }
   
-  /* Lista de subproyectos/tecnologías */
   .sub-project-list {
     display: inline-flex;
     list-style-type: none;
@@ -105,7 +95,6 @@
     color: var(--hover-text-color);
   }
   
-  /* Video Overlay */
   #video-overlay.video-overlay {
     position: fixed;
     top: 0;
@@ -149,9 +138,8 @@
     cursor: pointer;
   }
   
-  /* Contenedor de vista previa de proyectos */
   #project-preview.project-preview {
-    display: none; /* inicialmente oculto */
+    display: none; 
     text-align: center;
     margin-top: 1rem;
   }
@@ -166,48 +154,43 @@
     text-align: left;
   }
 
-  /* Contenedor de vista previa de proyectos */
 #project-preview.project-preview {
-    position: absolute;         /* Para poder ubicarlo con left y top */
-    z-index: 999;               /* Para que aparezca encima del contenido */
-    display: none;              /* Inicialmente oculto, se maneja con JS */
-    background-color: var(--content-bg-color);;     /* Fondo para que se distinga */
-    border: 1px solid #ccc;     /* Borde suave */
-    border-radius: 8px;         /* Esquinas redondeadas */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    position: absolute;
+    z-index: 999;
+    display: none;
+    background-color: var(--content-bg-color);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     padding: 1rem;
-    transition: opacity 0.3s ease; /* Suaviza la aparición/desaparición */
-    max-width: 300px;           /* Ajusta el ancho máximo según tu preferencia */
-    pointer-events: auto;       /* Permite que entre/salga el mouse para JS */
+    transition: opacity 0.3s ease;
+    max-width: 300px;
+    pointer-events: auto;
   }
   
-  /* Cuando está visible, se hace el cambio de opacidad */
+
   #project-preview.visible {
-    display: block; /* El JS primero hace display:block y luego añade .visible */
+    display: block;
     opacity: 1;
   }
   
-  /* Imagen dentro del contenedor de preview */
   .project-preview-image {
-    width: 100%;        /* Para que la imagen se escale al ancho del contenedor */
+    width: 100%;
     height: auto;
-    max-height: 200px;  /* Fija una altura máxima si lo deseas */
-    object-fit: contain; /* Evita deformar la imagen */
+    max-height: 200px;
+    object-fit: contain;
     margin-bottom: 1rem;
   }
   
-  /* Descripción del proyecto */
   .project-preview-description {
     text-align: left;
   }
   
-  /* Ajusta posicionamiento si deseas que siga el mouse o esté en un lugar fijo */
-  /* Adaptaciones responsivas */
   @media (max-width: 768px) {
     .project-item {
       flex-direction: column;
       text-align: center;
-      border: none; /* por si quieres simplificar la vista en móvil */
+      border: none;
     }
   
     .project-left,
