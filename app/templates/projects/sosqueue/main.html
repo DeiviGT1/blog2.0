@@ -1,0 +1,95 @@
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="refresh" content="3">
+  <title>Cola de Trabajo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/sosqueue/main.css') }}" />
+</head>
+<body>
+  <header>
+    <h1>Cola de Trabajo</h1>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+    {% else %}
+      <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+    {% endif %}
+  </header>
+  
+  <section class="queue-container">
+
+    {# 1) Botón “Disponible” siempre visible (si estás autenticado y NO en la cola) #}
+    {% if current_user.is_authenticated and (current_user.id not in queue_ids) %}
+      <button id="btn-join">Disponible</button>
+    {% endif %}
+
+    {# 2) Ahora sí, si hay alguien en la cola muéstralos… #}
+    {% if queue %}
+      <ul class="user-queue">
+        {% for user in queue %}
+          <li id="user-{{ user.id }}">
+            <span class="user-name">{{ user.name }}</span>
+            {% if current_user.is_authenticated and user.id == current_user.id %}
+              {% if queue[0].id == current_user.id %}
+                <button id="btn-work">En trabajo</button>
+              {% endif %}
+              <button id="btn-leave">Salir</button>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty-queue">No hay usuarios en la cola.</p>
+    {% endif %}
+
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Función genérica para POST a join, work o leave
+      const callAction = (action) => {
+        fetch(`${window.location.pathname}${action}`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({})  // ningún dato extra por ahora
+        })
+        .then(res => {
+          if (!res.ok) {
+            return res.json().then(data => { throw new Error(data.error || res.statusText); });
+          }
+          return res.json();
+        })
+        .then(_ => {
+          // recarga la página para ver la cola actualizada
+          window.location.reload();
+        })
+        .catch(err => {
+          alert(`Error: ${err.message}`);
+        });
+      };
+
+      // Botón “Disponible”
+      const joinBtn = document.getElementById('btn-join');
+      if (joinBtn) {
+        joinBtn.addEventListener('click', () => callAction('join'));
+      }
+
+      // Botón “En trabajo”
+      const workBtn = document.getElementById('btn-work');
+      if (workBtn) {
+        workBtn.addEventListener('click', () => callAction('work'));
+      }
+
+      // Botón “Salir”
+      const leaveBtn = document.getElementById('btn-leave');
+      if (leaveBtn) {
+        leaveBtn.addEventListener('click', () => callAction('leave'));
+      }
+    });
+  </script>
+</body>
+</html>
