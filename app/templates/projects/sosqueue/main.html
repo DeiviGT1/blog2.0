@@ -7,100 +7,100 @@
   <meta http-equiv="refresh" content="3">
   <title>Cola de Trabajo</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/sosqueue/main.css') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/projects/logo-isotipo-sos.webp') }}">
 </head>
 <body>
   <header>
     <h1>Cola de Trabajo</h1>
   </header>
-  
+
   <section class="queue-container">
 
-  {# 1) Botón “Disponible” solo si NO estás en la cola activa #}
-  {% if current_user.is_authenticated 
-    and (current_user.id|int not in queue_ids) %}
-  <button id="btn-join">Disponible</button>
+  {# Botón “Disponible” – sólo para empleados (no admin) que NO estén en activos #}
+  {% if current_user.is_authenticated and not current_user.is_admin
+        and (current_user.id|int not in queue_ids) %}
+    <button id="btn-join">Disponible</button>
   {% endif %}
 
-    {# 2) Ahora sí, si hay alguien en la cola muéstralos… #}
-    {% if queue %}
+  {# Lista de usuarios en ambas colas #}
+  {% if queue %}
     <ul class="user-queue">
       {% for user in queue %}
-        <li 
-          id="user-{{ user.id }}" 
-          class="{% if user.id|int not in queue_ids %}idle{% endif %}"
-        >
-        {% if user.id == current_user.id %}
-          <span class="user-name current-user">{{ user.name }}</span>
-        {% else %}
-          <span class="user-name">{{ user.name }}</span>
-        {% endif %}
-          {% if current_user.is_authenticated
-                and user.id == current_user.id
-                and (user.id in queue_ids) %}
-            {% if queue[0].id == current_user.id %}
-              <button id="btn-work">En trabajo</button>
+        <li id="user-{{ user.id }}"
+            class="{% if user.id|int not in queue_ids %}idle{% endif %}">
+          {% if user.id == current_user.id %}
+            <span class="user-name current-user">{{ user.name }}</span>
+          {% else %}
+            <span class="user-name">{{ user.name }}</span>
+          {% endif %}
+
+          {# ---- Controles del EMPLEADO ---- #}
+          {% if current_user.is_authenticated and not current_user.is_admin %}
+            {% if user.id == current_user.id and (user.id in queue_ids) %}
+              {% if queue[0].id == current_user.id %}
+                <button id="btn-work">En trabajo</button>
+              {% endif %}
+              <button id="btn-leave">Salir</button>
             {% endif %}
-            <button id="btn-leave">Salir</button>
+          {% endif %}
+
+          {# ---- Controles del ADMIN ---- #}
+          {% if current_user.is_authenticated and current_user.is_admin %}
+            <button class="btn-up"   data-id="{{ user.id }}">⬆️</button>
+            <button class="btn-down" data-id="{{ user.id }}">⬇️</button>
+            <button class="btn-idle" data-id="{{ user.id }}">Salir</button>
           {% endif %}
         </li>
       {% endfor %}
     </ul>
-    {% else %}
-      <p class="empty-queue">No hay usuarios en la cola.</p>
+  {% else %}
+    <p class="empty-queue">No hay usuarios en la cola.</p>
+  {% endif %}
+
+  <section>
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
     {% endif %}
-
-    <section>
-      {% if current_user.is_authenticated %}
-        <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-      {% endif %}
-    </section>
-
+  </section>
   </section>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Función genérica para POST a join, work o leave
+      /* ---------- acciones de EMPLEADO ---------- */
       const callAction = (action) => {
         fetch(`${window.location.pathname}${action}`, {
           method: 'POST',
           credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({})  // ningún dato extra por ahora
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
         })
-        .then(res => {
-          if (!res.ok) {
-            return res.json().then(data => { throw new Error(data.error || res.statusText); });
-          }
-          return res.json();
-        })
-        .then(_ => {
-          // recarga la página para ver la cola actualizada
-          window.location.reload();
-        })
-        .catch(err => {
-          alert(`Error: ${err.message}`);
-        });
+        .then(res => res.ok ? res.json() : res.json().then(d => { throw new Error(d.error); }))
+        .then(() => window.location.reload())
+        .catch(err => alert(`Error: ${err.message}`));
       };
 
-      // Botón “Disponible”
-      const joinBtn = document.getElementById('btn-join');
-      if (joinBtn) {
-        joinBtn.addEventListener('click', () => callAction('join'));
-      }
+      document.getElementById('btn-join')  ?.addEventListener('click', () => callAction('join'));
+      document.getElementById('btn-work')  ?.addEventListener('click', () => callAction('work'));
+      document.getElementById('btn-leave') ?.addEventListener('click', () => callAction('leave'));
 
-      // Botón “En trabajo”
-      const workBtn = document.getElementById('btn-work');
-      if (workBtn) {
-        workBtn.addEventListener('click', () => callAction('work'));
-      }
+      /* ---------- acciones de ADMIN ---------- */
+      const callAdmin = (path) => {
+        fetch(`${window.location.pathname}${path}`, {
+          method: 'POST',
+          credentials: 'same-origin'
+        })
+        .then(() => window.location.reload())
+        .catch(err => alert(`Error: ${err.message}`));
+      };
 
-      // Botón “Salir”
-      const leaveBtn = document.getElementById('btn-leave');
-      if (leaveBtn) {
-        leaveBtn.addEventListener('click', () => callAction('leave'));
-      }
+      document.querySelectorAll('.btn-up').forEach(btn =>
+        btn.addEventListener('click', () => callAdmin(`admin/move/${btn.dataset.id}/up`)));
+
+      document.querySelectorAll('.btn-down').forEach(btn =>
+        btn.addEventListener('click', () => callAdmin(`admin/move/${btn.dataset.id}/down`)));
+
+      document.querySelectorAll('.btn-idle').forEach(btn =>
+        btn.addEventListener('click', () => callAdmin(`admin/idle/${btn.dataset.id}`)));
     });
   </script>
 </body>

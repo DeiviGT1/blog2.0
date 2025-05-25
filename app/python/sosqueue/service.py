@@ -22,10 +22,7 @@ class QueueService:
             return self._queue
 
     def work(self, user):
-        """
-        El usuario acepta el turno:
-        sólo si está primero, se rota al final.
-        """
+        """Si está primero, lo rota al final."""
         with self._lock:
             if not self._queue or self._queue[0]['id'] != user.id:
                 raise ValueError("No te toca todavía")
@@ -34,12 +31,9 @@ class QueueService:
             return self._queue
 
     def leave(self, user):
-        """
-        El usuario decide salir de la cola:
-        se elimina donde esté y se añade al final.
-        """
+        """El usuario decide salir de la cola: se mueve al final."""
         with self._lock:
-            for idx,u in enumerate(self._queue):
+            for idx, u in enumerate(self._queue):
                 if u['id'] == user.id:
                     usr = self._queue.pop(idx)
                     self._queue.append(usr)
@@ -47,13 +41,30 @@ class QueueService:
             raise ValueError("No estás en la cola")
 
     def move_all_to(self, other_queue_service):
-        """
-        Saca todos los items de esta cola y los añade
-        al final de la otra cola.
-        """
+        """Pasa todos los usuarios a otra cola."""
         with self._lock:
             items = list(self._queue)
             self._queue.clear()
-        # añade afuera del primer lock
         with other_queue_service._lock:
             other_queue_service._queue.extend(items)
+
+    # ---------- utilidades para administrador ----------
+    def _find_idx(self, user_id: int):
+        for idx, u in enumerate(self._queue):
+            if u['id'] == user_id:
+                return idx
+        return -1
+
+    def move_up(self, user_id: int):
+        with self._lock:
+            idx = self._find_idx(user_id)
+            if idx > 0:
+                self._queue[idx-1], self._queue[idx] = self._queue[idx], self._queue[idx-1]
+        return self._queue
+
+    def move_down(self, user_id: int):
+        with self._lock:
+            idx = self._find_idx(user_id)
+            if 0 <= idx < len(self._queue)-1:
+                self._queue[idx+1], self._queue[idx] = self._queue[idx], self._queue[idx+1]
+        return self._queue
