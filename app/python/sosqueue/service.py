@@ -45,3 +45,15 @@ class QueueService:
                     self._queue.append(usr)
                     return self._queue
             raise ValueError("No estás en la cola")
+
+    def move_all_to(self, other_queue_service):
+        """
+        Saca todos los items de esta cola y los añade
+        al final de la otra cola.
+        """
+        with self._lock:
+            items = list(self._queue)
+            self._queue.clear()
+        # añade afuera del primer lock
+        with other_queue_service._lock:
+            other_queue_service._queue.extend(items)

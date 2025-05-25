@@ -5,9 +5,10 @@ from flask_login import login_user, logout_user, login_required, UserMixin
 
 # Credenciales de prueba (usuario: {id, password})
 _CREDENTIALS = {
-    'juan':   {'id': 1, 'password': 'pass1'},
-    'maria':  {'id': 2, 'password': 'pass2'},
-    'carlos': {'id': 3, 'password': 'pass3'},
+    'Juanfer':   {'id': 1, 'password': '1'},
+    'Edison':  {'id': 2, 'password': '2'},
+    'Johan ': {'id': 3, 'password': '3'},
+    'emp': {'id': 4, 'password': '4'}
 }
 
 class User(UserMixin):

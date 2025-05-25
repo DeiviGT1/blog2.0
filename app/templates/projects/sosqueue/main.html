@@ -1,3 +1,4 @@
+{# app/templates/projects/sosqueue/main.html #}
 
 <html lang="es">
 <head>
@@ -10,38 +11,49 @@
 <body>
   <header>
     <h1>Cola de Trabajo</h1>
-    {% if current_user.is_authenticated %}
-      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-    {% else %}
-      <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
-    {% endif %}
   </header>
   
   <section class="queue-container">
 
-    {# 1) Botón “Disponible” siempre visible (si estás autenticado y NO en la cola) #}
-    {% if current_user.is_authenticated and (current_user.id not in queue_ids) %}
-      <button id="btn-join">Disponible</button>
-    {% endif %}
+  {# 1) Botón “Disponible” solo si NO estás en la cola activa #}
+  {% if current_user.is_authenticated 
+    and (current_user.id|int not in queue_ids) %}
+  <button id="btn-join">Disponible</button>
+  {% endif %}
 
     {# 2) Ahora sí, si hay alguien en la cola muéstralos… #}
     {% if queue %}
-      <ul class="user-queue">
-        {% for user in queue %}
-          <li id="user-{{ user.id }}">
-            <span class="user-name">{{ user.name }}</span>
-            {% if current_user.is_authenticated and user.id == current_user.id %}
-              {% if queue[0].id == current_user.id %}
-                <button id="btn-work">En trabajo</button>
-              {% endif %}
-              <button id="btn-leave">Salir</button>
+    <ul class="user-queue">
+      {% for user in queue %}
+        <li 
+          id="user-{{ user.id }}" 
+          class="{% if user.id|int not in queue_ids %}idle{% endif %}"
+        >
+        {% if user.id == current_user.id %}
+          <span class="user-name current-user">{{ user.name }}</span>
+        {% else %}
+          <span class="user-name">{{ user.name }}</span>
+        {% endif %}
+          {% if current_user.is_authenticated
+                and user.id == current_user.id
+                and (user.id in queue_ids) %}
+            {% if queue[0].id == current_user.id %}
+              <button id="btn-work">En trabajo</button>
             {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
+            <button id="btn-leave">Salir</button>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
     {% else %}
       <p class="empty-queue">No hay usuarios en la cola.</p>
     {% endif %}
+
+    <section>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+      {% endif %}
+    </section>
 
   </section>
 
