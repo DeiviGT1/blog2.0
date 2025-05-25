@@ -13,7 +13,7 @@ _CREDENTIALS = {
     'admin':   {'id': 0, 'password': 'admin', 'admin': True},  # super-usuario
     'Juanfer': {'id': 1, 'password': '1'},
     'Edison':  {'id': 2, 'password': '2'},
-    'Johan ':  {'id': 3, 'password': '3'},
+    'Johan':  {'id': 3, 'password': '3'},
     'emp':     {'id': 4, 'password': '4'},
 }
 
