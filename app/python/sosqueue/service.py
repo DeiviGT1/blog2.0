@@ -17,38 +17,31 @@ class QueueService:
         """Añade al usuario al final si no está ya."""
         with self._lock:
             if any(u['id'] == user.id for u in self._queue):
-                raise ValueError("Ya estás en la cola")
+                raise ValueError("El usuario ya está en esta cola")
             self._queue.append({'id': user.id, 'name': user.username})
             return self._queue
 
-    def work(self, user):
-        """Si está primero, lo rota al final."""
+    def remove(self, user_id: int):
+        """
+        NUEVO: Elimina a un usuario por ID. 
+        Devuelve True si se eliminó, False si no se encontró.
+        """
         with self._lock:
-            if not self._queue or self._queue[0]['id'] != user.id:
-                raise ValueError("No te toca todavía")
-            first = self._queue.pop(0)
-            self._queue.append(first)
-            return self._queue
+            initial_len = len(self._queue)
+            self._queue = [u for u in self._queue if u['id'] != user_id]
+            return initial_len != len(self._queue)
 
-    def leave(self, user):
-        """El usuario decide salir de la cola: se mueve al final."""
+    def pop_first(self):
+        """
+        NUEVO: Elimina y devuelve el primer elemento de la cola.
+        Devuelve None si la cola está vacía.
+        """
         with self._lock:
-            for idx, u in enumerate(self._queue):
-                if u['id'] == user.id:
-                    usr = self._queue.pop(idx)
-                    self._queue.append(usr)
-                    return self._queue
-            raise ValueError("No estás en la cola")
+            if not self._queue:
+                return None
+            return self._queue.pop(0)
 
-    def move_all_to(self, other_queue_service):
-        """Pasa todos los usuarios a otra cola."""
-        with self._lock:
-            items = list(self._queue)
-            self._queue.clear()
-        with other_queue_service._lock:
-            other_queue_service._queue.extend(items)
-
-    # ---------- utilidades para administrador ----------
+    # ---------- utilidades para administrador (sin cambios) ----------
     def _find_idx(self, user_id: int):
         for idx, u in enumerate(self._queue):
             if u['id'] == user_id:
@@ -68,3 +61,35 @@ class QueueService:
             if 0 <= idx < len(self._queue)-1:
                 self._queue[idx+1], self._queue[idx] = self._queue[idx], self._queue[idx+1]
         return self._queue
+    
+class JobService:
+    """
+    Un servicio simple para gestionar una lista de trabajos pendientes.
+    """
+    def __init__(self):
+        self._jobs = []  # Una simple lista, ej: [{'id': 1}, {'id': 2}]
+        self._lock = Lock()
+        self._next_id = 1
+
+    def add_job(self):
+        """Añade un nuevo trabajo a la lista y lo devuelve."""
+        with self._lock:
+            new_job = {'id': self._next_id}
+            self._jobs.append(new_job)
+            self._next_id += 1
+            return new_job
+
+    def take_job(self):
+        """
+        Elimina y devuelve el trabajo más antiguo de la lista.
+        Devuelve None si la cola está vacía.
+        """
+        with self._lock:
+            if not self._jobs:
+                return None
+            return self._jobs.pop(0)
+
+    def get_job_count(self):
+        """Devuelve el número de trabajos disponibles."""
+        with self._lock:
+            return len(self._jobs)

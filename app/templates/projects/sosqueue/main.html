@@ -1,10 +1,9 @@
-{# app/templates/projects/sosqueue/main.html #}
-
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-M" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="refresh" content="3">
+  <meta http-equiv="refresh" content="5">
   <title>Cola de Trabajo</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/projects/sosqueue/main.css') }}" />
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/projects/logo-isotipo-sos.webp') }}">
@@ -14,93 +13,132 @@
     <h1>Cola de Trabajo</h1>
   </header>
 
-  <section class="queue-container">
-
-  {# Botón “Disponible” – sólo para empleados (no admin) que NO estén en activos #}
-  {% if current_user.is_authenticated and not current_user.is_admin
-        and (current_user.id|int not in queue_ids) %}
-    <button id="btn-join">Disponible</button>
-  {% endif %}
-
-  {# Lista de usuarios en ambas colas #}
-  {% if queue %}
-    <ul class="user-queue">
-      {% for user in queue %}
-        <li id="user-{{ user.id }}"
-            class="{% if user.id|int not in queue_ids %}idle{% endif %}">
-          {% if user.id == current_user.id %}
-            <span class="user-name current-user">{{ user.name }}</span>
-          {% else %}
-            <span class="user-name">{{ user.name }}</span>
-          {% endif %}
-
-          {# ---- Controles del EMPLEADO ---- #}
-          {% if current_user.is_authenticated and not current_user.is_admin %}
-            {% if user.id == current_user.id and (user.id in queue_ids) %}
-              {% if queue[0].id == current_user.id %}
-                <button id="btn-work">En trabajo</button>
-              {% endif %}
-              <button id="btn-leave">Salir</button>
-            {% endif %}
-          {% endif %}
-
-          {# ---- Controles del ADMIN ---- #}
-          {% if current_user.is_authenticated and current_user.is_admin %}
-            <button class="btn-up"   data-id="{{ user.id }}">⬆️</button>
-            <button class="btn-down" data-id="{{ user.id }}">⬇️</button>
-            <button class="btn-idle" data-id="{{ user.id }}">Salir</button>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p class="empty-queue">No hay usuarios en la cola.</p>
-  {% endif %}
-
-  <section>
-    {% if current_user.is_authenticated %}
-      <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+  <section class="queue-container job-container">
+    <h2 class="queue-title">📋 Trabajos Pendientes</h2>
+    <div class="job-status">
+      {% if job_count == 0 %}
+        <p>No hay trabajos disponibles.</p>
+      {% elif job_count == 1 %}
+        <p class="job-count-display">Hay 1 trabajo disponible</p>
+      {% else %}
+        <p class="job-count-display">Hay {{ job_count }} trabajos disponibles</p>
+      {% endif %}
+    </div>
+    {% if current_user.is_authenticated and current_user.is_admin %}
+      <button id="btn-add-job">Añadir Nuevo Trabajo</button>
     {% endif %}
   </section>
+
+  <section class="queue-container">
+    {# Botón "Disponible" – se muestra si el usuario actual NO está en ninguna cola activa #}
+    {% if current_user.is_authenticated and not current_user.is_admin and current_user.id not in active_ids %}
+      <button id="btn-available">Ponerme Disponible</button>
+    {% endif %}
+
+    <div class="queue-section">
+      <h2 class="queue-title">🟢 Disponibles</h2>
+      <ul class="user-queue">
+        {% for user in available_users %}
+          <li id="user-{{ user.id }}" class="available">
+            <span class="user-name {% if user.id == current_user.id %}current-user{% endif %}">{{ user.name }}</span>
+            <div class="user-controls">
+              {% if not current_user.is_admin and user.id == current_user.id %}
+                {% if loop.first and job_count > 0 %}
+                  <button id="btn-work">Empezar Trabajo</button>
+                {% endif %}
+                <button id="btn-idle">Descansar</button>
+              {% endif %}
+              {% if current_user.is_admin %}
+                <button class="btn-admin btn-up" data-id="{{ user.id }}" title="Subir">⬆️</button>
+                <button class="btn-admin btn-down" data-id="{{ user.id }}" title="Bajar">⬇️</button>
+                <button class="btn-admin btn-to-idle" data-id="{{ user.id }}" title="Mandar a Descanso">🛌</button>
+              {% endif %}
+            </div>
+          </li>
+        {% else %}
+          <li class="empty-list-item">No hay nadie disponible en este momento.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="queue-section">
+      <h2 class="queue-title">🔴 En Trabajo</h2>
+      <ul class="user-queue">
+        {% for user in working_users %}
+          <li id="user-{{ user.id }}" class="working">
+            <span class="user-name {% if user.id == current_user.id %}current-user{% endif %}">{{ user.name }}</span>
+            <div class="user-controls">
+              {% if not current_user.is_admin and user.id == current_user.id %}
+                <button id="btn-finish">Terminar Trabajo</button>
+              {% endif %}
+              {% if current_user.is_admin %}
+                <button class="btn-admin btn-to-idle" data-id="{{ user.id }}" title="Mandar a Descanso">🛌</button>
+              {% endif %}
+            </div>
+          </li>
+        {% else %}
+          <li class="empty-list-item">Nadie está trabajando actualmente.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="queue-section">
+      <h2 class="queue-title">⚪️ En Descanso</h2>
+      <ul class="user-queue">
+        {% for user in idle_users %}
+          <li id="user-{{ user.id }}" class="idle">
+            <span class="user-name {% if user.id == current_user.id %}current-user{% endif %}">{{ user.name }}</span>
+          </li>
+        {% else %}
+          <li class="empty-list-item">No hay nadie en descanso.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    <section class="logout-section">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}">Cerrar sesión ({{ current_user.username }})</a>
+      {% endif %}
+    </section>
   </section>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      /* ---------- acciones de EMPLEADO ---------- */
-      const callAction = (action) => {
-        fetch(`${window.location.pathname}${action}`, {
+      const callAction = (endpoint) => {
+        fetch(`{{ url_for('sosqueue.index') }}/${endpoint}`, {
           method: 'POST',
           credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
         })
-        .then(res => res.ok ? res.json() : res.json().then(d => { throw new Error(d.error); }))
-        .then(() => window.location.reload())
-        .catch(err => alert(`Error: ${err.message}`));
-      };
-
-      document.getElementById('btn-join')  ?.addEventListener('click', () => callAction('join'));
-      document.getElementById('btn-work')  ?.addEventListener('click', () => callAction('work'));
-      document.getElementById('btn-leave') ?.addEventListener('click', () => callAction('leave'));
-
-      /* ---------- acciones de ADMIN ---------- */
-      const callAdmin = (path) => {
-        fetch(`${window.location.pathname}${path}`, {
-          method: 'POST',
-          credentials: 'same-origin'
+        .then(res => {
+          if (!res.ok) return res.json().then(err => { throw new Error(err.error) });
+          return res.json();
         })
         .then(() => window.location.reload())
         .catch(err => alert(`Error: ${err.message}`));
       };
+      
+      // Eventos para botones de EMPLEADO
+      document.getElementById('btn-available')?.addEventListener('click', () => callAction('available'));
+      document.getElementById('btn-work')?.addEventListener('click', () => callAction('work'));
+      document.getElementById('btn-finish')?.addEventListener('click', () => callAction('finish'));
+      document.getElementById('btn-idle')?.addEventListener('click', () => callAction('idle'));
 
+      // Evento para botón de ADMIN para añadir trabajo
+      document.getElementById('btn-add-job')?.addEventListener('click', () => callAction('admin/add_job'));
+
+      // Eventos para botones de ADMIN en la lista de usuarios
       document.querySelectorAll('.btn-up').forEach(btn =>
-        btn.addEventListener('click', () => callAdmin(`admin/move/${btn.dataset.id}/up`)));
+        btn.addEventListener('click', () => callAction(`admin/move/${btn.dataset.id}/up`)));
 
       document.querySelectorAll('.btn-down').forEach(btn =>
-        btn.addEventListener('click', () => callAdmin(`admin/move/${btn.dataset.id}/down`)));
+        btn.addEventListener('click', () => callAction(`admin/move/${btn.dataset.id}/down`)));
 
-      document.querySelectorAll('.btn-idle').forEach(btn =>
-        btn.addEventListener('click', () => callAdmin(`admin/idle/${btn.dataset.id}`)));
+      document.querySelectorAll('.btn-to-idle').forEach(btn =>
+        btn.addEventListener('click', () => callAction(`admin/set_idle/${btn.dataset.id}`)));
     });
   </script>
 </body>
