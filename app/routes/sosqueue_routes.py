@@ -120,6 +120,30 @@ def become_idle():
         pass
     return jsonify({'status': 'ok'})
 
+@sos_bp.route('/state', methods=['GET'])
+@login_required
+def get_state():
+    """
+    NUEVO: Devuelve el estado completo de la aplicación como JSON
+    para las actualizaciones dinámicas del cliente.
+    """
+    available_users = available_queue.get_queue()
+    working_users = working_queue.get_queue()
+    idle_users = idle_queue.get_queue()
+    job_count = job_queue.get_job_count()
+    active_ids = {u['id'] for u in available_users} | {u['id'] for u in working_users}
+    first_available_id = available_users[0]['id'] if available_users else None
+
+    state = {
+        'available_users': available_users,
+        'working_users': working_users,
+        'idle_users': idle_users,
+        'job_count': job_count,
+        'active_ids': list(active_ids),
+        'first_available_id': first_available_id,
+    }
+    return jsonify(state)
+
 # ----------- ACCIONES DE ADMINISTRADOR -------------
 
 @sos_bp.route('/admin/move/<int:user_id>/<string:direction>', methods=['POST'])
