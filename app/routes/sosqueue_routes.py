@@ -6,153 +6,194 @@ from app.python.sosqueue.service import QueueService, JobService
 from app import socketio
 
 sos_bp = Blueprint('sosqueue', __name__, url_prefix='/sosqueue')
-
-# --- Instancias de las Colas de Servicio ---
 job_queue = JobService()
-available_queue = QueueService()
-working_queue = QueueService()
-idle_queue = QueueService()
+
+
+# Tres colas separadas para cada estado
+available_queue = QueueService() # Verde: Disponibles, en orden
+working_queue = QueueService()   # Rojo: Ocupados/En trabajo
+idle_queue = QueueService()      # Gris: Inactivos/En descanso
 
 def _require_admin():
-    """Función de utilidad para proteger rutas de administrador."""
     if not getattr(current_user, 'is_admin', False):
-        abort(403, "Se requiere permiso de administrador.")
+        abort(403)
 
-def broadcast_reload():
-    """Emite una señal simple para que todos los clientes recarguen su página."""
-    socketio.emit('reload_page')
+def broadcast_state():
+    """
+    Obtiene el estado actual de todas las colas de sosqueue y lo
+    emite a todos los clientes conectados a través de Socket.IO.
+    """
+    # Esta función contiene la misma lógica para obtener el estado que ya teníamos
+    available_users = available_queue.get_queue()
+    working_users = working_queue.get_queue()
+    idle_users = idle_queue.get_queue()
+    job_count = job_queue.get_job_count()
+    active_ids = {u['id'] for u in available_users} | {u['id'] for u in working_users}
+    first_available_id = available_users[0]['id'] if available_users else None
 
-# --- Rutas HTTP ---
+    state = {
+        'available_users': available_users,
+        'working_users': working_users,
+        'idle_users': idle_users,
+        'job_count': job_count,
+        'active_ids': list(active_ids),
+        'first_available_id': first_available_id,
+    }
+    # Emite el evento 'update_state'. El cliente estará escuchando este evento.
+    socketio.emit('update_state', state)
+
+# ---------------------- VISTA PRINCIPAL ----------------------
 
 @sos_bp.route('/')
 @login_required
 def index():
+    return render_template('projects/sosqueue/main.html')
+# ----------- ACCIONES DE EMPLEADOS -------------
+
+@sos_bp.route('/available', methods=['POST'])
+@login_required
+def become_available():
+    """Mueve al usuario de 'idle' a la cola 'available'."""
+    if current_user.is_admin:
+        return jsonify({'error': 'Los administradores no entran en la cola'}), 403
+
+    idle_queue.remove(current_user.id)
+    try:
+        available_queue.join(current_user)
+        return jsonify({'status': 'ok'})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+
+@sos_bp.route('/work', methods=['POST'])
+@login_required
+def start_work():
+    """Mueve al primer usuario de 'available' a 'working' y consume un trabajo."""
+    # Validación 1: ¿Es el turno del usuario?
+    if not available_queue.get_queue() or available_queue.get_queue()[0]['id'] != current_user.id:
+        return jsonify({'error': 'No es tu turno para tomar un trabajo.'}), 403
+
+    # Validación 2: ¿Hay trabajos disponibles?
+    if job_queue.get_job_count() == 0:
+        return jsonify({'error': 'No hay trabajos disponibles en este momento.'}), 400
+
+    # Si todo está en orden, se consume un trabajo y se mueve al usuario
+    job_taken = job_queue.take_job()
+    if not job_taken: # Doble chequeo en caso de concurrencia
+        return jsonify({'error': 'Justo alguien más tomó el último trabajo.'}), 400
+
+    user_dict = available_queue.pop_first()
+    if user_dict:
+        with working_queue._lock:
+            working_queue._queue.append(user_dict)
+    
+    broadcast_state()
+    return jsonify({'status': 'ok'})
+
+@sos_bp.route('/finish', methods=['POST'])
+@login_required
+def finish_work():
+    """Mueve al usuario de 'working' al final de la cola 'available'."""
+    # Se elimina al usuario de la lista de 'working'
+    if not working_queue.remove(current_user.id):
+        return jsonify({'error': 'No estabas en la lista de trabajo.'}), 404
+    
+    # Se añade al usuario al final de la cola de 'available'
+    try:
+        available_queue.join(current_user)
+    except ValueError:
+        # En caso de que el usuario ya estuviera en la cola de disponibles,
+        # lo cual no debería pasar, esta línea evita un error.
+        pass
+    broadcast_state()
+    return jsonify({'status': 'ok'})
+
+@sos_bp.route('/idle', methods=['POST'])
+@login_required
+def become_idle():
+    """Mueve al usuario de 'available' a 'idle' (decide descansar)."""
+    if not available_queue.remove(current_user.id):
+        return jsonify({'error': 'No estabas en la cola de disponibles.'}), 404
+
+    try:
+        idle_queue.join(current_user)
+    except ValueError:
+        pass
+    broadcast_state()
+    return jsonify({'status': 'ok'})
+
+@sos_bp.route('/state', methods=['GET'])
+@login_required
+def get_state():
     """
-    Renderiza la página principal.
-    Obtiene todos los datos necesarios del estado actual y los pasa a la plantilla
-    para el renderizado inicial del lado del servidor.
+    NUEVO: Devuelve el estado completo de la aplicación como JSON
+    para las actualizaciones dinámicas del cliente.
     """
     available_users = available_queue.get_queue()
     working_users = working_queue.get_queue()
     idle_users = idle_queue.get_queue()
     job_count = job_queue.get_job_count()
     active_ids = {u['id'] for u in available_users} | {u['id'] for u in working_users}
+    first_available_id = available_users[0]['id'] if available_users else None
 
-    return render_template(
-        'projects/sosqueue/main.html',
-        available_users=available_users,
-        working_users=working_users,
-        idle_users=idle_users,
-        job_count=job_count,
-        active_ids=active_ids
-    )
+    state = {
+        'available_users': available_users,
+        'working_users': working_users,
+        'idle_users': idle_users,
+        'job_count': job_count,
+        'active_ids': list(active_ids),
+        'first_available_id': first_available_id,
+    }
+    return jsonify(state)
 
-# --- Rutas de Acciones de Empleados ---
+@socketio.on('connect')
+def handle_connect():
+    """
+    Se ejecuta cuando un nuevo usuario abre la página de sosqueue.
+    Le envía inmediatamente el estado actual para que no vea una página vacía.
+    """
+    broadcast_state()
 
-@sos_bp.route('/available', methods=['POST'])
+# ----------- ACCIONES DE ADMINISTRADOR -------------
+
+@sos_bp.route('/admin/move/<int:user_id>/<string:direction>', methods=['POST'])
 @login_required
-def become_available():
-    """Mueve al usuario de la inactividad a la cola de disponibles."""
-    if current_user.is_admin:
-        return jsonify({'error': 'Los administradores no entran en la cola'}), 403
-
-    idle_queue.remove(current_user.id)
-    available_queue.join(current_user)
-    broadcast_reload()
+def admin_move(user_id, direction):
+    """Mueve a un usuario ARRIBA/ABAJO en la cola de DISPONIBLES."""
+    _require_admin()
+    if direction == 'up':
+        available_queue.move_up(user_id)
+    elif direction == 'down':
+        available_queue.move_down(user_id)
+    broadcast_state()
     return jsonify({'status': 'ok'})
 
-@sos_bp.route('/work', methods=['POST'])
+@sos_bp.route('/admin/set_idle/<int:user_id>', methods=['POST'])
 @login_required
-def start_work():
-    """Mueve al primer usuario disponible a la cola de trabajo y consume un trabajo."""
-    if not available_queue.get_queue() or available_queue.get_queue()[0]['id'] != current_user.id:
-        return jsonify({'error': 'No es tu turno para tomar un trabajo.'}), 403
-    if job_queue.get_job_count() == 0:
-        return jsonify({'error': 'No hay trabajos disponibles en este momento.'}), 400
-
-    job_queue.take_job()
-    user_dict = available_queue.pop_first()
+def admin_set_idle(user_id):
+    """Mueve a un usuario desde cualquier cola a la de inactivos."""
+    _require_admin()
+    # Busca y extrae al usuario de las colas activas
+    user_dict = next((u for u in available_queue.get_queue() if u['id'] == user_id), None)
     if user_dict:
-        # Se añade el diccionario del usuario directamente a la cola de trabajo.
-        with working_queue._lock:
-            if not any(u['id'] == user_dict['id'] for u in working_queue._queue):
-                working_queue._queue.append(user_dict)
-    
-    broadcast_reload()
+        available_queue.remove(user_id)
+    else:
+        user_dict = next((u for u in working_queue.get_queue() if u['id'] == user_id), None)
+        if user_dict:
+            working_queue.remove(user_id)
+
+    if not user_dict:
+        return jsonify({'error': 'Usuario no encontrado en colas activas'}), 404
+
+    # Añade a idle si no estaba ya
+    with idle_queue._lock:
+        if not any(u['id'] == user_id for u in idle_queue._queue):
+            idle_queue._queue.append(user_dict)
+    broadcast_state()
     return jsonify({'status': 'ok'})
-
-@sos_bp.route('/finish', methods=['POST'])
-@login_required
-def finish_work():
-    """Mueve a un usuario de la cola de trabajo de vuelta al final de la cola de disponibles."""
-    if not working_queue.remove(current_user.id):
-        return jsonify({'error': 'No estabas en la lista de trabajo.'}), 404
-    
-    available_queue.join(current_user)
-    broadcast_reload()
-    return jsonify({'status': 'ok'})
-
-@sos_bp.route('/idle', methods=['POST'])
-@login_required
-def become_idle():
-    """Mueve a un usuario de la cola de disponibles a la cola de inactivos."""
-    if not available_queue.remove(current_user.id):
-        return jsonify({'error': 'No estabas en la cola de disponibles.'}), 404
-
-    idle_queue.join(current_user)
-    broadcast_reload()
-    return jsonify({'status': 'ok'})
-
-# --- Rutas de Acciones de Administrador ---
 
 @sos_bp.route('/admin/add_job', methods=['POST'])
 @login_required
 def admin_add_job():
     _require_admin()
     job_queue.add_job()
-    broadcast_reload()
-    return jsonify({'status': 'ok'})
-
-@sos_bp.route('/admin/move/<int:user_id>/<string:direction>', methods=['POST'])
-@login_required
-def admin_move(user_id, direction):
-    _require_admin()
-    if direction == 'up':
-        available_queue.move_up(user_id)
-    elif direction == 'down':
-        available_queue.move_down(user_id)
-    
-    broadcast_reload()
-    return jsonify({'status': 'ok'})
-
-@sos_bp.route('/admin/set_idle/<int:user_id>', methods=['POST'])
-@login_required
-def admin_set_idle(user_id):
-    _require_admin()
-    user_to_move = None
-    
-    # Busca al usuario en la cola de disponibles
-    for u in available_queue.get_queue():
-        if u['id'] == user_id:
-            user_to_move = u
-            available_queue.remove(user_id)
-            break
-    
-    # Si no lo encontró, lo busca en la cola de trabajo
-    if not user_to_move:
-        for u in working_queue.get_queue():
-            if u['id'] == user_id:
-                user_to_move = u
-                working_queue.remove(user_id)
-                break
-
-    if not user_to_move:
-        return jsonify({'error': 'Usuario no encontrado en colas activas'}), 404
-
-    # Añade al usuario a la cola de inactivos
-    with idle_queue._lock:
-        if not any(u['id'] == user_id for u in idle_queue._queue):
-            idle_queue._queue.append(user_to_move)
-
-    broadcast_reload()
     return jsonify({'status': 'ok'})
