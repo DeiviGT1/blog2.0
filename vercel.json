@@ -12,5 +12,11 @@
         "src": "/(.*)",
         "dest": "run.py"
       }
+    ],
+    "crons": [
+      {
+        "path": "/sosqueue/api/reset-queues",
+        "schedule": "0 2 * * *"
+      }
     ]
   }
