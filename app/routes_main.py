@@ -16,8 +16,8 @@ def register_routes(app):
     def load_user(user_id):
         for username, cred in _CREDENTIALS.items():
             if cred['id'] == int(user_id):
-                # CORRECCIÓN: Ahora se pasa el valor de 'admin' al crear el usuario.
-                # Esto es crucial para que los permisos de administrador funcionen.
+                # CORRECCIÓN CRÍTICA: Se pasa el valor 'admin' al crear el objeto User.
+                # Sin esto, ningún usuario será reconocido como administrador.
                 return User(cred['id'], username, cred.get('admin', False))
         return None
 
