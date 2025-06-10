@@ -1,28 +1,27 @@
-# app/routes.py
+# app/routes_main.py
 
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 
 def register_routes(app):
-    # ——— Inicializar extensiones ———
-    # Bootstrap (si quieres usarlo aquí)
+    # --- Inicializar extensiones ---
     Bootstrap(app)
-
-    # LoginManager
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    # user_loader para reconstruir al usuario desde su ID
+    # --- user_loader para reconstruir al usuario desde su ID ---
     from .routes.auth_routes import User, _CREDENTIALS
     @login_manager.user_loader
     def load_user(user_id):
         for username, cred in _CREDENTIALS.items():
             if cred['id'] == int(user_id):
-                return User(cred['id'], username)
+                # CORRECCIÓN: Ahora se pasa el valor de 'admin' al crear el usuario.
+                # Esto es crucial para que los permisos de administrador funcionen.
+                return User(cred['id'], username, cred.get('admin', False))
         return None
 
-    # ——— Registrar blueprints ———
+    # --- Registrar blueprints (sin cambios) ---
     from .routes.main import main_bp
     from .routes.openai_routes import openai_bp
     from .routes.playlists_routes import playlists_bp
