@@ -3,6 +3,7 @@
 from flask import Blueprint, render_template, jsonify, abort
 from flask_login import login_required, current_user
 from app.python.sosqueue.service import QueueService, JobService
+from app import socketio
 
 sos_bp = Blueprint('sosqueue', __name__, url_prefix='/sosqueue')
 job_queue = JobService()
@@ -17,39 +18,36 @@ def _require_admin():
     if not getattr(current_user, 'is_admin', False):
         abort(403)
 
-# ---------------------- VISTA PRINCIPAL ----------------------
-
-@sos_bp.route('/', methods=['GET'])
-@login_required
-def index():
-    # Obtenemos las tres listas por separado
+def broadcast_state():
+    """
+    Obtiene el estado actual de todas las colas de sosqueue y lo
+    emite a todos los clientes conectados a través de Socket.IO.
+    """
+    # Esta función contiene la misma lógica para obtener el estado que ya teníamos
     available_users = available_queue.get_queue()
     working_users = working_queue.get_queue()
     idle_users = idle_queue.get_queue()
-
-    # --- INICIO DE LA CORRECCIÓN ---
-    # Creamos un set de IDs de TODOS los usuarios activos.
-    # Un usuario está "activo" si se encuentra en la cola de disponibles O en la de trabajo.
+    job_count = job_queue.get_job_count()
     active_ids = {u['id'] for u in available_users} | {u['id'] for u in working_users}
-    # --- FIN DE LA CORRECCIÓN ---
-
-    # Determinamos el ID del primer usuario disponible
     first_available_id = available_users[0]['id'] if available_users else None
 
-    job_count = job_queue.get_job_count()
+    state = {
+        'available_users': available_users,
+        'working_users': working_users,
+        'idle_users': idle_users,
+        'job_count': job_count,
+        'active_ids': list(active_ids),
+        'first_available_id': first_available_id,
+    }
+    # Emite el evento 'update_state'. El cliente estará escuchando este evento.
+    socketio.emit('update_state', state)
 
+# ---------------------- VISTA PRINCIPAL ----------------------
 
-    # Pasamos las listas y el nuevo set de IDs activos a la plantilla
-    return render_template(
-        'projects/sosqueue/main.html',
-        available_users=available_users,
-        working_users=working_users,
-        idle_users=idle_users,
-        active_ids=active_ids,
-        first_available_id=first_available_id,
-        job_count=job_count # <-- Pasar el contador a la plantilla
-    )
-
+@sos_bp.route('/')
+@login_required
+def index():
+    return render_template('projects/sosqueue/main.html')
 # ----------- ACCIONES DE EMPLEADOS -------------
 
 @sos_bp.route('/available', methods=['POST'])
@@ -88,6 +86,7 @@ def start_work():
         with working_queue._lock:
             working_queue._queue.append(user_dict)
     
+    broadcast_state()
     return jsonify({'status': 'ok'})
 
 @sos_bp.route('/finish', methods=['POST'])
@@ -105,6 +104,7 @@ def finish_work():
         # En caso de que el usuario ya estuviera en la cola de disponibles,
         # lo cual no debería pasar, esta línea evita un error.
         pass
+    broadcast_state()
     return jsonify({'status': 'ok'})
 
 @sos_bp.route('/idle', methods=['POST'])
@@ -118,6 +118,7 @@ def become_idle():
         idle_queue.join(current_user)
     except ValueError:
         pass
+    broadcast_state()
     return jsonify({'status': 'ok'})
 
 @sos_bp.route('/state', methods=['GET'])
@@ -144,6 +145,14 @@ def get_state():
     }
     return jsonify(state)
 
+@socketio.on('connect')
+def handle_connect():
+    """
+    Se ejecuta cuando un nuevo usuario abre la página de sosqueue.
+    Le envía inmediatamente el estado actual para que no vea una página vacía.
+    """
+    broadcast_state()
+
 # ----------- ACCIONES DE ADMINISTRADOR -------------
 
 @sos_bp.route('/admin/move/<int:user_id>/<string:direction>', methods=['POST'])
@@ -155,6 +164,7 @@ def admin_move(user_id, direction):
         available_queue.move_up(user_id)
     elif direction == 'down':
         available_queue.move_down(user_id)
+    broadcast_state()
     return jsonify({'status': 'ok'})
 
 @sos_bp.route('/admin/set_idle/<int:user_id>', methods=['POST'])
@@ -178,6 +188,7 @@ def admin_set_idle(user_id):
     with idle_queue._lock:
         if not any(u['id'] == user_id for u in idle_queue._queue):
             idle_queue._queue.append(user_dict)
+    broadcast_state()
     return jsonify({'status': 'ok'})
 
 @sos_bp.route('/admin/add_job', methods=['POST'])
@@ -185,4 +196,5 @@ def admin_set_idle(user_id):
 def admin_add_job():
     _require_admin()
     job_queue.add_job()
+    broadcast_state()
     return jsonify({'status': 'ok'})
