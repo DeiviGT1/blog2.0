@@ -1,6 +1,7 @@
 # app/routes/curso_routes.py
 import os
 import re
+import uuid
 import functools
 from flask import (
     Blueprint, render_template, request, redirect,
@@ -112,6 +113,16 @@ MODULE_LOOKUP = {
     for lk, lv in LEVELS.items()
     for m in lv["modules"]
 }
+
+
+# ── Input validation helpers ──────────────────────────────────────────────────
+
+def _valid_uuid(value: str) -> bool:
+    try:
+        uuid.UUID(str(value))
+        return True
+    except (ValueError, AttributeError):
+        return False
 
 
 # ── Auth decorators ───────────────────────────────────────────────────────────
@@ -415,13 +426,6 @@ def modulo(module_id):
     prev_mod     = all_in_level[idx - 1] if idx > 0 else None
     next_mod     = all_in_level[idx + 1] if idx < len(all_in_level) - 1 else None
 
-    from app.python.supabase_client import get_user_submissions
-    user_subs = get_user_submissions(session["curso_user_id"])
-    already_submitted = any(s["module_id"] == module_id for s in user_subs)
-
-    supabase_anon_key = current_app.config.get("SUPABASE_ANON_KEY", "")
-    supabase_url      = current_app.config.get("SUPABASE_URL", "")
-
     return render_template(
         "curso/modulo.html",
         module_id=module_id,
@@ -430,10 +434,7 @@ def modulo(module_id):
         jsx_content=transformed,
         prev_mod=prev_mod,
         next_mod=next_mod,
-        already_submitted=already_submitted,
         enabled_modules=enabled,
-        supabase_anon_key=supabase_anon_key,
-        supabase_url=supabase_url,
     )
 
 
@@ -450,7 +451,11 @@ def descargar(filename):
 def submit(module_id):
     # Accept both regular module IDs and level-practice IDs (e.g. nivel0_practica)
     is_practica = module_id.endswith("_practica")
-    if not is_practica and module_id not in MODULE_LOOKUP:
+    if is_practica:
+        level_prefix = module_id[: -len("_practica")]
+        if level_prefix not in LEVELS:
+            abort(404)
+    elif module_id not in MODULE_LOOKUP:
         abort(404)
 
     # Determine where to redirect after submit
@@ -514,6 +519,8 @@ def admin_usuarios():
 @curso_bp.route("/admin/usuarios/<user_id>/aprobar", methods=["POST"])
 @require_admin
 def admin_aprobar(user_id):
+    if not _valid_uuid(user_id):
+        abort(400)
     from app.python.supabase_client import approve_user
     approve_user(user_id)
     flash("Usuario aprobado.", "success")
@@ -523,6 +530,12 @@ def admin_aprobar(user_id):
 @curso_bp.route("/admin/usuarios/<user_id>/revocar", methods=["POST"])
 @require_admin
 def admin_revocar(user_id):
+    if not _valid_uuid(user_id):
+        abort(400)
+    # Prevent admin from revoking themselves
+    if user_id == session.get("curso_user_id"):
+        flash("No puedes revocarte a ti mismo.", "error")
+        return redirect(url_for("curso.admin_usuarios"))
     from app.python.supabase_client import get_admin_client
     get_admin_client().table("profiles").update({"is_approved": False}).eq("id", user_id).execute()
     flash("Acceso revocado.", "success")
@@ -532,6 +545,8 @@ def admin_revocar(user_id):
 @curso_bp.route("/admin/usuarios/<user_id>/modulos", methods=["GET", "POST"])
 @require_admin
 def admin_modulos_usuario(user_id):
+    if not _valid_uuid(user_id):
+        abort(400)
     from app.python.supabase_client import (
         get_profile, get_all_permissions_for_user,
         set_module_permission, bulk_set_level_permissions,
@@ -543,11 +558,15 @@ def admin_modulos_usuario(user_id):
 
         if action == "toggle":
             mod_id  = request.form.get("module_id")
+            if mod_id not in MODULE_LOOKUP:
+                abort(400)
             enabled = request.form.get("enabled") == "true"
             set_module_permission(user_id, mod_id, enabled, admin_id)
 
         elif action in ("enable_level", "disable_level"):
             level_key = request.form.get("level_key")
+            if level_key not in LEVELS:
+                abort(400)
             enabled   = action == "enable_level"
             mids      = [m["id"] for m in LEVELS[level_key]["modules"]]
             bulk_set_level_permissions(user_id, mids, enabled, admin_id)
@@ -584,9 +603,11 @@ def admin_entregas():
 @curso_bp.route("/admin/entregas/<sub_id>/revisar", methods=["POST"])
 @require_admin
 def admin_revisar_entrega(sub_id):
+    if not _valid_uuid(sub_id):
+        abort(400)
     from app.python.supabase_client import update_submission_review
-    grade    = request.form.get("grade", "").strip()
-    feedback = request.form.get("feedback", "").strip()
+    grade    = request.form.get("grade", "").strip()[:50]       # cap length
+    feedback = request.form.get("feedback", "").strip()[:2000]  # cap length
     update_submission_review(sub_id, grade, feedback, session["curso_user_id"])
     flash("Revisión guardada.", "success")
     return redirect(url_for("curso.admin_entregas"))
