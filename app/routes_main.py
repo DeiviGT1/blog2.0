@@ -21,7 +21,14 @@ def register_routes(app):
                 return User(cred['id'], username, cred.get('admin', False))
         return None
 
-    # --- Registrar blueprints (sin cambios) ---
+    # --- Supabase / curso config ---
+    import os
+    app.config["SUPABASE_URL"]          = os.getenv("SUPABASE_URL", "")
+    app.config["SUPABASE_ANON_KEY"]     = os.getenv("SUPABASE_ANON_KEY", "")
+    app.config["SUPABASE_SERVICE_ROLE_KEY"] = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
+    app.config["ADMIN_EMAIL"]           = os.getenv("ADMIN_EMAIL", "")
+
+    # --- Registrar blueprints ---
     from .routes.main import main_bp
     from .routes.openai_routes import openai_bp
     from .routes.playlists_routes import playlists_bp
@@ -30,6 +37,7 @@ def register_routes(app):
     from .routes.articles_routes import articles_bp
     from .routes.sosqueue_routes import sos_bp
     from .routes.auth_routes import auth_bp
+    from .routes.curso_routes import curso_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(openai_bp)
@@ -39,3 +47,4 @@ def register_routes(app):
     app.register_blueprint(articles_bp)
     app.register_blueprint(sos_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(curso_bp)

@@ -1,0 +1,84 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Admin — Excel 365{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+  <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem;">Panel de administración</h1>
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-card__num">{{ profiles|length }}</div>
+      <div class="stat-card__label">Usuarios totales</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ pending|length }}</div>
+      <div class="stat-card__label">Pendientes de aprobación</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ profiles|selectattr('is_approved')|list|length }}</div>
+      <div class="stat-card__label">Aprobados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ submissions|length }}</div>
+      <div class="stat-card__label">Entregas recibidas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ submissions|selectattr('reviewed')|list|length }}</div>
+      <div class="stat-card__label">Entregas revisadas</div>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;">
+    <a class="btn btn-primary" href="{{ url_for('curso.admin_usuarios') }}">
+      <i class="fas fa-users"></i> Gestionar usuarios
+    </a>
+    <a class="btn btn-outline" href="{{ url_for('curso.admin_entregas') }}">
+      <i class="fas fa-file-excel"></i> Ver entregas
+    </a>
+  </div>
+
+  <!-- Pending approvals -->
+  {% if pending %}
+  <div class="admin-section">
+    <h2>⚠️ Usuarios pendientes de aprobación</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Registrado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pending %}
+        <tr>
+          <td>{{ p.username or '—' }}</td>
+          <td>{{ p.email }}</td>
+          <td style="white-space:nowrap;font-size:.82rem;">
+            {{ p.created_at[:10] if p.created_at else '—' }}
+          </td>
+          <td>
+            <form method="POST" action="{{ url_for('curso.admin_aprobar', user_id=p.id) }}"
+                  style="display:inline;">
+              <button class="btn btn-success btn-sm">✓ Aprobar</button>
+            </form>
+            <a class="btn btn-outline btn-sm"
+               href="{{ url_for('curso.admin_modulos_usuario', user_id=p.id) }}"
+               style="margin-left:.4rem;">Módulos</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div style="padding:1rem;background:var(--c-bg-alt);border:1px solid var(--c-border);border-radius:var(--radius);font-size:.9rem;color:var(--c-text-muted);">
+    ✅ No hay usuarios pendientes de aprobación.
+  </div>
+  {% endif %}
+
+</main>
+{% endblock %}

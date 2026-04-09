@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Excel 365 — JoseDavidGT{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/curso/curso.css') }}" />
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="curso-page{% if session.get('inverted') %} curso-inverted{% endif %}">
+
+  <!-- Navigation -->
+  <nav class="curso-nav">
+    <a class="curso-nav__brand" href="{{ url_for('curso.landing') }}">
+      <img src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}"
+           alt="JoseDavidGT Logo" />
+      Excel 365
+    </a>
+
+    <div class="curso-nav__links">
+      {% if session.get('curso_user_id') %}
+        <a class="curso-nav__link {% if request.endpoint == 'curso.dashboard' %}active{% endif %}"
+           href="{{ url_for('curso.dashboard') }}">Dashboard</a>
+        {% if session.get('curso_is_admin') %}
+          <a class="curso-nav__link {% if 'admin' in request.endpoint %}active{% endif %}"
+             href="{{ url_for('curso.admin_index') }}">Admin</a>
+        {% endif %}
+        <span class="curso-nav__user">{{ session.get('curso_username', '') }}</span>
+        <a class="curso-nav__logout" href="{{ url_for('curso.logout') }}">Salir</a>
+      {% else %}
+        <a class="curso-nav__link" href="{{ url_for('main.index') }}">Portafolio</a>
+        <a class="btn btn-outline btn-sm" href="{{ url_for('curso.login') }}">Iniciar sesión</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-list">
+        {% for category, message in messages %}
+          <li class="flash flash-{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Page content -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="curso-footer">
+    © 2025 Jose David GT · <a href="{{ url_for('main.index') }}" style="color:var(--c-primary)">Portafolio</a>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

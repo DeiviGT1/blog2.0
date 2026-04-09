@@ -1,0 +1,60 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Módulos de {{ profile.username }} — Admin{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem;">
+    <div>
+      <h1 style="font-size:1.4rem;font-weight:800;">
+        Módulos de {{ profile.username or profile.email }}
+      </h1>
+      <p style="font-size:.87rem;color:var(--c-text-muted);">{{ profile.email }}</p>
+    </div>
+    <a class="btn btn-outline btn-sm" href="{{ url_for('curso.admin_usuarios') }}">← Usuarios</a>
+  </div>
+
+  {% for lk, lv in levels.items() %}
+  <div class="admin-section">
+    <!-- Level header with bulk actions -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;">
+      <h2 style="border:none;padding:0;margin:0;font-size:1.05rem;">
+        <span class="level-badge" style="background:{{ lv.color }};">Nivel {{ lv.level_num }}</span>
+        {{ lv.short }}
+      </h2>
+      <div style="display:flex;gap:.5rem;">
+        <form method="POST">
+          <input type="hidden" name="action"    value="enable_level" />
+          <input type="hidden" name="level_key" value="{{ lk }}" />
+          <button class="btn btn-success btn-sm">Habilitar todo</button>
+        </form>
+        <form method="POST">
+          <input type="hidden" name="action"    value="disable_level" />
+          <input type="hidden" name="level_key" value="{{ lk }}" />
+          <button class="btn btn-danger btn-sm">Deshabilitar todo</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="perm-grid">
+      {% for mod in lv.modules %}
+        {% set is_enabled = perm_map.get(mod.id, False) %}
+        <div class="perm-card">
+          <span class="perm-card__title">{{ mod.title }}</span>
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="action"    value="toggle" />
+            <input type="hidden" name="module_id" value="{{ mod.id }}" />
+            <input type="hidden" name="enabled"   value="{{ 'false' if is_enabled else 'true' }}" />
+            <label class="toggle-switch" title="{{ 'Deshabilitar' if is_enabled else 'Habilitar' }}">
+              <input type="checkbox"
+                     {% if is_enabled %}checked{% endif %}
+                     onchange="this.form.submit();" />
+              <span class="toggle-slider"></span>
+            </label>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</main>
+{% endblock %}

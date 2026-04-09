@@ -1,0 +1,116 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Entregas — Admin Excel 365{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem;">
+    <h1 style="font-size:1.4rem;font-weight:800;">Entregas de estudiantes</h1>
+    <a class="btn btn-outline btn-sm" href="{{ url_for('curso.admin_index') }}">← Admin</a>
+  </div>
+
+  {% if submissions %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Estudiante</th>
+        <th>Módulo</th>
+        <th>Archivo</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Calificación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in submissions %}
+      <tr>
+        <td>
+          {{ s.profiles.username if s.profiles else '—' }}<br>
+          <span style="font-size:.78rem;color:var(--c-text-muted);">
+            {{ s.profiles.email if s.profiles else s.user_id[:8] }}
+          </span>
+        </td>
+        <td style="font-size:.85rem;">
+          {% set mod = module_lookup.get(s.module_id) %}
+          {% if mod %}
+            <span class="level-badge" style="background:{{ mod.color }};font-size:.65rem;">Nv. {{ mod.level_num }}</span>
+            {{ mod.title }}
+          {% else %}
+            {{ s.module_id }}
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ get_download_url(s.file_path) }}" target="_blank"
+             class="btn btn-outline btn-sm" title="{{ s.original_filename }}">
+            <i class="fas fa-download"></i>
+            {{ s.original_filename[:25] }}{% if s.original_filename|length > 25 %}…{% endif %}
+          </a>
+        </td>
+        <td style="font-size:.82rem;white-space:nowrap;">
+          {{ s.uploaded_at[:16].replace('T',' ') if s.uploaded_at else '—' }}
+        </td>
+        <td>
+          {% if s.reviewed %}
+            <span class="badge badge-approved">Revisado</span>
+          {% else %}
+            <span class="badge badge-pending">Pendiente</span>
+          {% endif %}
+        </td>
+        <td>{{ s.grade or '—' }}</td>
+        <td>
+          <button class="btn btn-outline btn-sm"
+                  onclick="openReview('{{ s.id }}','{{ s.grade or '' }}',{{ s.feedback | tojson if s.feedback else '""' }})">
+            ✏️ Revisar
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div style="padding:2rem;text-align:center;color:var(--c-text-muted);border:1px solid var(--c-border);border-radius:var(--radius);">
+      No hay entregas todavía.
+    </div>
+  {% endif %}
+</main>
+
+<!-- Review modal -->
+<div id="review-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:var(--c-bg);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:480px;box-shadow:var(--shadow-lg);">
+    <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;">Revisar entrega</h2>
+    <form id="review-form" method="POST">
+      <div class="form-group">
+        <label>Calificación</label>
+        <input type="text" name="grade" id="review-grade" placeholder="Ej: Excelente, 8/10, Aprobado…" />
+      </div>
+      <div class="form-group">
+        <label>Feedback</label>
+        <textarea name="feedback" id="review-feedback" rows="4"
+                  style="width:100%;padding:.65rem;border:1.5px solid var(--c-border);border-radius:var(--radius);background:var(--c-bg);color:var(--c-text);font-family:var(--font);font-size:.9rem;resize:vertical;"></textarea>
+      </div>
+      <div style="display:flex;gap:.8rem;justify-content:flex-end;">
+        <button type="button" class="btn btn-outline" onclick="closeReview()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar revisión</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function openReview(id, grade, feedback) {
+    document.getElementById("review-form").action = `/curso/admin/entregas/${id}/revisar`;
+    document.getElementById("review-grade").value    = grade    || "";
+    document.getElementById("review-feedback").value = feedback || "";
+    const modal = document.getElementById("review-modal");
+    modal.style.display = "flex";
+  }
+  function closeReview() {
+    document.getElementById("review-modal").style.display = "none";
+  }
+  document.getElementById("review-modal").addEventListener("click", e => {
+    if (e.target === e.currentTarget) closeReview();
+  });
+</script>
+{% endblock %}

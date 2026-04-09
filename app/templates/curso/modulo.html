@@ -1,0 +1,144 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}{{ meta.title }} — Excel 365{% endblock %}
+
+{% block extra_head %}
+<!-- React + Babel CDN for JSX rendering -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+  <div class="modulo-layout">
+
+    <!-- Sidebar: module list for this level -->
+    <aside class="modulo-sidebar">
+      <h3>{{ level_data.short }}</h3>
+      <ul class="sidebar-module-list">
+        {% for m in level_data.modules %}
+          <li>
+            <a href="{{ url_for('curso.modulo', module_id=m.id) }}"
+               class="{% if m.id == module_id %}active{% elif m.id not in enabled_modules %}locked{% endif %}"
+               {% if m.id not in enabled_modules and not session.get('curso_is_admin') %}
+                 title="Módulo bloqueado" onclick="return false;"
+               {% endif %}>
+              {{ loop.index }}. {{ m.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <!-- Level downloads -->
+      <div style="margin-top:1.3rem;padding-top:1rem;border-top:1px solid var(--c-border);">
+        <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--c-text-muted);margin-bottom:.6rem;">
+          Archivos del nivel
+        </p>
+        {% for xlsx in level_data.xlsx %}
+          <a href="{{ url_for('curso.descargar', filename=xlsx) }}"
+             class="btn btn-outline btn-sm btn-full" style="margin-bottom:.5rem;display:block;text-align:center;">
+            <i class="fas fa-download"></i> {{ xlsx.replace('_',' ').replace('.xlsx','') }}
+          </a>
+        {% endfor %}
+      </div>
+
+      <div style="margin-top:1rem;">
+        <a href="{{ url_for('curso.dashboard') }}"
+           style="font-size:.82rem;color:var(--c-text-muted);">
+          ← Volver al dashboard
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main module content -->
+    <div class="modulo-content">
+
+      <!-- Header -->
+      <div class="modulo-header">
+        <div>
+          <span class="level-badge" style="background:{{ level_data.color }};font-size:.7rem;padding:.2rem .7rem;">
+            Nivel {{ level_data.level_num }}
+          </span>
+          <h1 style="margin-top:.5rem;">{{ meta.title }}</h1>
+        </div>
+        <div class="modulo-nav">
+          {% if prev_mod %}
+            <a class="btn btn-outline btn-sm" href="{{ url_for('curso.modulo', module_id=prev_mod) }}">
+              ← Anterior
+            </a>
+          {% endif %}
+          {% if next_mod %}
+            <a class="btn btn-primary btn-sm" href="{{ url_for('curso.modulo', module_id=next_mod) }}">
+              Siguiente →
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- React component renders here -->
+      <div id="react-root">
+        <p style="color:var(--c-text-muted);font-size:.9rem;">Cargando módulo…</p>
+      </div>
+
+      <!-- File upload section -->
+      <div class="upload-section">
+        <h3>📤 Entrega tu práctica</h3>
+        <p>Completa el archivo <strong>{{ level_data.short }} Práctica</strong> y súbelo aquí para que el instructor lo revise.</p>
+
+        {% if already_submitted %}
+          <div class="upload-submitted">
+            ✅ Ya enviaste una entrega para este módulo. Puedes reemplazarla subiendo un nuevo archivo.
+          </div>
+          <div style="margin-top:1rem;"></div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('curso.submit', module_id=module_id) }}"
+              enctype="multipart/form-data" id="upload-form">
+          <div class="upload-area" id="upload-area">
+            <input type="file" name="file" id="file-input" accept=".xlsx,.xls,.xlsm"
+                   onchange="handleFileSelect(this)" />
+            <div class="upload-area__icon">📁</div>
+            <div class="upload-area__text" id="upload-text">Haz clic o arrastra tu archivo Excel aquí</div>
+            <div class="upload-area__hint">.xlsx · .xls · .xlsm · máx. 10 MB</div>
+          </div>
+          <button type="submit" class="btn btn-success" style="margin-top:1rem;" id="submit-btn" disabled>
+            <i class="fas fa-upload"></i> Enviar entrega
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+  // ── Inject the JSX module content ──────────────────────────
+  {{ jsx_content | safe }}
+</script>
+
+<script>
+  // ── File upload UI ──────────────────────────────────────────
+  function handleFileSelect(input) {
+    const btn  = document.getElementById("submit-btn");
+    const text = document.getElementById("upload-text");
+    if (input.files && input.files[0]) {
+      text.textContent = input.files[0].name;
+      btn.disabled = false;
+    }
+  }
+
+  // Drag-and-drop support
+  const area = document.getElementById("upload-area");
+  area.addEventListener("dragover",  e => { e.preventDefault(); area.style.borderColor = "var(--c-primary)"; });
+  area.addEventListener("dragleave", ()=> { area.style.borderColor = ""; });
+  area.addEventListener("drop", e => {
+    e.preventDefault();
+    area.style.borderColor = "";
+    const fi = document.getElementById("file-input");
+    fi.files = e.dataTransfer.files;
+    handleFileSelect(fi);
+  });
+</script>
+{% endblock %}

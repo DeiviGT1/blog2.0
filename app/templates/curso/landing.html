@@ -1,0 +1,51 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Curso Excel 365 — JoseDavidGT{% endblock %}
+
+{% block content %}
+<main class="curso-main">
+  <div class="landing-hero">
+    <h1>Curso Excel 365</h1>
+    <p>De cero a profesional. 5 niveles, 36 módulos, ejercicios prácticos
+       y seguimiento personalizado.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a class="btn btn-primary" href="{{ url_for('curso.register') }}">Crear cuenta</a>
+      <a class="btn btn-outline"  href="{{ url_for('curso.login') }}">Ya tengo cuenta</a>
+    </div>
+  </div>
+
+  <!-- Level overview -->
+  <div class="level-grid">
+    {% for lk, lv in levels.items() %}
+    <div class="level-pill" style="border-left:4px solid {{ lv.color }};">
+      <div class="level-pill__num" style="color:{{ lv.color }}">Nivel {{ lv.level_num }}</div>
+      <div class="level-pill__name">{{ lv.short }}</div>
+      <div class="level-pill__count">{{ lv.modules|length }} módulos</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Features -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.5rem;margin-top:1rem;">
+    <div style="padding:1.4rem;border:1px solid var(--c-border);border-radius:var(--radius-lg);">
+      <div style="font-size:1.6rem;margin-bottom:.6rem;">📊</div>
+      <strong style="display:block;margin-bottom:.4rem;">Ejercicios reales</strong>
+      <p style="font-size:.88rem;color:var(--c-text-muted);">Archivos Excel de práctica por nivel para aplicar lo aprendido de inmediato.</p>
+    </div>
+    <div style="padding:1.4rem;border:1px solid var(--c-border);border-radius:var(--radius-lg);">
+      <div style="font-size:1.6rem;margin-bottom:.6rem;">🔒</div>
+      <strong style="display:block;margin-bottom:.4rem;">Acceso controlado</strong>
+      <p style="font-size:.88rem;color:var(--c-text-muted);">El administrador habilita los módulos a tu ritmo. Sin abrumarte con todo de golpe.</p>
+    </div>
+    <div style="padding:1.4rem;border:1px solid var(--c-border);border-radius:var(--radius-lg);">
+      <div style="font-size:1.6rem;margin-bottom:.6rem;">📤</div>
+      <strong style="display:block;margin-bottom:.4rem;">Entrega tu trabajo</strong>
+      <p style="font-size:.88rem;color:var(--c-text-muted);">Sube tu archivo Excel directamente en el módulo para que el instructor lo revise y te dé feedback.</p>
+    </div>
+    <div style="padding:1.4rem;border:1px solid var(--c-border);border-radius:var(--radius-lg);">
+      <div style="font-size:1.6rem;margin-bottom:.6rem;">🚀</div>
+      <strong style="display:block;margin-bottom:.4rem;">5 niveles</strong>
+      <p style="font-size:.88rem;color:var(--c-text-muted);">Desde la interfaz básica hasta macros y Power Query. Una ruta clara de principiante a pro.</p>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Autenticando...{% endblock %}
+
+{% block content %}
+<main class="curso-main" style="text-align:center;padding-top:4rem;">
+  <p style="font-size:1.1rem;color:var(--c-text-muted);">Completando inicio de sesión con Google…</p>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Handles implicit OAuth flow: token arrives in URL hash (#access_token=...)
+  (async function () {
+    const hash   = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const token  = params.get("access_token");
+
+    if (!token) {
+      window.location.href = "{{ url_for('curso.login') }}";
+      return;
+    }
+
+    const res = await fetch("{{ url_for('curso.auth_session') }}", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ access_token: token }),
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      window.location.href = data.approved
+        ? "{{ url_for('curso.dashboard') }}"
+        : "{{ url_for('curso.pending') }}";
+    } else {
+      window.location.href = "{{ url_for('curso.login') }}";
+    }
+  })();
+</script>
+{% endblock %}

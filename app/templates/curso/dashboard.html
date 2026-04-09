@@ -1,0 +1,79 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Dashboard — Excel 365{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <h1 style="font-size:1.6rem;font-weight:800;margin-bottom:.2rem;">
+        Hola, {{ session.get('curso_username', 'estudiante') }} 👋
+      </h1>
+      <p style="font-size:.92rem;color:var(--c-text-muted);">
+        {% if is_admin %}
+          Tienes acceso completo como administrador.
+        {% else %}
+          Los módulos habilitados están marcados en verde. Haz clic para acceder.
+        {% endif %}
+      </p>
+    </div>
+    {% if is_admin %}
+      <a class="btn btn-primary btn-sm" href="{{ url_for('curso.admin_index') }}">
+        <i class="fas fa-cog"></i> Panel de administración
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Levels -->
+  {% for lk, lv in levels.items() %}
+  <div class="dashboard-section">
+    <div class="level-header">
+      <span class="level-badge" style="background:{{ lv.color }};">
+        Nivel {{ lv.level_num }}
+      </span>
+      <span class="level-title">{{ lv.title }}</span>
+      <!-- Download files -->
+      {% for xlsx in lv.xlsx %}
+        <a href="{{ url_for('curso.descargar', filename=xlsx) }}"
+           class="btn btn-outline btn-sm" style="margin-left:auto;white-space:nowrap;"
+           title="Descargar {{ xlsx }}">
+          <i class="fas fa-download"></i> {{ xlsx.replace('_', ' ').replace('.xlsx', '') }}
+        </a>
+      {% endfor %}
+    </div>
+
+    <div class="module-grid">
+      {% for mod in lv.modules %}
+        {% set enabled = mod.id in enabled_modules %}
+        {% set submitted = mod.id in submitted_modules %}
+        <div class="module-card {% if enabled %}enabled{% else %}locked{% endif %}">
+          {% if enabled %}
+            <a href="{{ url_for('curso.modulo', module_id=mod.id) }}"
+               style="position:absolute;inset:0;border-radius:inherit;" aria-label="{{ mod.title }}"></a>
+          {% endif %}
+
+          <div class="module-card__meta">
+            Nivel {{ lv.level_num }} · Módulo {{ loop.index }} de {{ lv.modules|length }}
+          </div>
+          <div class="module-card__title">{{ mod.title }}</div>
+
+          <div class="module-card__status {% if enabled %}status-enabled{% else %}status-locked{% endif %}">
+            {% if enabled %}
+              {% if submitted %}
+                <span class="status-submitted">✓ Entregado</span>
+              {% else %}
+                <i class="fas fa-unlock-alt"></i> Disponible
+              {% endif %}
+            {% else %}
+              <span class="lock-icon">🔒</span> Bloqueado
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+</main>
+{% endblock %}

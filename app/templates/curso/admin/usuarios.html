@@ -1,0 +1,66 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Usuarios — Admin Excel 365{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.8rem;">
+    <h1 style="font-size:1.4rem;font-weight:800;">Usuarios registrados</h1>
+    <a class="btn btn-outline btn-sm" href="{{ url_for('curso.admin_index') }}">← Admin</a>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Estado</th>
+        <th>Registrado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in profiles %}
+      <tr>
+        <td>
+          {{ p.username or '—' }}
+          {% if p.is_admin %}<span class="badge badge-admin" style="margin-left:.4rem;">Admin</span>{% endif %}
+        </td>
+        <td style="font-size:.85rem;">{{ p.email }}</td>
+        <td>
+          {% if p.is_admin %}
+            <span class="badge badge-admin">Admin</span>
+          {% elif p.is_approved %}
+            <span class="badge badge-approved">Aprobado</span>
+          {% else %}
+            <span class="badge badge-pending">Pendiente</span>
+          {% endif %}
+        </td>
+        <td style="white-space:nowrap;font-size:.82rem;">
+          {{ p.created_at[:10] if p.created_at else '—' }}
+        </td>
+        <td style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;">
+          {% if not p.is_admin %}
+            {% if not p.is_approved %}
+              <form method="POST" action="{{ url_for('curso.admin_aprobar', user_id=p.id) }}">
+                <button class="btn btn-success btn-sm">✓ Aprobar</button>
+              </form>
+            {% else %}
+              <form method="POST" action="{{ url_for('curso.admin_revocar', user_id=p.id) }}"
+                    onsubmit="return confirm('¿Revocar acceso a este usuario?');">
+                <button class="btn btn-danger btn-sm">✗ Revocar</button>
+              </form>
+            {% endif %}
+          {% endif %}
+          <a class="btn btn-outline btn-sm"
+             href="{{ url_for('curso.admin_modulos_usuario', user_id=p.id) }}">
+            <i class="fas fa-th"></i> Módulos
+          </a>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" style="text-align:center;color:var(--c-text-muted);">No hay usuarios registrados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</main>
+{% endblock %}

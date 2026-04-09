@@ -24,3 +24,4 @@ flask_login==0.6.3
 apscheduler==3.11.0
 eventlet==0.40.0
 redis==6.2.0
+supabase>=2.0.0
