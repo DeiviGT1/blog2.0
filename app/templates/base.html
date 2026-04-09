@@ -65,7 +65,7 @@
               <a class="nav-link" href="{% if request.path == '/' %}#projects{% else %}{{ url_for('main.index') }}#projects{% endif %}">Projects</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/articles">Articles</a>
+              <a class="nav-link" href="{% if request.path == '/' %}#articles{% else %}{{ url_for('main.index') }}#articles{% endif %}">Articles</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% if request.path == '/' %}#contact{% else %}{{ url_for('main.index') }}#contact{% endif %}">Contact</a>

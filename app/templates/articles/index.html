@@ -1,8 +1,6 @@
+{extends}
+
 <!-- app/templates/articles/index.html -->
-{% extends "base.html" %}
-
-{% block titulo %}Articles — JoseDavidGT{% endblock %}
-
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/articles/articles.css') }}" />
 {% endblock %}
@@ -10,21 +8,22 @@
 {% block contenido %}
 <div class="articles-index">
   <h1>Articles</h1>
-  <p class="section-lead">Thoughts on technology, data, and the world it's reshaping.</p>
+  <p class="section-lead">Thoughts on technology, data, and the world it is reshaping.</p>
 
   <!-- Article 1 -->
   <div class="article-card">
     <div class="article-meta">Opinion &nbsp;·&nbsp; April 2025 &nbsp;·&nbsp; 8 min</div>
     <a href="/articles/ia-mercado-laboral">
-      <h2>Bienvenido al mercado laboral. La puerta está cerrada.</h2>
+      <h2>Welcome to the job market. The door is closed.</h2>
     </a>
     <p class="article-excerpt">
-      La IA no está destruyendo empleos al azar — está cerrando la puerta de entrada.
-      Datos de Harvard, Stanford y el WEF muestran que los puestos junior han caído
-      hasta un 35% en 18 meses. Esto no es una tendencia. Es una restructuración.
+      AI is not randomly destroying jobs — it is closing the entry door.
+      Data from Harvard, Stanford, and the WEF show that junior roles have fallen
+      by as much as 35% in 18 months. This is not a trend. It is a restructuring.
     </p>
     <a href="/articles/ia-mercado-laboral" class="read-more">Read article →</a>
   </div>
 
 </div>
+
 {% endblock %}
