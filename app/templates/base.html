@@ -53,8 +53,7 @@
               <h3>Jose David GT</h3>
               <h4 style="font-weight: 500">Data Engineer</h4>
               <p>
-                I provide analytics with dynamic charts on Power BI to help you
-                understand your own business
+                Data Engineer building analytics pipelines, BI dashboards, and full-stack applications. I also write about technology and its impact on work.
               </p>
             </div>
           </a>
@@ -64,6 +63,9 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% if request.path == '/' %}#projects{% else %}{{ url_for('main.index') }}#projects{% endif %}">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/articles/ia-mercado-laboral">Articles</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% if request.path == '/' %}#contact{% else %}{{ url_for('main.index') }}#contact{% endif %}">Contact</a>

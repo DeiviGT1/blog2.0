@@ -27,6 +27,7 @@ def register_routes(app):
     from .routes.playlists_routes import playlists_bp
     from .routes.dashboard_routes import dashboard_bp
     from .routes.blogpost_routes import blogpost_bp
+    from .routes.articles_routes import articles_bp
     from .routes.sosqueue_routes import sos_bp
     from .routes.auth_routes import auth_bp
 
@@ -35,5 +36,6 @@ def register_routes(app):
     app.register_blueprint(playlists_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(blogpost_bp)
+    app.register_blueprint(articles_bp)
     app.register_blueprint(sos_bp)
     app.register_blueprint(auth_bp)
