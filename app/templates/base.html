@@ -65,6 +65,9 @@
               <a class="nav-link" href="{% if request.path == '/' %}#projects{% else %}{{ url_for('main.index') }}#projects{% endif %}">Projects</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="/articles">Articles</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{% if request.path == '/' %}#contact{% else %}{{ url_for('main.index') }}#contact{% endif %}">Contact</a>
             </li>
           </ul>
@@ -84,7 +87,6 @@
 
         <div class="sidebar-bottom">
           <a class="blogpost-bottom" href="/blogpost">BlogPost</a>
-          <a class="blogpost-bottom" href="/articles">Articles</a>
         </div>
 
       </nav>
