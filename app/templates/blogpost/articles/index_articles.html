@@ -1,29 +1,17 @@
 {% extends "blogpost/base_blogpost.html" %}
 
+{% block title %}Articles — JoseDavidGT{% endblock %}
+
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/blogpost/articles.css') }}" />
 {% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <div class="introduction container">
-        <h1 class="display-4">Hello! I am Jose</h1>
-        <div class="subtitle">
-            <img class="invertible-image avatar-image"
-                src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}"
-                data-default-src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO-BLACK@4x.webp') }}"
-                data-inverted-src="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}"
-                alt="Avatar">
-                <p class="lead">I engage in data mining, analyze data, create websites, and write about technology.</p>
-        </div>
-    </div>
-</div>
-
-<!-- Featured Articles -->
-<div class="articles-index" style="margin-top: 0; padding-top: 1rem;">
-  <h1>Latest Articles</h1>
+<div class="articles-index">
+  <h1>Articles</h1>
   <p class="section-lead">Thoughts on technology, data, and the world it's reshaping.</p>
 
+  <!-- Article 1 -->
   <div class="article-card">
     <div class="article-meta">Opinión &nbsp;·&nbsp; Abril 2025 &nbsp;·&nbsp; 8 min</div>
     <a href="/blogpost/articles/ia-mercado-laboral">
@@ -36,5 +24,6 @@
     </p>
     <a href="/blogpost/articles/ia-mercado-laboral" class="read-more">Leer artículo →</a>
   </div>
+
 </div>
 {% endblock %}

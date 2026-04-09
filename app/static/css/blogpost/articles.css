@@ -1,0 +1,227 @@
+/* app/static/css/blogpost/articles.css */
+
+/* ── Article listing (index) ── */
+
+.articles-index {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.articles-index h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  text-align: left;
+}
+
+.articles-index .section-lead {
+  color: var(--muted-text-color);
+  margin-bottom: 2.5rem;
+  text-align: left;
+  font-size: 1.05rem;
+}
+
+.article-card {
+  border-top: 1px solid var(--hover-bg-color);
+  padding: 1.8rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+  transition: opacity 0.2s;
+}
+
+.article-card:hover {
+  opacity: 0.75;
+}
+
+.article-card a {
+  text-decoration: none;
+}
+
+.article-card .article-meta {
+  font-size: 0.82rem;
+  color: var(--muted-text-color);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.article-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0.3rem 0 0.5rem;
+  text-align: left;
+  color: var(--main-text-color);
+  line-height: 1.35;
+}
+
+.article-card .article-excerpt {
+  font-size: 0.97rem;
+  color: var(--muted-text-color);
+  line-height: 1.65;
+  text-align: left;
+  margin: 0;
+}
+
+.article-card .read-more {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--hover-bg-color);
+  text-align: left;
+  margin-top: 0.4rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── Single article ── */
+
+.article-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.article-header {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--hover-bg-color);
+  padding-bottom: 1.5rem;
+  text-align: left;
+}
+
+.article-header .article-category {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hover-bg-color);
+  text-align: left;
+  margin-bottom: 0.75rem;
+}
+
+.article-header h1 {
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  margin-bottom: 0.8rem;
+}
+
+.article-header .article-subtitle {
+  font-size: 1.1rem;
+  color: var(--muted-text-color);
+  line-height: 1.55;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.article-header .article-byline {
+  font-size: 0.85rem;
+  color: var(--muted-text-color);
+  text-align: left;
+}
+
+/* ── Body copy ── */
+
+.article-body {
+  text-align: left;
+}
+
+.article-body p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 1.4rem;
+  color: var(--main-text-color);
+  text-align: left;
+}
+
+.article-body h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 2.5rem 0 0.9rem;
+  text-align: left;
+  color: var(--main-text-color);
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--hover-bg-color);
+  margin: 2rem 0;
+  padding: 0.6rem 1.4rem;
+  background-color: var(--sidebar-bg-color);
+  transition: background-color 0.5s;
+}
+
+.article-body blockquote p {
+  font-size: 1.08rem;
+  font-style: italic;
+  color: var(--main-text-color);
+  margin: 0;
+}
+
+.article-body .data-callout {
+  background-color: var(--sidebar-bg-color);
+  border: 1px solid var(--hover-bg-color);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin: 2rem 0;
+  transition: background-color 0.5s;
+}
+
+.article-body .data-callout p {
+  margin: 0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+.article-body .data-callout strong {
+  color: var(--hover-bg-color);
+}
+
+.article-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hover-bg-color);
+}
+
+.article-footer .sources {
+  font-size: 0.82rem;
+  color: var(--muted-text-color);
+  line-height: 1.7;
+  text-align: left;
+}
+
+.article-footer .sources strong {
+  color: var(--muted-text-color);
+}
+
+.article-footer .zenodo-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--hover-bg-color);
+  border: 1.5px solid var(--hover-bg-color);
+  border-radius: 20px;
+  padding: 0.4rem 1rem;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.article-footer .zenodo-link:hover {
+  background-color: var(--hover-bg-color);
+  color: var(--hover-text-color);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .article-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .article-wrapper,
+  .articles-index {
+    padding: 2rem 1rem 3rem;
+  }
+}

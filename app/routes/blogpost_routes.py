@@ -44,3 +44,12 @@ def gato_tuerto():
 @blogpost_bp.route('/blogpost/portfolio')
 def portfolio():
     return render_template('blogpost/projects/web-development/portfolio.html')
+
+# Articles
+@blogpost_bp.route('/blogpost/articles')
+def articles_index():
+    return render_template('blogpost/articles/index_articles.html')
+
+@blogpost_bp.route('/blogpost/articles/ia-mercado-laboral')
+def ia_mercado_laboral():
+    return render_template('blogpost/articles/ia-mercado-laboral.html')
