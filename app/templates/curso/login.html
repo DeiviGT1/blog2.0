@@ -16,6 +16,10 @@
         <label for="password">Contraseña</label>
         <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
       </div>
+      <div style="text-align:right;margin-top:.3rem;margin-bottom:.8rem;">
+        <a href="{{ url_for('curso.forgot_password') }}"
+           style="font-size:.83rem;color:var(--c-text-muted);">¿Olvidaste tu contraseña?</a>
+      </div>
       <button type="submit" class="btn btn-primary btn-full">Iniciar sesión</button>
     </form>
 

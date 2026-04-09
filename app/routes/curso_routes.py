@@ -266,9 +266,81 @@ def login():
                 return redirect(url_for("curso.dashboard"))
             return redirect(url_for("curso.pending"))
         except Exception as e:
-            flash("Credenciales incorrectas. Intenta de nuevo.", "error")
+            msg = str(e).lower()
+            if "invalid login credentials" in msg or "invalid_credentials" in msg:
+                flash("Correo o contraseña incorrectos.", "error")
+            elif "email not confirmed" in msg:
+                flash("Debes confirmar tu correo antes de iniciar sesión. Revisa tu bandeja de entrada.", "error")
+            elif "too many requests" in msg:
+                flash("Demasiados intentos. Espera unos minutos e intenta de nuevo.", "error")
+            else:
+                flash("No se pudo iniciar sesión. Intenta de nuevo.", "error")
 
     return render_template("curso/login.html")
+
+
+@curso_bp.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if request.method == "POST":
+        email = request.form.get("email", "").strip()
+        if not email:
+            flash("Ingresa tu correo electrónico.", "error")
+            return render_template("curso/forgot_password.html")
+        try:
+            from app.python.supabase_client import send_password_reset
+            base_url = os.getenv("BASE_URL", "").rstrip("/")
+            reset_url = f"{base_url}/curso/auth/reset-callback" if base_url \
+                        else url_for("curso.reset_callback", _external=True)
+            send_password_reset(email, reset_url)
+        except Exception:
+            pass  # Don't reveal whether the email exists
+        flash("Si ese correo está registrado, recibirás un enlace para restablecer tu contraseña.", "success")
+        return redirect(url_for("curso.login"))
+    return render_template("curso/forgot_password.html")
+
+
+@curso_bp.route("/auth/reset-callback")
+def reset_callback():
+    """Supabase redirects here after the user clicks the reset link in their email."""
+    code = request.args.get("code")
+    if not code:
+        flash("Enlace de recuperación inválido o expirado.", "error")
+        return redirect(url_for("curso.login"))
+    # Store code in session and send user to the form
+    session["curso_reset_code"] = code
+    return redirect(url_for("curso.reset_password"))
+
+
+@curso_bp.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+    code = session.get("curso_reset_code")
+    if not code:
+        flash("Enlace de recuperación inválido o expirado.", "error")
+        return redirect(url_for("curso.login"))
+
+    if request.method == "POST":
+        password = request.form.get("password", "")
+        confirm  = request.form.get("confirm", "")
+        if len(password) < 8:
+            flash("La contraseña debe tener al menos 8 caracteres.", "error")
+            return render_template("curso/reset_password.html")
+        if password != confirm:
+            flash("Las contraseñas no coinciden.", "error")
+            return render_template("curso/reset_password.html")
+        try:
+            from app.python.supabase_client import get_client, update_user_password
+            sb   = get_client()
+            resp = sb.auth.exchange_code_for_session({"auth_code": code})
+            update_user_password(resp.session.access_token, password)
+            session.pop("curso_reset_code", None)
+            flash("¡Contraseña actualizada! Ya puedes iniciar sesión.", "success")
+            return redirect(url_for("curso.login"))
+        except Exception as e:
+            flash("El enlace expiró o ya fue usado. Solicita uno nuevo.", "error")
+            session.pop("curso_reset_code", None)
+            return redirect(url_for("curso.forgot_password"))
+
+    return render_template("curso/reset_password.html")
 
 
 @curso_bp.route("/register", methods=["GET", "POST"])

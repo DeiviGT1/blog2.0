@@ -47,6 +47,19 @@ def get_user_from_token(access_token: str):
         return None
 
 
+def send_password_reset(email: str, redirect_to: str):
+    """Send a password-reset email via Supabase."""
+    sb = get_client()
+    sb.auth.reset_password_for_email(email, {"redirect_to": redirect_to})
+
+
+def update_user_password(access_token: str, new_password: str):
+    """Update the password for the user identified by access_token."""
+    sb = get_client()
+    sb.auth.set_session(access_token, "")   # attach token to this client instance
+    sb.auth.update_user({"password": new_password})
+
+
 def generate_pkce_pair() -> tuple[str, str]:
     """Return (code_verifier, code_challenge) for PKCE OAuth flow."""
     code_verifier = base64.urlsafe_b64encode(
