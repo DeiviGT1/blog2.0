@@ -80,33 +80,6 @@
         <p style="color:var(--c-text-muted);font-size:.9rem;">Cargando módulo…</p>
       </div>
 
-      <!-- File upload section -->
-      <div class="upload-section">
-        <h3>📤 Entrega tu práctica</h3>
-        <p>Completa el archivo <strong>{{ level_data.short }} Práctica</strong> y súbelo aquí para que el instructor lo revise.</p>
-
-        {% if already_submitted %}
-          <div class="upload-submitted">
-            ✅ Ya enviaste una entrega para este módulo. Puedes reemplazarla subiendo un nuevo archivo.
-          </div>
-          <div style="margin-top:1rem;"></div>
-        {% endif %}
-
-        <form method="POST" action="{{ url_for('curso.submit', module_id=module_id) }}"
-              enctype="multipart/form-data" id="upload-form">
-          <div class="upload-area" id="upload-area">
-            <input type="file" name="file" id="file-input" accept=".xlsx,.xls,.xlsm"
-                   onchange="handleFileSelect(this)" />
-            <div class="upload-area__icon">📁</div>
-            <div class="upload-area__text" id="upload-text">Haz clic o arrastra tu archivo Excel aquí</div>
-            <div class="upload-area__hint">.xlsx · .xls · .xlsm · máx. 10 MB</div>
-          </div>
-          <button type="submit" class="btn btn-success" style="margin-top:1rem;" id="submit-btn" disabled>
-            <i class="fas fa-upload"></i> Enviar entrega
-          </button>
-        </form>
-      </div>
-
     </div>
   </div>
 </main>
@@ -116,29 +89,5 @@
 <script type="text/babel">
   // ── Inject the JSX module content ──────────────────────────
   {{ jsx_content | safe }}
-</script>
-
-<script>
-  // ── File upload UI ──────────────────────────────────────────
-  function handleFileSelect(input) {
-    const btn  = document.getElementById("submit-btn");
-    const text = document.getElementById("upload-text");
-    if (input.files && input.files[0]) {
-      text.textContent = input.files[0].name;
-      btn.disabled = false;
-    }
-  }
-
-  // Drag-and-drop support
-  const area = document.getElementById("upload-area");
-  area.addEventListener("dragover",  e => { e.preventDefault(); area.style.borderColor = "var(--c-primary)"; });
-  area.addEventListener("dragleave", ()=> { area.style.borderColor = ""; });
-  area.addEventListener("drop", e => {
-    e.preventDefault();
-    area.style.borderColor = "";
-    const fi = document.getElementById("file-input");
-    fi.files = e.dataTransfer.files;
-    handleFileSelect(fi);
-  });
 </script>
 {% endblock %}

@@ -1,5 +1,9 @@
 # app/python/supabase_client.py
 import os
+import secrets
+import hashlib
+import base64
+import urllib.parse
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
@@ -43,22 +47,34 @@ def get_user_from_token(access_token: str):
         return None
 
 
-def sign_in_with_google(redirect_to: str):
-    """Return the Google OAuth URL to redirect the browser to."""
-    sb = get_client()
-    response = sb.auth.sign_in_with_oauth({
+def generate_pkce_pair() -> tuple[str, str]:
+    """Return (code_verifier, code_challenge) for PKCE OAuth flow."""
+    code_verifier = base64.urlsafe_b64encode(
+        secrets.token_bytes(32)
+    ).rstrip(b"=").decode("ascii")
+    code_challenge = base64.urlsafe_b64encode(
+        hashlib.sha256(code_verifier.encode("ascii")).digest()
+    ).rstrip(b"=").decode("ascii")
+    return code_verifier, code_challenge
+
+
+def google_oauth_url(redirect_to: str, code_challenge: str) -> str:
+    """Build the Supabase Google OAuth URL with PKCE challenge."""
+    params = urllib.parse.urlencode({
         "provider": "google",
-        "options": {"redirect_to": redirect_to},
+        "redirect_to": redirect_to,
+        "code_challenge": code_challenge,
+        "code_challenge_method": "S256",
     })
-    return response.url
+    return f"{SUPABASE_URL}/auth/v1/authorize?{params}"
 
 
 # ── Profile helpers (use admin client for server-side access) ────────────────
 
 def get_profile(user_id: str) -> dict | None:
     sb = get_admin_client()
-    result = sb.table("profiles").select("*").eq("id", user_id).single().execute()
-    return result.data
+    result = sb.table("profiles").select("*").eq("id", user_id).maybe_single().execute()
+    return result.data if result else None
 
 
 def create_or_update_profile(user_id: str, email: str, username: str,
@@ -165,9 +181,10 @@ def get_user_submissions(user_id: str) -> list:
 
 def get_all_submissions() -> list:
     sb = get_admin_client()
+    # Use explicit FK hint because submissions has two FKs to profiles
     result = (
         sb.table("submissions")
-        .select("*, profiles(email, username)")
+        .select("*, profiles!submissions_user_id_fkey(email, username)")
         .order("uploaded_at", desc=True)
         .execute()
     )

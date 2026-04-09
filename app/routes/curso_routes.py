@@ -299,24 +299,28 @@ def register():
 
 @curso_bp.route("/auth/google")
 def auth_google():
-    from app.python.supabase_client import sign_in_with_google
+    from app.python.supabase_client import generate_pkce_pair, google_oauth_url
+    code_verifier, code_challenge = generate_pkce_pair()
+    session["curso_pkce_verifier"] = code_verifier
     callback = url_for("curso.auth_callback", _external=True)
-    google_url = sign_in_with_google(callback)
-    return redirect(google_url)
+    return redirect(google_oauth_url(callback, code_challenge))
 
 
 @curso_bp.route("/auth/callback")
 def auth_callback():
     """
-    Handles both PKCE code exchange and a fallback POST from the JS client.
-    Supabase redirects here after Google OAuth.
+    Handles PKCE code exchange after Google OAuth redirect.
     """
     code = request.args.get("code")
     if code:
+        code_verifier = session.pop("curso_pkce_verifier", None)
         try:
             from app.python.supabase_client import get_client
             sb   = get_client()
-            resp = sb.auth.exchange_code_for_session({"auth_code": code})
+            resp = sb.auth.exchange_code_for_session({
+                "auth_code": code,
+                "code_verifier": code_verifier,
+            })
             approved = _after_auth(resp.user, resp.session.access_token)
             if approved:
                 return redirect(url_for("curso.dashboard"))
@@ -325,7 +329,7 @@ def auth_callback():
             flash(f"Error de autenticación: {e}", "error")
             return redirect(url_for("curso.login"))
 
-    # Implicit flow — token arrives in URL hash, handled by JS
+    # Fallback — token in URL hash (implicit flow), handled by JS
     return render_template("curso/auth_callback.html")
 
 
@@ -385,12 +389,11 @@ def modulo(module_id):
 
     # Check permission
     is_admin = session.get("curso_is_admin", False)
-    if not is_admin:
-        from app.python.supabase_client import get_user_permissions
-        enabled = get_user_permissions(session["curso_user_id"])
-        if module_id not in enabled:
-            flash("No tienes acceso a este módulo.", "warning")
-            return redirect(url_for("curso.dashboard"))
+    from app.python.supabase_client import get_user_permissions
+    enabled = ALL_MODULE_IDS if is_admin else get_user_permissions(session["curso_user_id"])
+    if not is_admin and module_id not in enabled:
+        flash("No tienes acceso a este módulo.", "warning")
+        return redirect(url_for("curso.dashboard"))
 
     # Load and transform JSX
     jsx_path = os.path.join(
@@ -445,25 +448,30 @@ def descargar(filename):
 @curso_bp.route("/submit/<module_id>", methods=["POST"])
 @require_approved
 def submit(module_id):
-    if module_id not in MODULE_LOOKUP:
+    # Accept both regular module IDs and level-practice IDs (e.g. nivel0_practica)
+    is_practica = module_id.endswith("_practica")
+    if not is_practica and module_id not in MODULE_LOOKUP:
         abort(404)
+
+    # Determine where to redirect after submit
+    back_url = url_for("curso.dashboard") if is_practica else url_for("curso.modulo", module_id=module_id)
 
     file = request.files.get("file")
     if not file or file.filename == "":
         flash("Selecciona un archivo.", "error")
-        return redirect(url_for("curso.modulo", module_id=module_id))
+        return redirect(back_url)
 
     filename = secure_filename(file.filename)
     ext      = os.path.splitext(filename)[1].lower()
     if ext not in (".xlsx", ".xls", ".xlsm"):
         flash("Solo se aceptan archivos Excel (.xlsx, .xls, .xlsm).", "error")
-        return redirect(url_for("curso.modulo", module_id=module_id))
+        return redirect(back_url)
 
     MAX_BYTES = 10 * 1024 * 1024  # 10 MB
     file_bytes = file.read()
     if len(file_bytes) > MAX_BYTES:
         flash("El archivo supera el límite de 10 MB.", "error")
-        return redirect(url_for("curso.modulo", module_id=module_id))
+        return redirect(back_url)
 
     try:
         from app.python.supabase_client import upload_submission_file, create_submission
@@ -474,7 +482,7 @@ def submit(module_id):
     except Exception as e:
         flash(f"Error al subir el archivo: {e}", "error")
 
-    return redirect(url_for("curso.modulo", module_id=module_id))
+    return redirect(back_url)
 
 
 # ── Admin routes ──────────────────────────────────────────────────────────────

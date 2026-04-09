@@ -33,14 +33,6 @@
         Nivel {{ lv.level_num }}
       </span>
       <span class="level-title">{{ lv.title }}</span>
-      <!-- Download files -->
-      {% for xlsx in lv.xlsx %}
-        <a href="{{ url_for('curso.descargar', filename=xlsx) }}"
-           class="btn btn-outline btn-sm" style="margin-left:auto;white-space:nowrap;"
-           title="Descargar {{ xlsx }}">
-          <i class="fas fa-download"></i> {{ xlsx.replace('_', ' ').replace('.xlsx', '') }}
-        </a>
-      {% endfor %}
     </div>
 
     <div class="module-grid">
@@ -71,6 +63,44 @@
           </div>
         </div>
       {% endfor %}
+    </div>
+
+    <!-- Level files & practice submission -->
+    <div class="level-files-bar">
+      <div class="level-files-bar__files">
+        <span class="level-files-bar__label"><i class="fas fa-folder-open"></i> Archivos del nivel</span>
+        {% for xlsx in lv.xlsx %}
+          <a href="{{ url_for('curso.modulo', module_id=lv.modules[0].id) }}"
+             class="btn btn-outline btn-sm" title="Disponible dentro del módulo">
+            <i class="fas fa-file-excel"></i> {{ xlsx.replace('_', ' ').replace('.xlsx', '') }}
+          </a>
+        {% endfor %}
+      </div>
+
+      <div class="level-files-bar__submit">
+        {% set practica_id = lk + '_practica' %}
+        {% set ya_entregado = practica_id in submitted_modules %}
+        {% if ya_entregado %}
+          <span class="badge-submitted"><i class="fas fa-check-circle"></i> Práctica entregada</span>
+          <form method="POST" action="{{ url_for('curso.submit', module_id=practica_id) }}"
+                enctype="multipart/form-data" style="display:inline;">
+            <label class="btn btn-outline btn-sm" style="cursor:pointer;margin-left:.5rem;">
+              <i class="fas fa-redo"></i> Reenviar
+              <input type="file" name="file" accept=".xlsx,.xls,.xlsm"
+                     style="display:none;" onchange="this.closest('form').submit()">
+            </label>
+          </form>
+        {% else %}
+          <form method="POST" action="{{ url_for('curso.submit', module_id=practica_id) }}"
+                enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:.5rem;">
+            <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+              <i class="fas fa-upload"></i> Entregar práctica
+              <input type="file" name="file" accept=".xlsx,.xls,.xlsm"
+                     style="display:none;" onchange="this.closest('form').submit()">
+            </label>
+          </form>
+        {% endif %}
+      </div>
     </div>
   </div>
   {% endfor %}
