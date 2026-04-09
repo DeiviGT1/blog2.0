@@ -313,7 +313,8 @@ def auth_google():
     from app.python.supabase_client import generate_pkce_pair, google_oauth_url
     code_verifier, code_challenge = generate_pkce_pair()
     session["curso_pkce_verifier"] = code_verifier
-    callback = url_for("curso.auth_callback", _external=True)
+    base_url = os.getenv("BASE_URL", "").rstrip("/")
+    callback = f"{base_url}/curso/auth/callback" if base_url else url_for("curso.auth_callback", _external=True)
     return redirect(google_oauth_url(callback, code_challenge))
 
 
