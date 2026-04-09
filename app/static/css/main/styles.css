@@ -76,10 +76,8 @@ body {
 .footer {
     background-color: var(--footer-bg-color);
     transition: background-color 0.5s, color 0.5s;
-    position: relative; /* Permite que el footer se posicione correctamente */
-    width: 70%; /* Asegura que ocupe todo el ancho de la pantalla */
+    width: 100%;
     text-align: center;
-    margin-left: 30%; /* Mismo margen que el sidebar */
     box-sizing: border-box;
 }
 
@@ -136,6 +134,6 @@ body {
         padding: 0;
     }
     .footer {
-        margin-left: 0; /* En móviles, el sidebar no está fijo, así que el footer ocupa el 100% */
+        width: 100%;
     }
 }
