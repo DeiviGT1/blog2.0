@@ -1,12 +1,13 @@
-{% extends "blogpost/base_blogpost.html" %}
+<!-- app/templates/articles/index.html -->
+{% extends "base.html" %}
 
-{% block title %}Articles — JoseDavidGT{% endblock %}
+{% block titulo %}Articles — JoseDavidGT{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/blogpost/articles.css') }}" />
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/articles/articles.css') }}" />
 {% endblock %}
 
-{% block content %}
+{% block contenido %}
 <div class="articles-index">
   <h1>Articles</h1>
   <p class="section-lead">Thoughts on technology, data, and the world it's reshaping.</p>
@@ -14,7 +15,7 @@
   <!-- Article 1 -->
   <div class="article-card">
     <div class="article-meta">Opinión &nbsp;·&nbsp; Abril 2025 &nbsp;·&nbsp; 8 min</div>
-    <a href="/blogpost/articles/ia-mercado-laboral">
+    <a href="/articles/ia-mercado-laboral">
       <h2>Bienvenido al mercado laboral. La puerta está cerrada.</h2>
     </a>
     <p class="article-excerpt">
@@ -22,7 +23,7 @@
       Datos de Harvard, Stanford y el WEF muestran que los puestos junior han caído
       hasta un 35% en 18 meses. Esto no es una tendencia. Es una restructuración.
     </p>
-    <a href="/blogpost/articles/ia-mercado-laboral" class="read-more">Leer artículo →</a>
+    <a href="/articles/ia-mercado-laboral" class="read-more">Leer artículo →</a>
   </div>
 
 </div>

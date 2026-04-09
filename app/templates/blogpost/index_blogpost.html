@@ -1,9 +1,5 @@
 {% extends "blogpost/base_blogpost.html" %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/blogpost/articles.css') }}" />
-{% endblock %}
-
 {% block content %}
 <div class="jumbotron">
     <div class="introduction container">
@@ -17,24 +13,5 @@
                 <p class="lead">I engage in data mining, analyze data, create websites, and write about technology.</p>
         </div>
     </div>
-</div>
-
-<!-- Featured Articles -->
-<div class="articles-index" style="margin-top: 0; padding-top: 1rem;">
-  <h1>Latest Articles</h1>
-  <p class="section-lead">Thoughts on technology, data, and the world it's reshaping.</p>
-
-  <div class="article-card">
-    <div class="article-meta">Opinión &nbsp;·&nbsp; Abril 2025 &nbsp;·&nbsp; 8 min</div>
-    <a href="/blogpost/articles/ia-mercado-laboral">
-      <h2>Bienvenido al mercado laboral. La puerta está cerrada.</h2>
-    </a>
-    <p class="article-excerpt">
-      La IA no está destruyendo empleos al azar — está cerrando la puerta de entrada.
-      Datos de Harvard, Stanford y el WEF muestran que los puestos junior han caído
-      hasta un 35% en 18 meses. Esto no es una tendencia. Es una restructuración.
-    </p>
-    <a href="/blogpost/articles/ia-mercado-laboral" class="read-more">Leer artículo →</a>
-  </div>
 </div>
 {% endblock %}
