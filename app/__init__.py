@@ -1,15 +1,23 @@
 # app/__init__.py
+import os
 from flask import Flask
+from dotenv import load_dotenv
 from .routes_main import register_routes
 
 def create_app():
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'tu_clave_secreta_aqui'
-
-    from dotenv import load_dotenv
     load_dotenv()
+    app = Flask(__name__)
 
-    # Registrar las rutas
+    secret = os.getenv("SECRET_KEY")
+    if not secret:
+        raise RuntimeError("SECRET_KEY no está configurada en las variables de entorno.")
+    app.config['SECRET_KEY'] = secret
+
+    # Cookies seguras en producción
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    if os.getenv("FLASK_ENV") == "production":
+        app.config['SESSION_COOKIE_SECURE'] = True   # solo HTTPS
+
     register_routes(app)
-
     return app
