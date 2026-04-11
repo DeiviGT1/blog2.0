@@ -200,8 +200,28 @@ input:not(:checked) + .slider .moon-icon {
 
 .sidebar-bottom {
   text-align: center;
-  height: 10%;
-  align-content: center;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.excel-course-bottom {
+  background-color: #217346;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  width: 100%;
+  display: block;
+  padding: 10px 0;
+  box-sizing: border-box;
+  font-weight: 600;
+  transition: background-color .2s;
+}
+
+.excel-course-bottom:hover {
+  background-color: #185a36;
+  color: #fff;
 }
 
 .blogpost-bottom {

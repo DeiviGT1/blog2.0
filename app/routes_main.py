@@ -35,7 +35,7 @@ def register_routes(app):
     from .routes.dashboard_routes import dashboard_bp
     from .routes.blogpost_routes import blogpost_bp
     from .routes.articles_routes import articles_bp
-    from .routes.sosqueue_routes import sos_bp
+    # from .routes.sosqueue_routes import sos_bp  # deshabilitado temporalmente (requiere Redis)
     from .routes.auth_routes import auth_bp
     from .routes.curso_routes import curso_bp
 
@@ -45,6 +45,6 @@ def register_routes(app):
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(blogpost_bp)
     app.register_blueprint(articles_bp)
-    app.register_blueprint(sos_bp)
+    # app.register_blueprint(sos_bp)  # deshabilitado temporalmente (requiere Redis)
     app.register_blueprint(auth_bp)
     app.register_blueprint(curso_bp)
