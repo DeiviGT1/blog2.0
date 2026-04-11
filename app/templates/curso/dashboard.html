@@ -1,109 +1,407 @@
 {% extends "curso/base_curso.html" %}
 {% block title %}Dashboard — Excel 365{% endblock %}
 
-{% block content %}
-<main class="curso-main curso-main--wide">
+{% block extra_head %}
+<style>
+  /* ══════════════════════════════════════
+     DASHBOARD — App-style layout
+     ══════════════════════════════════════ */
 
-  <!-- Header -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
-    <div>
-      <h1 style="font-size:1.6rem;font-weight:800;margin-bottom:.2rem;">
-        Hola, {{ session.get('curso_username', 'estudiante') }} 👋
-      </h1>
-      <p style="font-size:.92rem;color:var(--c-text-muted);">
-        {% if is_admin %}
-          Tienes acceso completo como administrador.
-        {% else %}
-          Los módulos habilitados están marcados en verde. Haz clic para acceder.
-        {% endif %}
+  .dash { display: flex; min-height: calc(100vh - 60px); }
+
+  /* ── Left sidebar: level navigator ─── */
+  .dash-side {
+    width: 260px; flex-shrink: 0;
+    background: var(--c-bg-alt); border-right: 1px solid var(--c-border);
+    padding: 1.5rem 1rem; position: sticky; top: 60px; height: calc(100vh - 60px);
+    overflow-y: auto; display: flex; flex-direction: column;
+  }
+  .dash-side__greeting {
+    margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--c-border);
+  }
+  .dash-side__greeting h2 {
+    font-size: 1rem; font-weight: 800; margin-bottom: .15rem;
+    background: linear-gradient(135deg, var(--c-primary), #0ea5e9);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .dash-side__greeting p { font-size: .78rem; color: var(--c-text-muted); }
+
+  .dash-side__levels { display: flex; flex-direction: column; gap: .4rem; flex: 1; }
+
+  .dash-side__level {
+    padding: .7rem .8rem; border-radius: var(--radius); cursor: pointer;
+    transition: all .25s; display: flex; align-items: center; gap: .6rem;
+    border: 1.5px solid transparent;
+  }
+  .dash-side__level:hover { background: var(--c-primary-lt); }
+  .dash-side__level.active { background: var(--c-primary-lt); border-color: var(--c-primary); }
+  .dash-side__level-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dash-side__level-info { flex: 1; min-width: 0; }
+  .dash-side__level-name { font-size: .84rem; font-weight: 700; color: var(--c-text); display: block; }
+  .dash-side__level-meta { font-size: .7rem; color: var(--c-text-muted); }
+  .dash-side__level-tag {
+    font-size: .6rem; font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
+    padding: .15rem .45rem; border-radius: 5px;
+  }
+
+  .dash-side__footer {
+    margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--c-border);
+    display: flex; flex-direction: column; gap: .4rem;
+  }
+
+  /* ── Right main content ─── */
+  .dash-main {
+    flex: 1; padding: 2rem 2.5rem; min-width: 0;
+  }
+
+  /* Level content panel */
+  .dash-panel { display: none; animation: fadeSlide .4s cubic-bezier(.16,1,.3,1); }
+  .dash-panel.active { display: block; }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dash-panel__header {
+    display: flex; align-items: center; gap: .8rem; margin-bottom: 1.5rem;
+    padding-bottom: 1rem; border-bottom: 1px solid var(--c-border);
+  }
+  .dash-panel__badge {
+    font-size: .7rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+    padding: .35rem .9rem; border-radius: 10px; color: #fff;
+  }
+  .dash-panel__title { font-size: 1.3rem; font-weight: 800; }
+
+  /* Module list — vertical cards */
+  .dash-mlist { display: flex; flex-direction: column; gap: .6rem; }
+
+  .dash-mcard {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 1.2rem; border-radius: var(--radius-lg);
+    border: 1.5px solid var(--c-border); background: var(--c-bg-alt);
+    transition: all .3s cubic-bezier(.16,1,.3,1); position: relative;
+    overflow: hidden;
+  }
+  .dash-mcard::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--c-primary); transform: scaleY(0);
+    transition: transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .dash-mcard.enabled { cursor: pointer; }
+  .dash-mcard.enabled:hover {
+    border-color: var(--c-primary); box-shadow: var(--shadow-md);
+    transform: translateX(4px);
+  }
+  .dash-mcard.enabled:hover::after { transform: scaleY(1); }
+  .dash-mcard.locked { opacity: .4; }
+
+  .dash-mcard__num {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem; font-weight: 800; flex-shrink: 0;
+    transition: all .3s;
+  }
+  .dash-mcard.enabled .dash-mcard__num { background: var(--c-primary-lt); color: var(--c-primary); }
+  .dash-mcard.locked .dash-mcard__num { background: var(--c-bg); color: var(--c-text-muted); }
+  .dash-mcard.submitted .dash-mcard__num { background: var(--c-primary); color: #fff; }
+
+  .dash-mcard__info { flex: 1; min-width: 0; }
+  .dash-mcard__title { font-size: .9rem; font-weight: 600; color: var(--c-text); }
+  .dash-mcard__sub { font-size: .75rem; color: var(--c-text-muted); margin-top: .1rem; }
+
+  .dash-mcard__badge {
+    font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    padding: .25rem .6rem; border-radius: 6px; flex-shrink: 0;
+  }
+  .dash-mcard__badge--available { background: #dcfce7; color: #166534; }
+  .dash-mcard__badge--submitted { background: var(--c-primary-lt); color: var(--c-primary); }
+  .dash-mcard__badge--locked { background: var(--c-bg); color: var(--c-text-muted); }
+
+  .dash-mcard__arrow {
+    color: var(--c-text-muted); font-size: .8rem; transition: all .3s; flex-shrink: 0;
+  }
+  .dash-mcard.enabled:hover .dash-mcard__arrow { color: var(--c-primary); transform: translateX(3px); }
+
+  /* Files row */
+  .dash-filesrow {
+    margin-top: 1.2rem; padding: 1rem 1.2rem;
+    background: var(--c-bg-alt); border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
+  }
+  .dash-filesrow__left { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .dash-filesrow__label { font-size: .8rem; font-weight: 600; color: var(--c-text-muted); }
+  .dash-filesrow__right { display: flex; align-items: center; gap: .5rem; }
+
+  /* Locked level */
+  .dash-locked-panel {
+    text-align: center; padding: 3rem 1.5rem;
+    border: 1.5px dashed var(--c-border); border-radius: var(--radius-xl);
+    background: var(--c-bg-alt);
+  }
+  .dash-locked-panel__icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: .3; }
+  .dash-locked-panel__title { font-size: 1.1rem; font-weight: 700; margin-bottom: .3rem; }
+  .dash-locked-panel__sub { font-size: .88rem; color: var(--c-text-muted); margin-bottom: 1.2rem; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .dash-locked-panel__modules {
+    display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; margin-bottom: 1.5rem;
+  }
+  .dash-locked-panel__mod {
+    font-size: .78rem; color: var(--c-text-muted); padding: .3rem .7rem;
+    border: 1px solid var(--c-border); border-radius: 6px; background: var(--c-bg);
+  }
+
+  /* Bundle */
+  .dash-bundle-bar {
+    position: relative; overflow: hidden;
+    background: var(--c-bg-dark); border-radius: var(--radius-lg);
+    padding: 1.5rem 1.8rem; margin-top: 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem; color: #fff;
+  }
+  .dash-bundle-bar::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(34,197,94,.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .dash-bundle-bar * { position: relative; z-index: 1; }
+  .dash-bundle-bar strong { font-size: .95rem; }
+  .dash-bundle-bar p { font-size: .82rem; color: #94a3b8; margin-top: .1rem; }
+
+  /* Scroll progress */
+  .scroll-progress {
+    position: fixed; top: 60px; left: 0; height: 3px; z-index: 99;
+    background: linear-gradient(90deg, var(--c-accent), #0ea5e9, #a855f7);
+    width: 0%; transition: width .1s;
+  }
+
+  /* ── Responsive ─── */
+  @media (max-width: 768px) {
+    .dash { flex-direction: column; }
+    .dash-side {
+      width: 100%; position: static; height: auto;
+      flex-direction: row; flex-wrap: wrap; padding: 1rem;
+      border-right: none; border-bottom: 1px solid var(--c-border);
+    }
+    .dash-side__greeting { margin-bottom: .8rem; padding-bottom: .8rem; width: 100%; }
+    .dash-side__levels { flex-direction: row; flex-wrap: wrap; gap: .3rem; }
+    .dash-side__level { padding: .5rem .7rem; }
+    .dash-side__footer { flex-direction: row; width: 100%; padding-top: .8rem; }
+    .dash-main { padding: 1.5rem 1rem; }
+    .dash-bundle-bar { flex-direction: column; text-align: center; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="dash">
+  <!-- ══════════ LEFT SIDEBAR ══════════ -->
+  <aside class="dash-side">
+    <div class="dash-side__greeting">
+      <h2>{{ session.get('curso_username', 'Estudiante') }}</h2>
+      <p>
+        {% if is_admin %}Administrador{% else %}Tu progreso{% endif %}
       </p>
     </div>
-    {% if is_admin %}
-      <a class="btn btn-primary btn-sm" href="{{ url_for('curso.admin_index') }}">
-        <i class="fas fa-cog"></i> Panel de administración
-      </a>
-    {% endif %}
-  </div>
 
-  <!-- Levels -->
-  {% for lk, lv in levels.items() %}
-  <div class="dashboard-section">
-    <div class="level-header">
-      <span class="level-badge" style="background:{{ lv.color }};">
-        Nivel {{ lv.level_num }}
-      </span>
-      <span class="level-title">{{ lv.title }}</span>
-    </div>
-
-    <div class="module-grid">
-      {% for mod in lv.modules %}
-        {% set enabled = mod.id in enabled_modules %}
-        {% set submitted = mod.id in submitted_modules %}
-        <div class="module-card {% if enabled %}enabled{% else %}locked{% endif %}">
-          {% if enabled %}
-            <a href="{{ url_for('curso.modulo', module_id=mod.id) }}"
-               style="position:absolute;inset:0;border-radius:inherit;" aria-label="{{ mod.title }}"></a>
+    <div class="dash-side__levels">
+      {% for lk, lv in levels.items() %}
+        {% set purchased = lk in purchased_levels %}
+        <div class="dash-side__level {% if loop.first %}active{% endif %}"
+             data-level="{{ lk }}" onclick="switchLevel('{{ lk }}')">
+          <div class="dash-side__level-dot" style="background:{{ lv.color }};"></div>
+          <div class="dash-side__level-info">
+            <span class="dash-side__level-name">{{ lv.short }}</span>
+            <span class="dash-side__level-meta">{{ lv.modules|length }} modulos</span>
+          </div>
+          {% if lk == 'nivel0' %}
+            <span class="dash-side__level-tag" style="background:#dcfce7;color:#166534;">Gratis</span>
+          {% elif not purchased and not is_admin %}
+            <span class="dash-side__level-tag" style="background:var(--c-bg);color:var(--c-text-muted);">
+              <i class="fas fa-lock" style="font-size:.5rem;"></i>
+            </span>
           {% endif %}
-
-          <div class="module-card__meta">
-            Nivel {{ lv.level_num }} · Módulo {{ loop.index }} de {{ lv.modules|length }}
-          </div>
-          <div class="module-card__title">{{ mod.title }}</div>
-
-          <div class="module-card__status {% if enabled %}status-enabled{% else %}status-locked{% endif %}">
-            {% if enabled %}
-              {% if submitted %}
-                <span class="status-submitted">✓ Entregado</span>
-              {% else %}
-                <i class="fas fa-unlock-alt"></i> Disponible
-              {% endif %}
-            {% else %}
-              <span class="lock-icon">🔒</span> Bloqueado
-            {% endif %}
-          </div>
         </div>
       {% endfor %}
     </div>
 
-    <!-- Level files & practice submission -->
-    <div class="level-files-bar">
-      <div class="level-files-bar__files">
-        <span class="level-files-bar__label"><i class="fas fa-folder-open"></i> Archivos del nivel</span>
-        {% for xlsx in lv.xlsx %}
-          <a href="{{ url_for('curso.modulo', module_id=lv.modules[0].id) }}"
-             class="btn btn-outline btn-sm" title="Disponible dentro del módulo">
-            <i class="fas fa-file-excel"></i> {{ xlsx.replace('_', ' ').replace('.xlsx', '') }}
-          </a>
-        {% endfor %}
-      </div>
-
-      <div class="level-files-bar__submit">
-        {% set practica_id = lk + '_practica' %}
-        {% set ya_entregado = practica_id in submitted_modules %}
-        {% if ya_entregado %}
-          <span class="badge-submitted"><i class="fas fa-check-circle"></i> Práctica entregada</span>
-          <form method="POST" action="{{ url_for('curso.submit', module_id=practica_id) }}"
-                enctype="multipart/form-data" style="display:inline;">
-            <label class="btn btn-outline btn-sm" style="cursor:pointer;margin-left:.5rem;">
-              <i class="fas fa-redo"></i> Reenviar
-              <input type="file" name="file" accept=".xlsx,.xls,.xlsm"
-                     style="display:none;" onchange="this.closest('form').submit()">
-            </label>
-          </form>
-        {% else %}
-          <form method="POST" action="{{ url_for('curso.submit', module_id=practica_id) }}"
-                enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:.5rem;">
-            <label class="btn btn-primary btn-sm" style="cursor:pointer;">
-              <i class="fas fa-upload"></i> Entregar práctica
-              <input type="file" name="file" accept=".xlsx,.xls,.xlsm"
-                     style="display:none;" onchange="this.closest('form').submit()">
-            </label>
-          </form>
-        {% endif %}
-      </div>
+    <div class="dash-side__footer">
+      {% if is_admin %}
+        <a class="btn btn-sm btn-primary btn-full" href="{{ url_for('curso.admin_index') }}">
+          <i class="fas fa-cog"></i> Admin
+        </a>
+      {% endif %}
     </div>
-  </div>
-  {% endfor %}
+  </aside>
 
-</main>
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <main class="dash-main">
+
+    {% for lk, lv in levels.items() %}
+    {% set level_purchased = lk in purchased_levels %}
+    <div class="dash-panel {% if loop.first %}active{% endif %}" data-panel="{{ lk }}">
+
+      <div class="dash-panel__header">
+        <span class="dash-panel__badge" style="background:{{ lv.color }};">Nivel {{ lv.level_num }}</span>
+        <span class="dash-panel__title">{{ lv.title }}</span>
+      </div>
+
+      {% if level_purchased or is_admin %}
+        <!-- Module list -->
+        <div class="dash-mlist">
+          {% for mod in lv.modules %}
+            {% set enabled = mod.id in enabled_modules %}
+            {% set submitted = mod.id in submitted_modules %}
+            <a href="{% if enabled %}{{ url_for('curso.modulo', module_id=mod.id) }}{% else %}#{% endif %}"
+               class="dash-mcard {% if enabled %}enabled{% endif %} {% if not enabled %}locked{% endif %} {% if submitted %}submitted{% endif %}"
+               {% if not enabled %}onclick="return false;"{% endif %}>
+              <div class="dash-mcard__num">{{ loop.index }}</div>
+              <div class="dash-mcard__info">
+                <div class="dash-mcard__title">{{ mod.title }}</div>
+                <div class="dash-mcard__sub">Modulo {{ loop.index }} de {{ lv.modules|length }}</div>
+              </div>
+              {% if enabled %}
+                {% if submitted %}
+                  <span class="dash-mcard__badge dash-mcard__badge--submitted"><i class="fas fa-check"></i> Entregado</span>
+                {% else %}
+                  <span class="dash-mcard__badge dash-mcard__badge--available">Disponible</span>
+                {% endif %}
+                <span class="dash-mcard__arrow"><i class="fas fa-chevron-right"></i></span>
+              {% else %}
+                <span class="dash-mcard__badge dash-mcard__badge--locked"><i class="fas fa-lock"></i></span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+
+        <!-- Files & practice -->
+        <div class="dash-filesrow">
+          <div class="dash-filesrow__left">
+            <span class="dash-filesrow__label"><i class="fas fa-folder-open"></i> Archivos</span>
+            {% for xlsx in lv.xlsx %}
+              <a href="{{ url_for('curso.modulo', module_id=lv.modules[0].id) }}"
+                 class="btn btn-outline btn-sm" title="Disponible dentro del modulo">
+                <i class="fas fa-file-excel"></i> {{ xlsx.replace('_', ' ').replace('.xlsx', '') }}
+              </a>
+            {% endfor %}
+          </div>
+          <div class="dash-filesrow__right">
+            {% set practica_id = lk + '_practica' %}
+            {% set ya_entregado = practica_id in submitted_modules %}
+            {% if ya_entregado %}
+              <span style="font-size:.8rem;color:var(--c-success);font-weight:600;">
+                <i class="fas fa-check-circle"></i> Practica entregada
+              </span>
+              <form method="POST" action="{{ url_for('curso.submit', module_id=practica_id) }}"
+                    enctype="multipart/form-data" style="display:inline;">
+                <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+                  <i class="fas fa-redo"></i> Reenviar
+                  <input type="file" name="file" accept=".xlsx,.xls,.xlsm"
+                         style="display:none;" onchange="this.closest('form').submit()">
+                </label>
+              </form>
+            {% else %}
+              <form method="POST" action="{{ url_for('curso.submit', module_id=practica_id) }}"
+                    enctype="multipart/form-data" style="display:inline-flex;align-items:center;gap:.5rem;">
+                <label class="btn btn-primary btn-sm" style="cursor:pointer;">
+                  <i class="fas fa-upload"></i> Entregar practica
+                  <input type="file" name="file" accept=".xlsx,.xls,.xlsm"
+                         style="display:none;" onchange="this.closest('form').submit()">
+                </label>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+
+      {% else %}
+        <!-- Locked level -->
+        <div class="dash-locked-panel">
+          <div class="dash-locked-panel__icon"><i class="fas fa-lock"></i></div>
+          <div class="dash-locked-panel__title">Nivel bloqueado</div>
+          <div class="dash-locked-panel__sub">
+            Desbloquea {{ lv.modules|length }} modulos con ejercicios practicos y revision personalizada del instructor.
+          </div>
+          <div class="dash-locked-panel__modules">
+            {% for mod in lv.modules %}
+              <span class="dash-locked-panel__mod">{{ mod.title }}</span>
+            {% endfor %}
+          </div>
+          <a href="{{ url_for('curso.pricing') }}" class="btn btn-primary">
+            <i class="fas fa-lock-open"></i> Ver planes
+          </a>
+        </div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+    <!-- Bundle CTA -->
+    {% if not is_admin %}
+      {% set unpurchased = [] %}
+      {% for i in range(1, 5) %}
+        {% if ('nivel' ~ i) not in purchased_levels %}
+          {% if unpurchased.append(i) %}{% endif %}
+        {% endif %}
+      {% endfor %}
+      {% if unpurchased|length > 1 %}
+        <div class="dash-bundle-bar">
+          <div>
+            <strong><i class="fas fa-bolt"></i> Curso completo — $80 USD</strong>
+            <p>Ahorra $50 comprando los 4 niveles juntos.</p>
+          </div>
+          <form method="POST" action="{{ url_for('curso.checkout', product_id='bundle') }}">
+            <button type="submit" class="btn" style="background:var(--c-accent);color:#fff;font-weight:700;">
+              <i class="fas fa-shopping-cart"></i> Comprar
+            </button>
+          </form>
+        </div>
+      {% endif %}
+    {% endif %}
+
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  // ── Level tab switching ──
+  window.switchLevel = function(levelKey) {
+    // Sidebar
+    document.querySelectorAll('.dash-side__level').forEach(function(el) {
+      el.classList.toggle('active', el.dataset.level === levelKey);
+    });
+    // Panels
+    document.querySelectorAll('.dash-panel').forEach(function(el) {
+      el.classList.toggle('active', el.dataset.panel === levelKey);
+      // Re-trigger animation
+      if (el.dataset.panel === levelKey) {
+        el.style.animation = 'none';
+        el.offsetHeight; // reflow
+        el.style.animation = '';
+      }
+    });
+  };
+
+  // ── Scroll progress ──
+  window.addEventListener('scroll', function() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    if (h > 0) document.getElementById('scrollProgress').style.width = (window.scrollY / h * 100) + '%';
+    document.querySelector('.curso-nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ── Module card hover effect (subtle slide) ──
+  document.querySelectorAll('.dash-mcard.enabled').forEach(function(card) {
+    card.addEventListener('mouseenter', function() {
+      card.querySelector('.dash-mcard__num').style.transform = 'scale(1.1)';
+    });
+    card.addEventListener('mouseleave', function() {
+      card.querySelector('.dash-mcard__num').style.transform = '';
+    });
+  });
+})();
+</script>
 {% endblock %}

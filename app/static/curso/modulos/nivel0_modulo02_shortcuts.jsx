@@ -9,37 +9,37 @@ const GOLD = { 50: "#FDF8EC", 800: "#5C480F" };
 
 const SECTIONS = [
   {
-    title: "Movimiento basico",
+    title: "Movimiento básico",
     content: [
       {
         type: "text",
-        value: "El mouse funciona, pero es lento. Los atajos de teclado te permiten moverte por miles de celdas en segundos. El objetivo no es memorizar una lista, sino incorporar los que usas a diario hasta que sean automaticos."
+        value: "El mouse funciona, pero es lento. Los atajos de teclado te permiten moverte por miles de celdas en segundos. El objetivo no es memorizar una lista, sino incorporar los que usas a diario hasta que sean automáticos."
       },
       {
         type: "definition_list",
         items: [
-          { term: "Arrow Keys", def: "Mueven una celda en la direccion indicada. Lo mas basico." },
-          { term: "Ctrl + Arrow Key", def: "Salta al final del bloque de datos en esa direccion. Si estas en A1 y hay datos hasta A500, Ctrl+Down te lleva a A500 de un salto." },
-          { term: "Ctrl + Home", def: "Te lleva a A1 instantaneamente, sin importar donde estes." },
-          { term: "Ctrl + End", def: "Te lleva a la ultima celda que contiene datos en la hoja (la interseccion de la ultima fila y columna usadas)." },
-          { term: "Page Up / Page Down", def: "Avanza o retrocede una pantalla completa de filas. Util para revisar datos largos visualmente." },
+          { term: "Arrow Keys", def: "Mueven una celda en la dirección indicada. Lo más básico." },
+          { term: "Ctrl + Arrow Key", def: "Salta al final del bloque de datos en esa dirección. Si estás en A1 y hay datos hasta A500, Ctrl+Down te lleva a A500 de un salto." },
+          { term: "Ctrl + Home", def: "Te lleva a A1 instantáneamente, sin importar dónde estés." },
+          { term: "Ctrl + End", def: "Te lleva a la última celda que contiene datos en la hoja (la intersección de la última fila y columna usadas)." },
+          { term: "Page Up / Page Down", def: "Avanza o retrocede una pantalla completa de filas. Útil para revisar datos largos visualmente." },
         ]
       },
     ]
   },
   {
-    title: "Seleccion de rangos",
+    title: "Selección de rangos",
     content: [
       {
         type: "text",
-        value: "Seleccionar datos es la base de casi toda accion en Excel: formatear, copiar, aplicar formulas, crear Charts. Hacerlo con teclado es mucho mas preciso y rapido que arrastrar con el mouse."
+        value: "Seleccionar datos es la base de casi toda acción en Excel: formatear, copiar, aplicar fórmulas, crear Charts. Hacerlo con teclado es mucho más preciso y rápido que arrastrar con el mouse."
       },
       {
         type: "definition_list",
         items: [
-          { term: "Shift + Arrow Key", def: "Extiende la seleccion una celda a la vez en la direccion indicada." },
-          { term: "Ctrl + Shift + Arrow Key", def: "Selecciona todo el bloque de datos en esa direccion. Es la combinacion mas poderosa para seleccionar columnas o filas completas de datos de un solo golpe." },
-          { term: "Ctrl + A", def: "Selecciona toda la region de datos actual. Si presionas una segunda vez, selecciona toda la hoja." },
+          { term: "Shift + Arrow Key", def: "Extiende la selección una celda a la vez en la dirección indicada." },
+          { term: "Ctrl + Shift + Arrow Key", def: "Selecciona todo el bloque de datos en esa dirección. Es la combinación más poderosa para seleccionar columnas o filas completas de datos de un solo golpe." },
+          { term: "Ctrl + A", def: "Selecciona toda la región de datos actual. Si presionas una segunda vez, selecciona toda la hoja." },
           { term: "Ctrl + Space", def: "Selecciona toda la columna de la celda activa." },
           { term: "Shift + Space", def: "Selecciona toda la fila de la celda activa." },
         ]
@@ -47,21 +47,21 @@ const SECTIONS = [
     ]
   },
   {
-    title: "Edicion rapida",
+    title: "Edición rápida",
     content: [
       {
         type: "text",
-        value: "Estos atajos controlan como interactuas con el contenido de las celdas. La diferencia entre un usuario lento y uno rapido esta en dominar estos movimientos."
+        value: "Estos atajos controlan cómo interactúas con el contenido de las celdas. La diferencia entre un usuario lento y uno rápido está en dominar estos movimientos."
       },
       {
         type: "definition_list",
         items: [
-          { term: "F2", def: "Entra en modo edicion de la celda activa. El cursor aparece dentro de la celda y puedes editar su contenido. Si la celda tiene una formula, F2 resalta con colores las celdas que referencia." },
-          { term: "Escape", def: "Cancela la edicion y restaura el valor anterior. Si estabas escribiendo algo y te equivocaste, Escape deshace lo que escribiste sin guardar." },
-          { term: "Enter", def: "Confirma el valor y baja a la siguiente celda. La forma estandar de confirmar entrada." },
+          { term: "F2", def: "Entra en modo edición de la celda activa. El cursor aparece dentro de la celda y puedes editar su contenido. Si la celda tiene una fórmula, F2 resalta con colores las celdas que referencia." },
+          { term: "Escape", def: "Cancela la edición y restaura el valor anterior. Si estabas escribiendo algo y te equivocaste, Escape deshace lo que escribiste sin guardar." },
+          { term: "Enter", def: "Confirma el valor y baja a la siguiente celda. La forma estándar de confirmar entrada." },
           { term: "Tab", def: "Confirma el valor y se mueve a la derecha. Ideal para llenar datos por filas (Nombre, Apellido, Email, Tab, Tab, Tab...)." },
-          { term: "Ctrl + Z", def: "Deshacer. Funciona multiples niveles hacia atras. Es tu red de seguridad para cualquier error." },
-          { term: "Ctrl + Y", def: "Rehacer. Revierte el ultimo Undo. Tambien repite la ultima accion realizada." },
+          { term: "Ctrl + Z", def: "Deshacer. Funciona múltiples niveles hacia atrás. Es tu red de seguridad para cualquier error." },
+          { term: "Ctrl + Y", def: "Rehacer. Revierte el último Undo. También repite la última acción realizada." },
           { term: "Delete", def: "Borra el contenido de las celdas seleccionadas sin borrar el formato." },
         ]
       },
@@ -72,37 +72,37 @@ const SECTIONS = [
     content: [
       {
         type: "text",
-        value: "Estos son los atajos que marcan la diferencia real en velocidad de trabajo. Cada uno ahorra segundos que, multiplicados por cientos de veces al dia, se convierten en horas."
+        value: "Estos son los atajos que marcan la diferencia real en velocidad de trabajo. Cada uno ahorra segundos que, multiplicados por cientos de veces al día, se convierten en horas."
       },
       {
         type: "definition_list",
         items: [
-          { term: "Ctrl + C / V / X", def: "Copiar, pegar, cortar. En Excel, copiar una celda con formula copia la formula (ajustando referencias)." },
-          { term: "Ctrl + D", def: "Rellena hacia abajo. Si seleccionas B1:B10 y la primera celda tiene un valor o formula, Ctrl+D copia ese contenido a todas las celdas debajo." },
-          { term: "Ctrl + R", def: "Rellena hacia la derecha. Misma logica que Ctrl+D pero en direccion horizontal." },
-          { term: "Alt + =", def: "AutoSum. Inserta automaticamente una funcion SUM del rango que Excel detecta arriba o a la izquierda." },
-          { term: "Ctrl + Shift + L", def: "Activa/desactiva AutoFilter. Un toggle rapido para los menus desplegables de filtro en los encabezados." },
-          { term: "Ctrl + T", def: "Convierte el rango actual en una Table. Una de las acciones mas importantes que aprenderas en este curso." },
-          { term: "Ctrl + 1", def: "Abre Format Cells. La ventana mas completa para formatear: numero, alineacion, fuente, bordes, relleno, proteccion." },
-          { term: "Ctrl + Shift + +", def: "Inserta celdas, filas o columnas segun la seleccion actual." },
-          { term: "Ctrl + -", def: "Elimina celdas, filas o columnas segun la seleccion actual." },
+          { term: "Ctrl + C / V / X", def: "Copiar, pegar, cortar. En Excel, copiar una celda con fórmula copia la fórmula (ajustando referencias)." },
+          { term: "Ctrl + D", def: "Rellena hacia abajo. Si seleccionas B1:B10 y la primera celda tiene un valor o fórmula, Ctrl+D copia ese contenido a todas las celdas debajo." },
+          { term: "Ctrl + R", def: "Rellena hacia la derecha. Misma lógica que Ctrl+D pero en dirección horizontal." },
+          { term: "Alt + =", def: "AutoSum. Inserta automáticamente una función SUM del rango que Excel detecta arriba o a la izquierda." },
+          { term: "Ctrl + Shift + L", def: "Activa/desactiva AutoFilter. Un toggle rápido para los menús desplegables de filtro en los encabezados." },
+          { term: "Ctrl + T", def: "Convierte el rango actual en una Table. Una de las acciones más importantes que aprenderás en este curso." },
+          { term: "Ctrl + 1", def: "Abre Format Cells. La ventana más completa para formatear: número, alineación, fuente, bordes, relleno, protección." },
+          { term: "Ctrl + Shift + +", def: "Inserta celdas, filas o columnas según la selección actual." },
+          { term: "Ctrl + -", def: "Elimina celdas, filas o columnas según la selección actual." },
         ]
       },
     ]
   },
   {
-    title: "Navegacion entre hojas",
+    title: "Navegación entre hojas",
     content: [
       {
         type: "text",
-        value: "Cuando un Workbook tiene multiples Sheets, necesitas poder moverte entre ellas sin usar el mouse."
+        value: "Cuando un Workbook tiene múltiples Sheets, necesitas poder moverte entre ellas sin usar el mouse."
       },
       {
         type: "definition_list",
         items: [
           { term: "Ctrl + Page Down", def: "Se mueve a la siguiente Sheet (a la derecha)." },
           { term: "Ctrl + Page Up", def: "Se mueve a la Sheet anterior (a la izquierda)." },
-          { term: "Clic derecho en flechas de Sheet Tabs", def: "Muestra lista completa de todas las hojas del Workbook. Util cuando tienes mas hojas de las que caben en la barra inferior." },
+          { term: "Clic derecho en flechas de Sheet Tabs", def: "Muestra lista completa de todas las hojas del Workbook. Útil cuando tienes más hojas de las que caben en la barra inferior." },
         ]
       },
     ]
@@ -112,18 +112,18 @@ const SECTIONS = [
     content: [
       {
         type: "text",
-        value: "El objetivo de este modulo no es que memorices 30 atajos. Es que identifiques los 10-15 que usarias todos los dias en tu trabajo y los practiques hasta que sean automaticos."
+        value: "El objetivo de este módulo no es que memorices 30 atajos. Es que identifiques los 10-15 que usarías todos los días en tu trabajo y los practiques hasta que sean automáticos."
       },
       {
         type: "key_points",
         items: [
           {
             title: "Empieza con 5",
-            text: "Elige los 5 atajos que mas usarias y usalos deliberadamente durante una semana. Cuando ya no pienses en ellos, agrega 5 mas."
+            text: "Elige los 5 atajos que más usarías y úsalos deliberadamente durante una semana. Cuando ya no pienses en ellos, agrega 5 más."
           },
           {
             title: "Resiste el mouse",
-            text: "Cada vez que vayas a usar el mouse para algo que tiene atajo, detente y usa el teclado. Las primeras veces sera mas lento. Despues sera mucho mas rapido."
+            text: "Cada vez que vayas a usar el mouse para algo que tiene atajo, detente y usa el teclado. Las primeras veces será más lento. Después será mucho más rápido."
           },
           {
             title: "Los imprescindibles",
@@ -182,13 +182,13 @@ export default function Module() {
             fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", padding: "3px 10px",
             borderRadius: "var(--border-radius-md)", background: GOLD[50], color: GOLD[800],
           }}>NIVEL 0 — OBLIGATORIO</span>
-          <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>Modulo 2 de 6</span>
+          <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>Módulo 2 de 6</span>
         </div>
         <h1 style={{ fontSize: 22, fontWeight: 500, color: "var(--color-text-primary)", margin: "0 0 6px" }}>
-          Navegacion y Keyboard Shortcuts
+          Navegación y Keyboard Shortcuts
         </h1>
         <p style={{ fontSize: 14, color: "var(--color-text-secondary)", margin: 0, lineHeight: 1.6 }}>
-          Deja de depender del mouse para todo y gana velocidad real de trabajo con los atajos que mas impacto tienen.
+          Deja de depender del mouse para todo y gana velocidad real de trabajo con los atajos que más impacto tienen.
         </p>
       </div>
 
@@ -250,14 +250,14 @@ export default function Module() {
         padding: "1.25rem", marginTop: "1.5rem",
       }}>
         <div style={{ fontSize: 14, fontWeight: 500, color: "var(--color-text-primary)", marginBottom: 10 }}>
-          Puntos clave de este modulo
+          Puntos clave de este módulo
         </div>
         {[
-          "Ctrl+Arrow salta bloques de datos. Ctrl+Shift+Arrow los selecciona. Son el duo mas importante.",
-          "F2 entra en modo edicion y muestra visualmente que celdas referencia una formula.",
+          "Ctrl+Arrow salta bloques de datos. Ctrl+Shift+Arrow los selecciona. Son el dúo más importante.",
+          "F2 entra en modo edición y muestra visualmente qué celdas referencia una fórmula.",
           "Tab confirma y mueve a la derecha. Ideal para llenar tablas por filas.",
           "Alt+= inserta AutoSum. Ctrl+T convierte datos en Table. Ctrl+1 abre Format Cells.",
-          "No memorices 30 atajos. Domina 5 primero y luego agrega mas gradualmente.",
+          "No memorices 30 atajos. Domina 5 primero y luego agrega más gradualmente.",
         ].map((point, i) => (
           <div key={i} style={{
             display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0",
@@ -275,7 +275,7 @@ export default function Module() {
         marginTop: "1.5rem", paddingTop: "1rem", borderTop: "0.5px solid var(--color-border-tertiary)",
       }}>
         <span style={{ fontSize: 13, fontWeight: 500, color: V[600] }}>Anterior: La interfaz de Excel 365</span>
-        <span style={{ fontSize: 13, fontWeight: 500, color: V[600] }}>Siguiente: Estructura y organizacion de datos</span>
+        <span style={{ fontSize: 13, fontWeight: 500, color: V[600] }}>Siguiente: Estructura y organización de datos</span>
       </div>
     </div>
   );

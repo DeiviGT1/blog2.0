@@ -1,0 +1,78 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Ventas — Admin{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+    <h1 style="font-size:1.5rem;font-weight:800;">Ventas</h1>
+    <a class="btn btn-outline btn-sm" href="{{ url_for('curso.admin_index') }}">
+      <i class="fas fa-arrow-left"></i> Volver
+    </a>
+  </div>
+
+  <!-- Summary -->
+  <div class="stat-grid" style="margin-bottom:2rem;">
+    <div class="stat-card">
+      <div class="stat-card__num">{{ purchases|selectattr('status', 'equalto', 'completed')|list|length }}</div>
+      <div class="stat-card__label">Ventas completadas</div>
+    </div>
+    <div class="stat-card">
+      {% set total_revenue = [] %}
+      {% for p in purchases if p.status == 'completed' %}
+        {% if total_revenue.append(p.amount_cents) %}{% endif %}
+      {% endfor %}
+      <div class="stat-card__num">${{ (total_revenue|sum / 100)|round(0)|int }}</div>
+      <div class="stat-card__label">Ingresos totales</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ purchases|selectattr('status', 'equalto', 'pending')|list|length }}</div>
+      <div class="stat-card__label">Pendientes</div>
+    </div>
+  </div>
+
+  {% if purchases %}
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Producto</th>
+        <th>Monto</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in purchases %}
+      <tr>
+        <td>{{ p.profiles.username if p.profiles else '—' }}</td>
+        <td style="font-size:.84rem;">{{ p.profiles.email if p.profiles else '—' }}</td>
+        <td>
+          <span class="badge" style="background:{{ pricing[p.product].color if p.product in pricing else '#666' }};color:#fff;">
+            {{ pricing[p.product].label if p.product in pricing else p.product }}
+          </span>
+        </td>
+        <td>${{ (p.amount_cents / 100)|round(2) }}</td>
+        <td>
+          {% if p.status == 'completed' %}
+            <span class="badge badge-approved">Completado</span>
+          {% elif p.status == 'pending' %}
+            <span class="badge badge-pending">Pendiente</span>
+          {% else %}
+            <span class="badge badge-disabled">{{ p.status }}</span>
+          {% endif %}
+        </td>
+        <td style="white-space:nowrap;font-size:.82rem;">
+          {{ (p.completed_at or p.created_at)[:10] if (p.completed_at or p.created_at) else '—' }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="padding:1.5rem;background:var(--c-bg-alt);border:1px solid var(--c-border);border-radius:var(--radius);text-align:center;color:var(--c-text-muted);">
+    No hay ventas registradas aun.
+  </div>
+  {% endif %}
+</main>
+{% endblock %}

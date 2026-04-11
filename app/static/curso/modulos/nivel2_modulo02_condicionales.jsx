@@ -34,7 +34,7 @@ const SECTIONS = [
         { term: "Sintaxis", def: "=IFS(condition1, value1, condition2, value2, ..., TRUE, default_value). Los pares condicion-valor se evaluan en orden." },
         { term: "Ejemplo", def: "=IFS(B2>=90, \"Excelente\", B2>=70, \"Aprobado\", B2>=50, \"Regular\", TRUE, \"Reprobado\"). Mas legible que IF anidados." },
         { term: "El truco de TRUE al final", def: "TRUE como ultima condicion siempre se cumple, funcionando como el 'else' o valor por defecto. Sin el, si ninguna condicion se cumple, IFS devuelve #N/A." },
-        { term: "Solo en Excel 365", def: "IFS no existe en versiones antiguas de Excel. Si necesitas compatibilidad, usa IF anidados." },
+        { term: "Excel 2019 y 365", def: "IFS esta disponible en Excel 2019 y Excel 365. No existe en versiones anteriores. Si necesitas compatibilidad con Excel 2016 o antes, usa IF anidados." },
       ]},
     ]
   },

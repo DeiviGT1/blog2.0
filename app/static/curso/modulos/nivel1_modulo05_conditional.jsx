@@ -64,7 +64,7 @@ const SECTIONS = [
       { type: "text", value: "Cuando tienes varias reglas sobre el mismo rango, el orden y la gestion importan." },
       { type: "definition_list", items: [
         { term: "Manage Rules", def: "Home > Conditional Formatting > Manage Rules. Muestra todas las reglas activas con su rango, condicion y formato. Desde aqui puedes editar, eliminar y reordenar." },
-        { term: "Orden de prioridad", def: "Las reglas se evaluan de arriba a abajo. La primera regla que se cumpla aplica su formato. Puedes arrastrar para reordenar." },
+        { term: "Orden de prioridad", def: "Las reglas se evaluan de arriba a abajo. Si varias se cumplen, todas aplican su formato (se acumulan). La regla mas arriba tiene prioridad si hay conflictos en el mismo atributo. Puedes arrastrar para reordenar." },
         { term: "Stop If True", def: "Si marcas esta opcion en una regla, las reglas siguientes no se evaluan si esta se cumple. Util cuando tienes reglas que podrian entrar en conflicto." },
         { term: "Clear Rules", def: "Home > Conditional Formatting > Clear Rules. Puedes limpiar reglas de la seleccion actual o de toda la hoja. No afecta el formato manual, solo el condicional." },
       ]},

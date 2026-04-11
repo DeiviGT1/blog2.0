@@ -1,0 +1,251 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Planes y precios — Excel 365{% endblock %}
+
+{% block extra_head %}
+<style>
+  .pricing-page { padding-bottom: 4rem; }
+
+  /* ── Hero ─── */
+  .pricing-hero-new {
+    text-align: center; padding: 4rem 1rem 2.5rem;
+    position: relative; overflow: hidden;
+  }
+  .pricing-hero-new::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(34,197,94,.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .pricing-hero-new h1 {
+    font-size: 2.4rem; font-weight: 900; margin-bottom: .5rem;
+    background: linear-gradient(135deg, var(--c-text), var(--c-primary));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .pricing-hero-new p { font-size: 1.05rem; color: var(--c-text-muted); max-width: 520px; margin: 0 auto; }
+
+  /* ── Bundle card ─── */
+  .bundle-spotlight {
+    max-width: 720px; margin: 2rem auto 3rem; position: relative;
+    background: var(--c-bg-dark); border-radius: var(--radius-xl); overflow: hidden;
+    color: #fff; transition: all .4s;
+  }
+  .bundle-spotlight:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+  .bundle-spotlight::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(34,197,94,.2) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(14,165,233,.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .bundle-spotlight__badge {
+    position: absolute; top: 16px; right: 16px;
+    background: var(--c-accent); color: #fff; font-size: .68rem;
+    font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+    padding: .35rem .9rem; border-radius: 8px; z-index: 2;
+    animation: pulse-glow 2s infinite;
+  }
+  .bundle-spotlight__inner { position: relative; z-index: 1; padding: 2.5rem; display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; }
+  .bundle-spotlight__left { flex: 1 1 280px; }
+  .bundle-spotlight__right { flex: 0 0 auto; text-align: center; }
+  .bundle-spotlight__title { font-size: 1.5rem; font-weight: 800; margin-bottom: .4rem; }
+  .bundle-spotlight__sub { font-size: .9rem; color: #94a3b8; margin-bottom: 1.2rem; }
+  .bundle-spotlight__features { list-style: none; }
+  .bundle-spotlight__features li { font-size: .88rem; padding: .3rem 0; display: flex; align-items: center; gap: .5rem; color: #cbd5e1; }
+  .bundle-spotlight__features i { color: var(--c-accent); font-size: .75rem; }
+  .bundle-spotlight__price { font-size: 3.5rem; font-weight: 900; line-height: 1; margin-bottom: .2rem; }
+  .bundle-spotlight__currency { font-size: .9rem; color: #94a3b8; }
+  .bundle-spotlight__savings { font-size: .85rem; color: var(--c-accent); font-weight: 700; margin: .5rem 0 1.2rem; }
+
+  /* ── Level cards grid: 2 rows, centered ─── */
+  .levels-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .level-price-card {
+    border: 1.5px solid var(--c-border); border-radius: var(--radius-lg);
+    overflow: hidden; background: var(--c-bg-alt); position: relative;
+    transition: all .4s cubic-bezier(.16,1,.3,1);
+    display: flex; flex-direction: column;
+  }
+  .level-price-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .level-price-card__header { padding: 1rem 1.2rem; color: #fff; }
+  .level-price-card__header h3 { font-size: .95rem; font-weight: 700; margin-bottom: .1rem; }
+  .level-price-card__header .sub { font-size: .75rem; opacity: .8; }
+  .level-price-card__body { padding: 1.3rem; flex: 1; display: flex; flex-direction: column; }
+  .level-price-card__price { font-size: 2rem; font-weight: 900; color: var(--c-text); margin-bottom: .3rem; }
+  .level-price-card__desc { font-size: .82rem; color: var(--c-text-muted); line-height: 1.55; margin-bottom: 1rem; flex: 1; }
+  .level-price-card__features { list-style: none; margin-bottom: 1.2rem; }
+  .level-price-card__features li { font-size: .8rem; padding: .25rem 0; color: var(--c-text); display: flex; align-items: center; gap: .4rem; }
+  .level-price-card__features i { color: var(--c-success); font-size: .7rem; }
+  .level-price-card--free { border-color: var(--c-success); }
+
+  /* ── FAQ ─── */
+  .faq-section { margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--c-border); }
+  .faq-section h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1.5rem; text-align: center; }
+
+  @media (max-width: 1024px) {
+    .levels-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .levels-grid { grid-template-columns: 1fr; max-width: 360px; }
+    .bundle-spotlight__inner { flex-direction: column; text-align: center; }
+    .bundle-spotlight__features { display: inline-block; text-align: left; }
+    .pricing-hero-new h1 { font-size: 1.7rem; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--wide pricing-page">
+
+  <!-- Hero -->
+  <div class="pricing-hero-new reveal">
+    <h1>Elige tu plan</h1>
+    <p>El Nivel 0 es gratis para todos. Desbloquea los niveles avanzados para llevar tu Excel al siguiente nivel.</p>
+  </div>
+
+  <!-- Bundle spotlight -->
+  <div class="bundle-spotlight reveal">
+    <div class="bundle-spotlight__badge"><i class="fas fa-star"></i> Mejor valor</div>
+    {% set b = pricing['bundle'] %}
+    <div class="bundle-spotlight__inner">
+      <div class="bundle-spotlight__left">
+        <div class="bundle-spotlight__title">{{ b.label }}</div>
+        <div class="bundle-spotlight__sub">Niveles 1 al 4 — {{ b.module_count }} modulos con acceso de por vida</div>
+        <ul class="bundle-spotlight__features">
+          <li><i class="fas fa-check"></i> Acceso a los 4 niveles completos</li>
+          <li><i class="fas fa-check"></i> {{ b.module_count }} modulos con contenido interactivo</li>
+          <li><i class="fas fa-check"></i> Archivos de practica por nivel</li>
+          <li><i class="fas fa-check"></i> Revision personalizada de entregas</li>
+          <li><i class="fas fa-check"></i> Acceso permanente, sin suscripcion</li>
+        </ul>
+      </div>
+      <div class="bundle-spotlight__right">
+        <div class="bundle-spotlight__price">{{ b.price_display }}</div>
+        <div class="bundle-spotlight__currency">USD · pago unico</div>
+        <div class="bundle-spotlight__savings"><i class="fas fa-tag"></i> Ahorra {{ b.savings }}</div>
+        {% if is_logged_in %}
+          {% set all_purchased = 'nivel1' in purchased_levels and 'nivel2' in purchased_levels and 'nivel3' in purchased_levels and 'nivel4' in purchased_levels %}
+          {% if all_purchased %}
+            <div style="background:rgba(34,197,94,.15);color:#22c55e;padding:.6rem 1.2rem;border-radius:10px;font-size:.88rem;font-weight:600;">
+              <i class="fas fa-check-circle"></i> Ya tienes acceso completo
+            </div>
+          {% else %}
+            <form method="POST" action="{{ url_for('curso.checkout', product_id='bundle') }}">
+              <button type="submit" class="btn btn-lg" style="background:var(--c-accent);color:#fff;font-weight:700;width:100%;">
+                <i class="fas fa-shopping-cart"></i> Comprar curso completo
+              </button>
+            </form>
+          {% endif %}
+        {% else %}
+          <a href="{{ url_for('curso.register') }}" class="btn btn-lg" style="background:var(--c-accent);color:#fff;font-weight:700;width:100%;">
+            Crear cuenta y comprar
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Section title -->
+  <h2 class="pricing-section-title reveal">O compra por nivel</h2>
+
+  <!-- 5 level cards in one row -->
+  <div class="levels-grid">
+    <!-- Free tier -->
+    <div class="level-price-card level-price-card--free reveal reveal-delay-1">
+      <div class="level-price-card__header" style="background:{{ levels.nivel0.color }};">
+        <h3>Nivel 0</h3>
+        <p class="sub">Fundamentos · {{ levels.nivel0.modules|length }} modulos</p>
+      </div>
+      <div class="level-price-card__body">
+        <div class="level-price-card__price" style="color:var(--c-success);">Gratis</div>
+        <p class="level-price-card__desc">La interfaz, atajos esenciales, estructura de datos, formato y mentalidad Excel.</p>
+        <ul class="level-price-card__features">
+          <li><i class="fas fa-check"></i> {{ levels.nivel0.modules|length }} modulos</li>
+          <li><i class="fas fa-check"></i> Archivos de ejemplo</li>
+          <li><i class="fas fa-check"></i> Acceso inmediato</li>
+        </ul>
+        {% if is_logged_in %}
+          <div style="text-align:center;padding:.6rem;background:#dcfce7;color:#166534;border-radius:var(--radius);font-size:.85rem;font-weight:600;">
+            <i class="fas fa-check-circle"></i> Desbloqueado
+          </div>
+        {% else %}
+          <a href="{{ url_for('curso.register') }}" class="btn btn-outline btn-full">Registrarme gratis</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Paid levels -->
+    {% for pk, plan in pricing.items() if pk != 'bundle' %}
+    <div class="level-price-card reveal reveal-delay-{{ loop.index + 1 }}">
+      <div class="level-price-card__header" style="background:{{ plan.color }};">
+        <h3>{{ plan.label }}</h3>
+        <p class="sub">{{ plan.module_count }} modulos</p>
+      </div>
+      <div class="level-price-card__body">
+        <div class="level-price-card__price">{{ plan.price_display }} <span style="font-size:.8rem;font-weight:600;color:var(--c-text-muted);">USD</span></div>
+        <p class="level-price-card__desc">{{ plan.description }}</p>
+        <ul class="level-price-card__features">
+          <li><i class="fas fa-check"></i> {{ plan.module_count }} modulos</li>
+          <li><i class="fas fa-check"></i> Archivos de practica</li>
+          <li><i class="fas fa-check"></i> Revision de entregas</li>
+          <li><i class="fas fa-check"></i> Acceso de por vida</li>
+        </ul>
+        {% if is_logged_in %}
+          {% if pk in purchased_levels %}
+            <div style="text-align:center;padding:.6rem;background:#dcfce7;color:#166534;border-radius:var(--radius);font-size:.85rem;font-weight:600;">
+              <i class="fas fa-check-circle"></i> Ya tienes acceso
+            </div>
+          {% else %}
+            <form method="POST" action="{{ url_for('curso.checkout', product_id=pk) }}">
+              <button type="submit" class="btn btn-primary btn-full">Comprar</button>
+            </form>
+          {% endif %}
+        {% else %}
+          <a href="{{ url_for('curso.register') }}" class="btn btn-outline btn-full">Crear cuenta</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section reveal">
+    <h2>Preguntas frecuentes</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4>¿El acceso es de por vida?</h4>
+        <p>Si. Una vez que compras un nivel, tienes acceso permanente a todos sus modulos y archivos.</p>
+      </div>
+      <div class="faq-item">
+        <h4>¿Puedo comprar niveles individuales y luego el paquete?</h4>
+        <p>Si, pero te recomendamos el paquete completo desde el inicio para ahorrar $50.</p>
+      </div>
+      <div class="faq-item">
+        <h4>¿Que metodos de pago aceptan?</h4>
+        <p>Aceptamos tarjetas de credito y debito (Visa, Mastercard, American Express) a traves de Stripe.</p>
+      </div>
+      <div class="faq-item">
+        <h4>¿Necesito saber Excel para empezar?</h4>
+        <p>No. El Nivel 0 (gratis) parte desde cero. Los niveles pagados construyen sobre esa base progresivamente.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Nav scroll
+  const nav = document.querySelector('.curso-nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+})();
+</script>
+{% endblock %}

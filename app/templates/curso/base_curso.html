@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Excel 365 — JoseDavidGT{% endblock %}</title>
   <link rel="icon" href="{{ url_for('static', filename='images/LOGOS/LOGO-ISOTIPO@4x.webp') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/curso/curso.css') }}" />
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
   {% block extra_head %}{% endblock %}
@@ -32,7 +32,9 @@
         <span class="curso-nav__user">{{ session.get('curso_username', '') }}</span>
         <a class="curso-nav__logout" href="{{ url_for('curso.logout') }}">Salir</a>
       {% else %}
-        <a class="curso-nav__link" href="{{ url_for('main.index') }}">Portafolio</a>
+        <a class="curso-nav__link {% if request.endpoint == 'curso.pricing' %}active{% endif %}"
+           href="{{ url_for('curso.pricing') }}">Precios</a>
+        <a class="btn btn-outline btn-sm" href="{{ url_for('curso.login') }}">Iniciar sesión</a>
       {% endif %}
     </div>
   </nav>

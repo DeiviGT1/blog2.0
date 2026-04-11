@@ -37,8 +37,8 @@ const SECTIONS = [
   { title: "SUM vs. SUBTOTAL vs. AGGREGATE", content: [
     { type: "definition_list", items: [
       { term: "SUM", def: "Suma todo el rango, incluyendo filas ocultas por filtros. Si filtras una tabla, SUM sigue sumando todo." },
-      { term: "SUBTOTAL", def: "Suma solo las celdas visibles. =SUBTOTAL(109, A1:A100) ignora filas ocultas por filtros. El 109 indica SUM ignorando ocultos." },
-      { term: "AGGREGATE", def: "Version mas avanzada de SUBTOTAL. Puede ignorar errores ademas de filas ocultas. =AGGREGATE(9, 6, A1:A100) suma ignorando errores y filas ocultas." },
+      { term: "SUBTOTAL", def: "Suma solo las celdas visibles. =SUBTOTAL(9, A1:A100) ignora filas ocultas por filtros. Usa 109 en vez de 9 para tambien ignorar filas ocultas manualmente (clic derecho > Hide)." },
+      { term: "AGGREGATE", def: "Version mas avanzada de SUBTOTAL. =AGGREGATE(9, 7, A1:A100) suma ignorando errores y filas ocultas. El 9 indica SUM, el 7 indica ignorar filas ocultas y errores." },
     ]},
   ]},
   { title: "Analisis financiero en Excel", content: [

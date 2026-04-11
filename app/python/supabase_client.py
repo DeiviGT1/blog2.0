@@ -60,6 +60,18 @@ def update_user_password(access_token: str, new_password: str):
     sb.auth.update_user({"password": new_password})
 
 
+def verify_email_otp(email: str, token: str):
+    """Verify a signup OTP code. Returns auth response with user + session."""
+    sb = get_client()
+    return sb.auth.verify_otp({"email": email, "token": token, "type": "signup"})
+
+
+def resend_confirmation(email: str):
+    """Resend the signup confirmation email."""
+    sb = get_client()
+    sb.auth.resend({"type": "signup", "email": email})
+
+
 def generate_pkce_pair() -> tuple[str, str]:
     """Return (code_verifier, code_challenge) for PKCE OAuth flow."""
     code_verifier = base64.urlsafe_b64encode(
@@ -242,3 +254,71 @@ def get_submission_download_url(file_path: str) -> str:
     sb = get_admin_client()
     result = sb.storage.from_(STORAGE_BUCKET).create_signed_url(file_path, 3600)
     return result.get("signedURL", "")
+
+
+# ── Purchase helpers ─────────────────────────────────────────────────────────
+
+def create_purchase(user_id: str, product: str, amount_cents: int,
+                    stripe_session_id: str) -> dict:
+    sb = get_admin_client()
+    result = sb.table("purchases").insert({
+        "user_id": user_id,
+        "product": product,
+        "amount_cents": amount_cents,
+        "currency": "usd",
+        "stripe_session_id": stripe_session_id,
+        "status": "pending",
+    }).execute()
+    return result.data[0] if result.data else {}
+
+
+def complete_purchase(stripe_session_id: str,
+                      stripe_payment_intent: str) -> dict | None:
+    """Mark a pending purchase as completed. Returns the updated row or None."""
+    import datetime
+    sb = get_admin_client()
+    result = (
+        sb.table("purchases")
+        .update({
+            "status": "completed",
+            "stripe_payment_intent": stripe_payment_intent,
+            "completed_at": datetime.datetime.utcnow().isoformat(),
+        })
+        .eq("stripe_session_id", stripe_session_id)
+        .eq("status", "pending")
+        .execute()
+    )
+    return result.data[0] if result.data else None
+
+
+def get_user_purchases(user_id: str) -> list:
+    """Return all completed purchases for a user."""
+    try:
+        sb = get_admin_client()
+        result = (
+            sb.table("purchases")
+            .select("*")
+            .eq("user_id", user_id)
+            .eq("status", "completed")
+            .order("completed_at", desc=True)
+            .execute()
+        )
+        return result.data or []
+    except Exception:
+        # Table may not exist yet — don't break auth flow
+        return []
+
+
+def get_all_purchases() -> list:
+    """Admin: list all purchases with user info."""
+    try:
+        sb = get_admin_client()
+        result = (
+            sb.table("purchases")
+            .select("*, profiles!purchases_user_id_fkey(email, username)")
+            .order("created_at", desc=True)
+            .execute()
+        )
+        return result.data or []
+    except Exception:
+        return []

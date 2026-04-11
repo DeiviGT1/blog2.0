@@ -1,0 +1,47 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Verifica tu correo — Excel 365{% endblock %}
+
+{% block content %}
+<main class="curso-main curso-main--narrow" style="padding-top:3rem;">
+  <div class="auth-card" style="text-align:center;">
+    <div style="font-size:3rem;margin-bottom:.8rem;">📧</div>
+    <h1>Verifica tu correo</h1>
+    <p class="subtitle">
+      Enviamos un codigo de 6 digitos a<br>
+      <strong style="color:var(--c-text);">{{ email }}</strong>
+    </p>
+
+    <form method="POST" action="{{ url_for('curso.verify_email') }}" style="margin-top:1.5rem;">
+      <div class="form-group">
+        <label for="token">Codigo de verificacion</label>
+        <input type="text"
+               id="token"
+               name="token"
+               placeholder="123456"
+               required
+               maxlength="8"
+               pattern="[0-9]{6,8}"
+               inputmode="numeric"
+               autocomplete="one-time-code"
+               style="text-align:center;font-size:1.5rem;letter-spacing:.5rem;font-weight:700;" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Verificar</button>
+    </form>
+
+    <div style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--c-border);">
+      <p style="font-size:.85rem;color:var(--c-text-muted);margin-bottom:.8rem;">
+        ¿No recibiste el correo? Revisa tu carpeta de spam.
+      </p>
+      <form method="POST" action="{{ url_for('curso.resend_verification') }}" style="display:inline;">
+        <button type="submit" class="btn btn-outline btn-sm">
+          <i class="fas fa-redo"></i> Reenviar codigo
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      <a href="{{ url_for('curso.register') }}">← Volver al registro</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

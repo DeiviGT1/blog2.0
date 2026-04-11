@@ -41,7 +41,7 @@ const SECTIONS = [
   ]},
   { title: "Herramientas de formato rápido", content: [
     { type: "key_points", items: [
-      { title: "Format Painter", text: "Selecciona celda con formato deseado > Format Painter (o Ctrl+Shift+C / Ctrl+Shift+V). Double-click para aplicar a múltiples rangos." },
+      { title: "Format Painter", text: "Selecciona celda con formato deseado > Home > Format Painter (icono de brocha). Double-click en el icono para aplicar a múltiples rangos. Alternativa: Ctrl+C > seleccionar destino > Ctrl+Alt+V > Formats." },
       { title: "Cell Styles", text: "Home > Cell Styles. Estilos predefinidos para encabezados, inputs, cálculos. Mantiene consistencia en archivos grandes." },
       { title: "Conditional Formatting (preview)", text: "Formato automático según reglas. Se profundiza en Nivel 1. Aquí solo como concepto." },
     ]},

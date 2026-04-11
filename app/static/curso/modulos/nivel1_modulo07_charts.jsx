@@ -17,7 +17,7 @@ const SECTIONS = [
       { type: "definition_list", items: [
         { term: "Column Chart (barras verticales)", def: "Para comparar valores entre categorias. Ejemplo: ventas por region, gastos por departamento, produccion por mes. El mas versatil y el mas usado. Usa este cuando tengas duda." },
         { term: "Bar Chart (barras horizontales)", def: "Igual que Column pero horizontal. Usalo cuando los nombres de las categorias son largos y no caben debajo de barras verticales. Ejemplo: ventas por nombre de producto." },
-        { term: "Line Chart (lineas)", def: "Para mostrar tendencias en el tiempo. Ejemplo: ventas mensuales, crecimiento trimestral, temperatura diaria. El eje X siempre debe ser tiempo (dias, meses, anos)." },
+        { term: "Line Chart (lineas)", def: "Para mostrar tendencias en el tiempo u otra secuencia continua. Ejemplo: ventas mensuales, crecimiento trimestral, temperatura diaria. El eje X generalmente representa tiempo (dias, meses, anos) u otra variable secuencial." },
         { term: "Pie Chart (circular)", def: "Para mostrar la proporcion de cada parte respecto al total. Ejemplo: distribucion de gastos por categoria. Solo usalo cuando tengas pocas categorias (maximo 5-6). Con mas categorias se vuelve ilegible." },
       ]},
     ]
@@ -68,7 +68,7 @@ const SECTIONS = [
       { type: "definition_list", items: [
         { term: "Mover dentro de la hoja", def: "Arrastra el Chart a la posicion deseada. Mantiene el vinculo con los datos." },
         { term: "Move Chart (mover a otra hoja)", def: "Clic derecho en el Chart > Move Chart. Puedes moverlo a una hoja nueva dedicada (Chart Sheet) o a otra hoja existente." },
-        { term: "Redimensionar", def: "Arrastra las esquinas o bordes del Chart. Manten Shift para mantener proporciones." },
+        { term: "Redimensionar", def: "Arrastra las esquinas o bordes del Chart. Usa Alt mientras arrastras para alinear con los bordes de las celdas." },
         { term: "Copiar a PowerPoint o Word", def: "Ctrl+C en el Chart y Ctrl+V en PowerPoint/Word. El grafico se pega con vinculo a los datos de Excel. Si actualizas los datos, el grafico en PowerPoint se puede actualizar tambien." },
       ]},
     ]

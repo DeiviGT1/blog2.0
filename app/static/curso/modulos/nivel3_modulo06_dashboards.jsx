@@ -28,7 +28,7 @@ export default function Module() {
       </div>
       <div style={{ background: "var(--color-background-secondary)", borderRadius: "var(--border-radius-lg)", padding: "1.25rem", marginTop: "1.5rem" }}>
         <div style={{ fontSize: 14, fontWeight: 500, color: "var(--color-text-primary)", marginBottom: 10 }}>Puntos clave</div>
-        {["Dashboard = hoja de presentacion. Sin datos crudos.", "KPI Cards son celdas formateadas. No objetos especiales.", "Report Connections conecta un Slicer a multiples PivotTables.", "Sin gridlines, sin headings, fondo neutro = look profesional.", "Protect Sheet para que solo se use Slicers."].map((p, i) => (
+        {["Dashboard = hoja de presentacion. Sin datos crudos.", "KPI Cards son celdas formateadas. No objetos especiales.", "Report Connections conecta un Slicer a multiples PivotTables.", "Sin gridlines, sin headings, fondo neutro = look profesional.", "Protect Sheet para que el usuario solo pueda usar los Slicers."].map((p, i) => (
           <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderTop: i > 0 ? "0.5px solid var(--color-border-tertiary)" : "none" }}><div style={{ width: 6, height: 6, minWidth: 6, borderRadius: "50%", background: V[400], marginTop: 7 }} /><span style={{ fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.6 }}>{p}</span></div>))}
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "1.5rem", paddingTop: "1rem", borderTop: "0.5px solid var(--color-border-tertiary)" }}>

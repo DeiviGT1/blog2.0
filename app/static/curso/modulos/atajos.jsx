@@ -87,8 +87,8 @@ const CATEGORIES = [
   { title: "Charts y PivotTables", shortcuts: [
     ["Alt + F1", "Crear Chart rapido en la misma hoja"],
     ["F11", "Crear Chart en hoja nueva dedicada"],
-    ["Alt + N, V", "Insertar PivotTable"],
-    ["Alt + F5", "Refresh PivotTable/conexiones"],
+    ["Alt + N, V, T", "Insertar PivotTable desde Table/Range"],
+    ["Ctrl + Alt + F5", "Refresh All (PivotTables/conexiones)"],
   ]},
   { title: "Archivos y general", shortcuts: [
     ["Ctrl + S", "Guardar"],

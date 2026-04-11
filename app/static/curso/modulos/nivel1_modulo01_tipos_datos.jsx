@@ -25,7 +25,7 @@ const SECTIONS = [
         { term: "Escribes 12/03/2025", def: "Excel lo interpreta como fecha. Internamente almacena un numero, muestra una fecha." },
         { term: "Escribes ABC", def: "Excel lo interpreta como texto. Se alinea a la izquierda." },
         { term: "Escribes 001234", def: "Excel elimina los ceros iniciales y lo convierte en 1234. Para mantener los ceros, formatea como Text antes de escribir o usa apostrofo: '001234." },
-        { term: "Escribes 3/4", def: "Excel puede interpretarlo como fecha (4 de marzo) en vez de fraccion. Escribe 0 3/4 para fraccion o usa formato Text." },
+        { term: "Escribes 3/4", def: "Excel puede interpretarlo como fecha en vez de fraccion (la fecha depende de tu configuracion regional: 4 de marzo en formato MM/DD, o 3 de abril en DD/MM). Escribe 0 3/4 para fraccion o usa formato Text." },
         { term: "Un numero con espacio", def: "Si hay un espacio invisible antes o despues del numero, Excel lo trata como texto. Se alinea a la izquierda y las formulas no lo reconocen como numero." },
       ]},
     ]

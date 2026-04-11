@@ -2,34 +2,53 @@
 {% block title %}{{ meta.title }} — Excel 365{% endblock %}
 
 {% block extra_head %}
-<!-- React + Babel CDN for JSX rendering -->
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  .mod-scroll-progress {
+    position: fixed; top: 60px; left: 0; height: 3px; z-index: 99;
+    background: linear-gradient(90deg, var(--c-accent), #0ea5e9, #a855f7);
+    width: 0%; transition: width .1s;
+  }
+  .sidebar-module-list a { display: flex; align-items: center; gap: .4rem; }
+  .sidebar-visited {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--c-success); color: #fff;
+    font-size: .55rem; margin-left: auto; flex-shrink: 0;
+  }
+  .modulo-content { animation: slideUp .5s cubic-bezier(.16,1,.3,1); }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 {% endblock %}
 
 {% block content %}
+<div class="mod-scroll-progress" id="modScrollProgress"></div>
+
 <main class="curso-main curso-main--wide">
   <div class="modulo-layout">
 
-    <!-- Sidebar: module list for this level -->
     <aside class="modulo-sidebar">
       <h3>{{ level_data.short }}</h3>
-      <ul class="sidebar-module-list">
+      <ul class="sidebar-module-list" id="sidebarList">
         {% for m in level_data.modules %}
           <li>
             <a href="{{ url_for('curso.modulo', module_id=m.id) }}"
+               data-mid="{{ m.id }}"
                class="{% if m.id == module_id %}active{% elif m.id not in enabled_modules %}locked{% endif %}"
                {% if m.id not in enabled_modules and not session.get('curso_is_admin') %}
                  title="Módulo bloqueado" onclick="return false;"
                {% endif %}>
-              {{ loop.index }}. {{ m.title }}
+              <span>{{ loop.index }}. {{ m.title }}</span>
             </a>
           </li>
         {% endfor %}
       </ul>
 
-      <!-- Level downloads -->
       <div style="margin-top:1.3rem;padding-top:1rem;border-top:1px solid var(--c-border);">
         <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;color:var(--c-text-muted);margin-bottom:.6rem;">
           Archivos del nivel
@@ -42,18 +61,15 @@
         {% endfor %}
       </div>
 
-      <div style="margin-top:1rem;">
-        <a href="{{ url_for('curso.dashboard') }}"
-           style="font-size:.82rem;color:var(--c-text-muted);">
-          ← Volver al dashboard
-        </a>
-      </div>
     </aside>
 
-    <!-- Main module content -->
     <div class="modulo-content">
+      <div style="margin-bottom:.8rem;">
+        <a href="{{ url_for('curso.dashboard') }}" class="btn btn-outline btn-sm">
+          <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+      </div>
 
-      <!-- Header -->
       <div class="modulo-header">
         <div>
           <span class="level-badge" style="background:{{ level_data.color }};font-size:.7rem;padding:.2rem .7rem;">
@@ -63,23 +79,28 @@
         </div>
         <div class="modulo-nav">
           {% if prev_mod %}
-            <a class="btn btn-outline btn-sm" href="{{ url_for('curso.modulo', module_id=prev_mod) }}">
-              ← Anterior
-            </a>
+            <a class="btn btn-outline btn-sm" href="{{ url_for('curso.modulo', module_id=prev_mod) }}">← Anterior</a>
           {% endif %}
           {% if next_mod %}
-            <a class="btn btn-primary btn-sm" href="{{ url_for('curso.modulo', module_id=next_mod) }}">
-              Siguiente →
-            </a>
+            <a class="btn btn-primary btn-sm" href="{{ url_for('curso.modulo', module_id=next_mod) }}">Siguiente →</a>
           {% endif %}
         </div>
       </div>
 
-      <!-- React component renders here -->
+      <!-- Progress bar: modules visited in this level -->
+      <div id="progBar" style="margin-bottom:1.2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+          <span style="font-size:.78rem;font-weight:600;color:var(--c-text-muted);">Progreso del nivel</span>
+          <span id="progText" style="font-size:.78rem;font-weight:700;color:var(--c-primary);"></span>
+        </div>
+        <div style="height:6px;background:var(--c-border);border-radius:3px;overflow:hidden;">
+          <div id="progFill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--c-primary),var(--c-accent));border-radius:3px;transition:width .5s cubic-bezier(.16,1,.3,1);"></div>
+        </div>
+      </div>
+
       <div id="react-root">
         <p style="color:var(--c-text-muted);font-size:.9rem;">Cargando módulo…</p>
       </div>
-
     </div>
   </div>
 </main>
@@ -87,7 +108,64 @@
 
 {% block scripts %}
 <script type="text/babel">
-  // ── Inject the JSX module content ──────────────────────────
+  const CURRENT_MODULE_ID = "{{ module_id }}";
   {{ jsx_content | safe }}
+</script>
+
+<script>
+(function(){
+  // All module IDs in this level (from Jinja)
+  var LEVEL_MODULES = {{ level_module_ids | tojson }};
+  var CURRENT = "{{ module_id }}";
+  var LEVEL_KEY = "{{ meta.level_key }}";
+  var STORAGE_KEY = 'curso_level_visited_' + LEVEL_KEY;
+
+  // ── Read/write visited modules for this level ──
+  function getVisited() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch(e) { return {}; }
+  }
+  function markVisited(mid) {
+    var v = getVisited();
+    if (!v[mid]) {
+      v[mid] = Date.now();
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(v)); } catch(e) {}
+    }
+  }
+  function countVisited() {
+    var v = getVisited();
+    var c = 0;
+    LEVEL_MODULES.forEach(function(mid) { if (v[mid]) c++; });
+    return c;
+  }
+
+  // ── Mark current module as visited ──
+  markVisited(CURRENT);
+
+  // ── Update progress bar ──
+  var total = LEVEL_MODULES.length;
+  var visited = countVisited();
+  var pct = Math.round(visited / total * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progText').textContent = visited + '/' + total + ' modulos';
+
+  // ── Sidebar: add check marks to visited modules ──
+  var visitedMap = getVisited();
+  document.querySelectorAll('#sidebarList a[data-mid]').forEach(function(a) {
+    if (visitedMap[a.dataset.mid] && !a.querySelector('.sidebar-visited')) {
+      var b = document.createElement('span');
+      b.className = 'sidebar-visited';
+      b.innerHTML = '<i class="fas fa-check"></i>';
+      a.appendChild(b);
+    }
+  });
+
+  // ── Scroll progress ──
+  window.addEventListener('scroll', function() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    if (h > 0) document.getElementById('modScrollProgress').style.width = (window.scrollY / h * 100) + '%';
+    document.querySelector('.curso-nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+})();
 </script>
 {% endblock %}

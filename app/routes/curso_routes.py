@@ -2,14 +2,19 @@
 import os
 import re
 import uuid
+import json
+import logging
 import functools
 from flask import (
     Blueprint, render_template, request, redirect,
     url_for, session, flash, abort, send_from_directory, current_app,
+    jsonify,
 )
 from werkzeug.utils import secure_filename
+import stripe
 
 curso_bp = Blueprint("curso", __name__, url_prefix="/curso")
+logger = logging.getLogger(__name__)
 
 # ── Course module registry ────────────────────────────────────────────────────
 
@@ -115,6 +120,92 @@ MODULE_LOOKUP = {
 }
 
 
+# ── Pricing configuration ────────────────────────────────────────────────────
+
+PRICING = {
+    "nivel1": {
+        "amount": 2500,
+        "price_display": "$25",
+        "label": "Nivel 1 — Básico",
+        "short": "Básico",
+        "color": "#1565C0",
+        "module_count": len(LEVELS["nivel1"]["modules"]),
+        "description": "Tipos de datos, fórmulas, referencias, funciones esenciales, formato condicional, filtros y gráficos.",
+        "levels": ["nivel1"],
+    },
+    "nivel2": {
+        "amount": 3000,
+        "price_display": "$30",
+        "label": "Nivel 2 — Intermedio",
+        "short": "Intermedio",
+        "color": "#2E7D32",
+        "module_count": len(LEVELS["nivel2"]["modules"]),
+        "description": "Referencias absolutas, condicionales, SUMIFS, texto, fechas, validación, rangos nombrados, tablas dinámicas y gráficos avanzados.",
+        "levels": ["nivel2"],
+    },
+    "nivel3": {
+        "amount": 3500,
+        "price_display": "$35",
+        "label": "Nivel 3 — Avanzado",
+        "short": "Avanzado",
+        "color": "#E65100",
+        "module_count": len(LEVELS["nivel3"]["modules"]),
+        "description": "XLOOKUP, INDEX/MATCH, arrays dinámicos, tablas dinámicas avanzadas, Power Query, dashboards, protección y colaboración.",
+        "levels": ["nivel3"],
+    },
+    "nivel4": {
+        "amount": 4000,
+        "price_display": "$40",
+        "label": "Nivel 4 — Excel Pro",
+        "short": "Excel Pro",
+        "color": "#4A148C",
+        "module_count": len(LEVELS["nivel4"]["modules"]),
+        "description": "Macros, VBA, Power Pivot, fuentes externas, Power Query avanzado y preparación para certificación.",
+        "levels": ["nivel4"],
+    },
+    "bundle": {
+        "amount": 8000,
+        "price_display": "$80",
+        "label": "Curso Completo",
+        "short": "Todo incluido",
+        "color": "#1a1a2e",
+        "module_count": sum(len(LEVELS[f"nivel{i}"]["modules"]) for i in range(1, 5)),
+        "description": "Acceso a los 4 niveles (30 módulos), archivos de práctica y revisión de entregas. Ahorra $50 vs comprar por separado.",
+        "levels": ["nivel1", "nivel2", "nivel3", "nivel4"],
+        "savings": "$50",
+    },
+}
+
+
+# ── Stripe setup ─────────────────────────────────────────────────────────────
+
+def _init_stripe():
+    stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "")
+
+
+def _get_purchased_levels(user_id: str) -> set:
+    """Return set of level keys the user has access to (free + purchased)."""
+    from app.python.supabase_client import get_user_purchases
+    purchases = get_user_purchases(user_id)
+    levels = {"nivel0"}  # Always free
+    for p in purchases:
+        product = p["product"]
+        if product == "bundle":
+            levels.update(["nivel1", "nivel2", "nivel3", "nivel4"])
+        elif product in LEVELS:
+            levels.add(product)
+    return levels
+
+
+def _unlock_levels_for_user(user_id: str, level_keys: list):
+    """Enable all modules for the given levels."""
+    from app.python.supabase_client import bulk_set_level_permissions
+    for lk in level_keys:
+        if lk in LEVELS:
+            mids = [m["id"] for m in LEVELS[lk]["modules"]]
+            bulk_set_level_permissions(user_id, mids, True, None)
+
+
 # ── Input validation helpers ──────────────────────────────────────────────────
 
 def _valid_uuid(value: str) -> bool:
@@ -175,10 +266,14 @@ def _clear_session():
 
 
 def _after_auth(user, access_token):
-    """Called after any successful auth (email or OAuth). Sets up session."""
-    from app.python.supabase_client import get_profile, create_or_update_profile
-    user_id = user.id
-    email   = user.email
+    """Called after any successful auth (email or OAuth). Sets up session.
+    Auto-approves all users and ensures nivel 0 is unlocked (free tier)."""
+    from app.python.supabase_client import (
+        get_profile, create_or_update_profile, approve_user,
+        set_admin, get_user_permissions, bulk_set_level_permissions,
+    )
+    user_id  = user.id
+    email    = user.email
     username = (user.user_metadata or {}).get("username") or \
                (user.user_metadata or {}).get("full_name") or \
                email.split("@")[0]
@@ -187,17 +282,33 @@ def _after_auth(user, access_token):
 
     admin_email = current_app.config.get("ADMIN_EMAIL", "")
     is_admin    = email == admin_email or (profile and profile.get("is_admin", False))
-    is_approved = is_admin or (profile and profile.get("is_approved", False))
+    # Auto-approve all users — payment model replaces manual admin gating
+    is_approved = True
 
     if not profile:
         create_or_update_profile(user_id, email, username, is_admin, is_approved)
-    elif is_admin and not profile.get("is_admin"):
-        from app.python.supabase_client import set_admin, approve_user
-        set_admin(user_id, True)
-        approve_user(user_id)
+    else:
+        if not profile.get("is_approved"):
+            approve_user(user_id)
+        if is_admin and not profile.get("is_admin"):
+            set_admin(user_id, True)
+
+    # Ensure nivel 0 (free) modules are unlocked
+    existing_perms = get_user_permissions(user_id)
+    nivel0_mids = [m["id"] for m in LEVELS["nivel0"]["modules"]]
+    if not all(mid in existing_perms for mid in nivel0_mids):
+        bulk_set_level_permissions(user_id, nivel0_mids, True, None)
+
+    # Also unlock any previously purchased levels (in case perms were lost)
+    purchased = _get_purchased_levels(user_id)
+    for lk in purchased:
+        if lk != "nivel0":
+            lk_mids = [m["id"] for m in LEVELS[lk]["modules"]]
+            if not all(mid in existing_perms for mid in lk_mids):
+                bulk_set_level_permissions(user_id, lk_mids, True, None)
 
     _save_session(user_id, email, username, is_admin, is_approved, access_token)
-    return is_approved or is_admin
+    return True  # Always approved
 
 
 # ── JSX transformer ───────────────────────────────────────────────────────────
@@ -237,7 +348,7 @@ def _transform_jsx(raw: str) -> str:
         result = f"const {{ {ids} }} = React;\n\n" + result
 
     # Append render
-    result += "\n\nReactDOM.createRoot(document.getElementById('react-root')).render(<Module />);\n"
+    result += "\nReactDOM.createRoot(document.getElementById('react-root')).render(<Module />);\n"
     return result
 
 
@@ -361,23 +472,72 @@ def register():
             flash("La contraseña debe tener al menos 8 caracteres.", "error")
             return render_template("curso/register.html")
         try:
-            from app.python.supabase_client import sign_up, sign_in
+            from app.python.supabase_client import sign_up
             sign_up(email, password, username)
-            # Sign in immediately to get a session
-            resp     = sign_in(email, password)
-            approved = _after_auth(resp.user, resp.session.access_token)
-            if approved:
-                return redirect(url_for("curso.dashboard"))
-            flash("Cuenta creada. Espera a que el administrador la active.", "success")
-            return redirect(url_for("curso.pending"))
+            # Store credentials for post-verification login
+            session["curso_verify_email"]    = email
+            session["curso_verify_password"] = password
+            return redirect(url_for("curso.verify_email"))
         except Exception as e:
             msg = str(e)
             if "already registered" in msg or "already exists" in msg:
-                flash("Este correo ya está registrado.", "error")
+                flash("Este correo ya esta registrado.", "error")
             else:
                 flash(f"Error al crear la cuenta: {msg}", "error")
 
     return render_template("curso/register.html")
+
+
+@curso_bp.route("/verify-email", methods=["GET", "POST"])
+def verify_email():
+    email = session.get("curso_verify_email")
+    if not email:
+        return redirect(url_for("curso.register"))
+
+    if request.method == "POST":
+        token = request.form.get("token", "").strip()
+        if not token:
+            flash("Ingresa el codigo de verificacion.", "error")
+            return render_template("curso/verify_email.html", email=email)
+        try:
+            from app.python.supabase_client import verify_email_otp
+            resp = verify_email_otp(email, token)
+            # OTP verified — user is now confirmed, sign them in
+            password = session.pop("curso_verify_password", "")
+            session.pop("curso_verify_email", None)
+            if resp.user and resp.session:
+                _after_auth(resp.user, resp.session.access_token)
+                flash("¡Cuenta verificada! El Nivel 0 ya esta desbloqueado.", "success")
+                return redirect(url_for("curso.dashboard"))
+            # Fallback: sign in with password if OTP didn't return session
+            from app.python.supabase_client import sign_in
+            login_resp = sign_in(email, password)
+            _after_auth(login_resp.user, login_resp.session.access_token)
+            flash("¡Cuenta verificada! El Nivel 0 ya esta desbloqueado.", "success")
+            return redirect(url_for("curso.dashboard"))
+        except Exception as e:
+            msg = str(e).lower()
+            if "expired" in msg or "invalid" in msg:
+                flash("Codigo incorrecto o expirado. Revisa tu correo e intenta de nuevo.", "error")
+            else:
+                flash("No se pudo verificar el codigo. Intenta de nuevo.", "error")
+            return render_template("curso/verify_email.html", email=email)
+
+    return render_template("curso/verify_email.html", email=email)
+
+
+@curso_bp.route("/verify-email/resend", methods=["POST"])
+def resend_verification():
+    email = session.get("curso_verify_email")
+    if not email:
+        return redirect(url_for("curso.register"))
+    try:
+        from app.python.supabase_client import resend_confirmation
+        resend_confirmation(email)
+        flash("Codigo reenviado. Revisa tu correo.", "success")
+    except Exception:
+        flash("No se pudo reenviar. Espera unos minutos e intenta de nuevo.", "error")
+    return redirect(url_for("curso.verify_email"))
 
 
 @curso_bp.route("/auth/google")
@@ -453,15 +613,20 @@ def pending():
 def dashboard():
     from app.python.supabase_client import get_user_permissions, get_user_submissions
     user_id    = session["curso_user_id"]
-    enabled    = get_user_permissions(user_id) if not session.get("curso_is_admin") else ALL_MODULE_IDS
+    is_admin   = session.get("curso_is_admin", False)
+    enabled    = get_user_permissions(user_id) if not is_admin else ALL_MODULE_IDS
     submissions = get_user_submissions(user_id)
     submitted_modules = {s["module_id"] for s in submissions}
+    purchased  = {"nivel0", "nivel1", "nivel2", "nivel3", "nivel4"} if is_admin \
+                 else _get_purchased_levels(user_id)
     return render_template(
         "curso/dashboard.html",
         levels=LEVELS,
         enabled_modules=enabled,
         submitted_modules=submitted_modules,
-        is_admin=session.get("curso_is_admin", False),
+        purchased_levels=purchased,
+        is_admin=is_admin,
+        pricing=PRICING,
     )
 
 
@@ -504,6 +669,7 @@ def modulo(module_id):
         module_id=module_id,
         meta=meta,
         level_data=level_data,
+        level_module_ids=all_in_level,
         jsx_content=transformed,
         prev_mod=prev_mod,
         next_mod=next_mod,
@@ -561,6 +727,134 @@ def submit(module_id):
         flash(f"Error al subir el archivo: {e}", "error")
 
     return redirect(back_url)
+
+
+# ── Payment routes ────────────────────────────────────────────────────────────
+
+@curso_bp.route("/pricing")
+def pricing():
+    """Public pricing page showing all plans."""
+    user_id   = session.get("curso_user_id")
+    purchased = _get_purchased_levels(user_id) if user_id else {"nivel0"}
+    return render_template(
+        "curso/pricing.html",
+        pricing=PRICING,
+        levels=LEVELS,
+        purchased_levels=purchased,
+        is_logged_in=bool(user_id),
+        stripe_pub_key=os.getenv("STRIPE_PUBLISHABLE_KEY", ""),
+    )
+
+
+@curso_bp.route("/checkout/<product_id>", methods=["POST"])
+@require_approved
+def checkout(product_id):
+    """Create a Stripe Checkout session and redirect the user."""
+    if product_id not in PRICING:
+        abort(400)
+
+    _init_stripe()
+    user_id = session["curso_user_id"]
+    email   = session.get("curso_email", "")
+    plan    = PRICING[product_id]
+
+    # Don't allow purchasing already-owned levels
+    purchased = _get_purchased_levels(user_id)
+    if product_id != "bundle" and product_id in purchased:
+        flash("Ya tienes acceso a este nivel.", "info")
+        return redirect(url_for("curso.dashboard"))
+    if product_id == "bundle" and all(
+        f"nivel{i}" in purchased for i in range(1, 5)
+    ):
+        flash("Ya tienes acceso a todos los niveles.", "info")
+        return redirect(url_for("curso.dashboard"))
+
+    base_url = os.getenv("BASE_URL", "").rstrip("/")
+    success  = f"{base_url}/curso/checkout/success?session_id={{CHECKOUT_SESSION_ID}}" \
+               if base_url else url_for("curso.checkout_success", _external=True) + "?session_id={CHECKOUT_SESSION_ID}"
+    cancel   = f"{base_url}/curso/pricing" if base_url \
+               else url_for("curso.pricing", _external=True)
+
+    try:
+        from app.python.supabase_client import create_purchase
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            mode="payment",
+            customer_email=email,
+            line_items=[{
+                "price_data": {
+                    "currency": "usd",
+                    "unit_amount": plan["amount"],
+                    "product_data": {
+                        "name": plan["label"],
+                        "description": plan["description"],
+                    },
+                },
+                "quantity": 1,
+            }],
+            metadata={
+                "user_id": user_id,
+                "product": product_id,
+            },
+            success_url=success,
+            cancel_url=cancel,
+        )
+        # Record pending purchase
+        create_purchase(user_id, product_id, plan["amount"], checkout_session.id)
+        return redirect(checkout_session.url, code=303)
+
+    except stripe.error.StripeError as e:
+        logger.error("Stripe checkout error: %s", e)
+        flash("Error al iniciar el pago. Intenta de nuevo.", "error")
+        return redirect(url_for("curso.pricing"))
+
+
+@curso_bp.route("/checkout/success")
+@require_approved
+def checkout_success():
+    """Landing page after successful Stripe payment."""
+    stripe_session_id = request.args.get("session_id", "")
+    return render_template("curso/checkout_success.html", session_id=stripe_session_id)
+
+
+@curso_bp.route("/webhook/stripe", methods=["POST"])
+def stripe_webhook():
+    """Stripe webhook — processes completed payments and unlocks modules."""
+    _init_stripe()
+    payload   = request.get_data()
+    sig       = request.headers.get("Stripe-Signature", "")
+    secret    = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
+    # Verify signature
+    try:
+        event = stripe.Webhook.construct_event(payload, sig, secret)
+    except (ValueError, stripe.error.SignatureVerificationError) as e:
+        logger.warning("Stripe webhook signature failed: %s", e)
+        abort(400)
+
+    # Only handle completed checkout sessions
+    if event["type"] == "checkout.session.completed":
+        sess     = event["data"]["object"]
+        meta     = sess.metadata or {}
+        user_id  = meta.get("user_id") if isinstance(meta, dict) else getattr(meta, "user_id", None)
+        product  = meta.get("product") if isinstance(meta, dict) else getattr(meta, "product", None)
+        sess_id  = sess.id if hasattr(sess, "id") else sess.get("id", "")
+        pi       = sess.payment_intent if hasattr(sess, "payment_intent") else sess.get("payment_intent", "")
+
+        if user_id and product and product in PRICING:
+            from app.python.supabase_client import complete_purchase
+            purchase = complete_purchase(sess_id, pi)
+            if purchase:
+                # Unlock the purchased level modules
+                level_keys = PRICING[product]["levels"]
+                _unlock_levels_for_user(user_id, level_keys)
+                logger.info("Payment OK: user=%s product=%s", user_id, product)
+            else:
+                logger.warning("Purchase not found or already completed: session=%s", sess_id)
+        else:
+            logger.warning("Webhook missing metadata: session=%s", sess_id)
+
+    return jsonify({"status": "ok"}), 200
 
 
 # ── Admin routes ──────────────────────────────────────────────────────────────
@@ -684,3 +978,15 @@ def admin_revisar_entrega(sub_id):
     update_submission_review(sub_id, grade, feedback, session["curso_user_id"])
     flash("Revisión guardada.", "success")
     return redirect(url_for("curso.admin_entregas"))
+
+
+@curso_bp.route("/admin/ventas")
+@require_admin
+def admin_ventas():
+    from app.python.supabase_client import get_all_purchases
+    purchases = get_all_purchases()
+    return render_template(
+        "curso/admin/ventas.html",
+        purchases=purchases,
+        pricing=PRICING,
+    )

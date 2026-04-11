@@ -25,3 +25,4 @@ apscheduler==3.11.0
 eventlet==0.40.0
 redis==6.2.0
 supabase>=2.0.0
+stripe>=7.0.0
