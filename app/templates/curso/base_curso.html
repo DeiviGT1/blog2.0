@@ -29,7 +29,12 @@
           <a class="curso-nav__link {% if 'admin' in request.endpoint %}active{% endif %}"
              href="{{ url_for('curso.admin_index') }}">Admin</a>
         {% endif %}
-        <span class="curso-nav__user">{{ session.get('curso_username', '') }}</span>
+        <a class="curso-nav__link {% if request.endpoint == 'curso.perfil' %}active{% endif %}"
+           href="{{ url_for('curso.perfil') }}"
+           title="Configuración de perfil">
+          <i class="fas fa-user-circle"></i>
+          {{ session.get('curso_username', '') }}
+        </a>
         <a class="curso-nav__logout" href="{{ url_for('curso.logout') }}">Salir</a>
       {% else %}
         <a class="curso-nav__link {% if request.endpoint == 'curso.pricing' %}active{% endif %}"

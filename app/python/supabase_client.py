@@ -114,6 +114,25 @@ def create_or_update_profile(user_id: str, email: str, username: str,
     }).execute()
 
 
+def update_formula_lang(user_id: str, lang: str):
+    """Update the user's preferred formula language ('es' or 'en')."""
+    if lang not in ("es", "en"):
+        lang = "es"
+    sb = get_admin_client()
+    sb.table("profiles").update({"formula_lang": lang}).eq("id", user_id).execute()
+
+
+def get_formula_lang(user_id: str) -> str:
+    """Return the user's preferred formula language, defaulting to 'es'."""
+    try:
+        profile = get_profile(user_id)
+        if profile and profile.get("formula_lang") in ("es", "en"):
+            return profile["formula_lang"]
+    except Exception:
+        pass
+    return "es"
+
+
 def approve_user(user_id: str):
     sb = get_admin_client()
     sb.table("profiles").update({"is_approved": True}).eq("id", user_id).execute()

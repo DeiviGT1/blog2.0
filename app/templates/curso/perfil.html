@@ -1,0 +1,186 @@
+{% extends "curso/base_curso.html" %}
+{% block title %}Mi Perfil — Excel 365{% endblock %}
+
+{% block content %}
+<div style="max-width:680px; margin:3rem auto; padding:0 1.5rem;">
+
+  <h1 style="font-size:1.6rem; font-weight:800; color:#1a202c; margin-bottom:.25rem;">
+    <i class="fas fa-user-circle" style="color:#217346;"></i>
+    Mi perfil
+  </h1>
+  <p style="color:#64748b; margin-bottom:2rem;">
+    {{ session.get('curso_email','') }}
+  </p>
+
+  <!-- Flash messages inline -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div style="
+          padding:.9rem 1.2rem; border-radius:.5rem; margin-bottom:1.2rem;
+          background:{% if category=='success' %}#d1fae5{% else %}#fee2e2{% endif %};
+          color:{% if category=='success' %}#065f46{% else %}#991b1b{% endif %};
+          font-weight:600; font-size:.92rem;
+        ">
+          <i class="fas fa-{% if category=='success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- Card: Idioma de fórmulas -->
+  <div style="
+    background:#fff; border:1px solid #e2e8f0; border-radius:1rem;
+    box-shadow:0 2px 12px rgba(0,0,0,.06); overflow:hidden; margin-bottom:1.5rem;
+  ">
+    <div style="
+      background:linear-gradient(135deg,#217346,#2e7d32);
+      padding:1.2rem 1.5rem; color:#fff;
+    ">
+      <h2 style="font-size:1.1rem; font-weight:700; margin:0;">
+        <i class="fas fa-language"></i> Idioma de fórmulas de Excel
+      </h2>
+      <p style="font-size:.85rem; opacity:.85; margin:.25rem 0 0;">
+        Elige en qué idioma quieres que se generen los archivos .xlsx descargables.
+      </p>
+    </div>
+
+    <div style="padding:1.5rem;">
+
+      <form method="POST" action="{{ url_for('curso.perfil') }}">
+
+        <div style="display:flex; gap:1rem; margin-bottom:1.5rem;">
+
+          <!-- Opción Español -->
+          <label style="
+            flex:1; cursor:pointer; border:2px solid {% if formula_lang=='es' %}#217346{% else %}#e2e8f0{% endif %};
+            border-radius:.75rem; padding:1.2rem 1rem; text-align:center;
+            background:{% if formula_lang=='es' %}#f0fdf4{% else %}#fafafa{% endif %};
+            transition:all .2s;
+          ">
+            <input type="radio" name="formula_lang" value="es"
+                   {% if formula_lang == 'es' %}checked{% endif %}
+                   style="display:none;"
+                   onchange="this.form.submit()">
+            <div style="font-size:1.8rem; margin-bottom:.4rem;">🇲🇽</div>
+            <div style="font-weight:700; font-size:1rem; color:#1a202c;">Español</div>
+            <div style="font-size:.78rem; color:#64748b; margin-top:.2rem;">
+              SUMA, SI, BUSCARX, FILTRAR…
+            </div>
+            {% if formula_lang == 'es' %}
+              <div style="
+                display:inline-block; margin-top:.5rem;
+                background:#217346; color:#fff;
+                font-size:.7rem; font-weight:700; padding:.15rem .6rem;
+                border-radius:99px;
+              ">✓ Activo</div>
+            {% endif %}
+          </label>
+
+          <!-- Opción English -->
+          <label style="
+            flex:1; cursor:pointer; border:2px solid {% if formula_lang=='en' %}#1565c0{% else %}#e2e8f0{% endif %};
+            border-radius:.75rem; padding:1.2rem 1rem; text-align:center;
+            background:{% if formula_lang=='en' %}#eff6ff{% else %}#fafafa{% endif %};
+            transition:all .2s;
+          ">
+            <input type="radio" name="formula_lang" value="en"
+                   {% if formula_lang == 'en' %}checked{% endif %}
+                   style="display:none;"
+                   onchange="this.form.submit()">
+            <div style="font-size:1.8rem; margin-bottom:.4rem;">🇺🇸</div>
+            <div style="font-weight:700; font-size:1rem; color:#1a202c;">English</div>
+            <div style="font-size:.78rem; color:#64748b; margin-top:.2rem;">
+              SUM, IF, XLOOKUP, FILTER…
+            </div>
+            {% if formula_lang == 'en' %}
+              <div style="
+                display:inline-block; margin-top:.5rem;
+                background:#1565c0; color:#fff;
+                font-size:.7rem; font-weight:700; padding:.15rem .6rem;
+                border-radius:99px;
+              ">✓ Active</div>
+            {% endif %}
+          </label>
+
+        </div>
+
+        <!-- Info box -->
+        <div style="
+          background:#fffbeb; border:1px solid #fcd34d; border-radius:.6rem;
+          padding:.9rem 1.1rem; font-size:.85rem; color:#78350f; line-height:1.6;
+        ">
+          <strong><i class="fas fa-info-circle"></i> ¿Por qué importa?</strong><br>
+          En Excel instalado en <strong>español</strong> debes usar <code>SUMA</code>, <code>SI</code>, <code>BUSCARX</code>, etc.
+          Si usas fórmulas en inglés verás el error <code>#¿NOMBRE?</code> / <code>#NAME?</code>.
+          Los archivos descargados del curso se generarán con las fórmulas en el idioma que elijas aquí.
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Card: Información de cuenta -->
+  <div style="
+    background:#fff; border:1px solid #e2e8f0; border-radius:1rem;
+    box-shadow:0 2px 12px rgba(0,0,0,.06); overflow:hidden;
+  ">
+    <div style="padding:1.2rem 1.5rem; border-bottom:1px solid #f1f5f9;">
+      <h2 style="font-size:1rem; font-weight:700; color:#1a202c; margin:0;">
+        <i class="fas fa-id-card" style="color:#64748b;"></i> Información de cuenta
+      </h2>
+    </div>
+    <div style="padding:1.2rem 1.5rem;">
+      <table style="width:100%; font-size:.9rem; border-collapse:collapse;">
+        <tr>
+          <td style="padding:.5rem 0; color:#64748b; width:40%;">Usuario</td>
+          <td style="padding:.5rem 0; font-weight:600; color:#1a202c;">
+            {{ session.get('curso_username', '—') }}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:.5rem 0; color:#64748b; border-top:1px solid #f1f5f9;">Email</td>
+          <td style="padding:.5rem 0; font-weight:600; color:#1a202c; border-top:1px solid #f1f5f9;">
+            {{ session.get('curso_email', '—') }}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:.5rem 0; color:#64748b; border-top:1px solid #f1f5f9;">Rol</td>
+          <td style="padding:.5rem 0; border-top:1px solid #f1f5f9;">
+            {% if session.get('curso_is_admin') %}
+              <span style="background:#7C3AED;color:#fff;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:99px;">
+                Admin
+              </span>
+            {% else %}
+              <span style="background:#217346;color:#fff;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:99px;">
+                Estudiante
+              </span>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:.5rem 0; color:#64748b; border-top:1px solid #f1f5f9;">Fórmulas</td>
+          <td style="padding:.5rem 0; border-top:1px solid #f1f5f9;">
+            <span style="
+              background:{% if formula_lang=='es' %}#217346{% else %}#1565c0{% endif %};
+              color:#fff; font-size:.72rem; font-weight:700; padding:.2rem .6rem; border-radius:99px;
+            ">
+              {% if formula_lang == 'es' %}🇲🇽 Español{% else %}🇺🇸 English{% endif %}
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:2rem;">
+    <a href="{{ url_for('curso.dashboard') }}"
+       style="color:#64748b; font-size:.88rem; text-decoration:none;">
+      ← Volver al Dashboard
+    </a>
+  </div>
+
+</div>
+{% endblock %}

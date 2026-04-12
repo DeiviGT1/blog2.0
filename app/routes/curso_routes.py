@@ -124,8 +124,8 @@ MODULE_LOOKUP = {
 
 PRICING = {
     "nivel1": {
-        "amount": 2500,
-        "price_display": "$25",
+        "amount": 1500,
+        "price_display": "$15",
         "label": "Nivel 1 — Básico",
         "short": "Básico",
         "color": "#1565C0",
@@ -134,8 +134,8 @@ PRICING = {
         "levels": ["nivel1"],
     },
     "nivel2": {
-        "amount": 3000,
-        "price_display": "$30",
+        "amount": 2000,
+        "price_display": "$20",
         "label": "Nivel 2 — Intermedio",
         "short": "Intermedio",
         "color": "#2E7D32",
@@ -144,8 +144,8 @@ PRICING = {
         "levels": ["nivel2"],
     },
     "nivel3": {
-        "amount": 3500,
-        "price_display": "$35",
+        "amount": 2000,
+        "price_display": "$20",
         "label": "Nivel 3 — Avanzado",
         "short": "Avanzado",
         "color": "#E65100",
@@ -154,8 +154,8 @@ PRICING = {
         "levels": ["nivel3"],
     },
     "nivel4": {
-        "amount": 4000,
-        "price_display": "$40",
+        "amount": 2500,
+        "price_display": "$25",
         "label": "Nivel 4 — Excel Pro",
         "short": "Excel Pro",
         "color": "#4A148C",
@@ -164,15 +164,15 @@ PRICING = {
         "levels": ["nivel4"],
     },
     "bundle": {
-        "amount": 8000,
-        "price_display": "$80",
+        "amount": 6000,
+        "price_display": "$60",
         "label": "Curso Completo",
         "short": "Todo incluido",
         "color": "#1a1a2e",
         "module_count": sum(len(LEVELS[f"nivel{i}"]["modules"]) for i in range(1, 5)),
-        "description": "Acceso a los 4 niveles (30 módulos), archivos de práctica y revisión de entregas. Ahorra $50 vs comprar por separado.",
+        "description": "Acceso a los 4 niveles (30 módulos), archivos de práctica y revisión de entregas. Ahorra $20 vs comprar por separado.",
         "levels": ["nivel1", "nivel2", "nivel3", "nivel4"],
-        "savings": "$50",
+        "savings": "$20",
     },
 }
 
@@ -257,6 +257,12 @@ def _save_session(user_id, email, username, is_admin, is_approved, access_token)
     session["curso_is_admin"]    = is_admin
     session["curso_is_approved"] = is_approved
     session["curso_access_token"]= access_token
+    # Cache formula language preference so we don't hit DB on every download
+    try:
+        from app.python.supabase_client import get_formula_lang
+        session["curso_formula_lang"] = get_formula_lang(user_id)
+    except Exception:
+        session["curso_formula_lang"] = "es"
 
 
 def _clear_session():
@@ -680,9 +686,57 @@ def modulo(module_id):
 @curso_bp.route("/descargar/<filename>")
 @require_approved
 def descargar(filename):
+    """
+    Generate and serve an Excel file on-the-fly in the user's preferred
+    formula language (es/en).  Filename format: nivelX_ejemplos.xlsx
+    or nivelX_practica.xlsx.  Falls back to static files for anything
+    that doesn't match the known pattern.
+    """
+    import re as _re
+    m = _re.match(r"^(nivel\d)_(ejemplos|practica)\.xlsx$", filename, _re.IGNORECASE)
+    if m:
+        level_key = m.group(1).lower()
+        file_type = m.group(2).lower()
+        from app.python.supabase_client import get_formula_lang
+        from app.python.excel_generator import generate_excel
+        lang = get_formula_lang(session["curso_user_id"])
+        try:
+            xlsx_bytes = generate_excel(level_key, file_type, lang)
+        except ValueError:
+            abort(404)
+        from flask import Response
+        lang_suffix = "_ES" if lang == "es" else "_EN"
+        download_name = f"{level_key}_{file_type}{lang_suffix}.xlsx"
+        return Response(
+            xlsx_bytes,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f'attachment; filename="{download_name}"'},
+        )
+    # Fallback: serve pre-existing static file
     safe = secure_filename(filename)
     directory = os.path.join(current_app.root_path, "static", "curso", "archivos")
     return send_from_directory(directory, safe, as_attachment=True)
+
+
+@curso_bp.route("/perfil", methods=["GET", "POST"])
+@require_login
+def perfil():
+    """User profile settings — formula language preference."""
+    from app.python.supabase_client import get_formula_lang, update_formula_lang, get_profile
+    user_id = session["curso_user_id"]
+    if request.method == "POST":
+        lang = request.form.get("formula_lang", "es")
+        if lang not in ("es", "en"):
+            lang = "es"
+        update_formula_lang(user_id, lang)
+        session["curso_formula_lang"] = lang
+        flash("Preferencias guardadas correctamente.", "success")
+        return redirect(url_for("curso.perfil"))
+    lang = session.get("curso_formula_lang") or get_formula_lang(user_id)
+    profile = get_profile(user_id) or {}
+    return render_template("curso/perfil.html",
+                           formula_lang=lang,
+                           profile=profile)
 
 
 @curso_bp.route("/submit/<module_id>", methods=["POST"])
