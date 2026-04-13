@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan de Difusión — Curso Excel 365</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #217346;
+      --green2:  #2e7d32;
+      --blue:    #1565c0;
+      --orange:  #e65100;
+      --purple:  #6a1b9a;
+      --gold:    #f59e0b;
+      --red:     #c62828;
+      --dark:    #0f172a;
+      --text:    #1e293b;
+      --muted:   #64748b;
+      --bg:      #f8fafc;
+      --card:    #ffffff;
+      --border:  #e2e8f0;
+      --radius:  1rem;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f2d1a 100%);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 50%, rgba(33,115,70,.35) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 30%, rgba(21,101,192,.3) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(34,197,94,.15);
+      border: 1px solid rgba(34,197,94,.4);
+      color: #4ade80;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      padding: .35rem 1rem;
+      border-radius: 99px;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .hero h1 span { color: #4ade80; }
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.72);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+      position: relative;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat strong {
+      display: block;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #4ade80;
+    }
+    .hero-stat span {
+      font-size: .8rem;
+      color: rgba(255,255,255,.6);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .section-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: .5rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: .6rem;
+    }
+    .section-desc {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1.2rem 1.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* ── GRID ── */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+    @media (max-width: 900px) {
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* ── NAME SECTION ── */
+    .name-card {
+      border: 2px solid transparent;
+      border-radius: .75rem;
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+    }
+    .name-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+    .name-card.winner {
+      border-color: var(--green);
+      background: #f0fdf4;
+    }
+    .name-card.winner::after {
+      content: '⭐ RECOMENDADO';
+      position: absolute;
+      top: -10px; right: 12px;
+      background: var(--green);
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+      letter-spacing: .08em;
+    }
+    .name-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: .3rem;
+    }
+    .name-card p { font-size: .85rem; color: var(--muted); }
+    .name-card .pros {
+      margin-top: .7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+    }
+    .tag {
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .15rem .55rem;
+      border-radius: 99px;
+    }
+    .tag-green  { background: #dcfce7; color: #15803d; }
+    .tag-blue   { background: #dbeafe; color: #1d4ed8; }
+    .tag-orange { background: #ffedd5; color: #c2410c; }
+    .tag-purple { background: #f3e8ff; color: #7e22ce; }
+    .tag-red    { background: #fee2e2; color: #b91c1c; }
+    .tag-gray   { background: #f1f5f9; color: #475569; }
+
+    /* ── CITIES ── */
+    .city-card {
+      border-radius: .75rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .city-header {
+      padding: 1rem 1.2rem;
+      color: #fff;
+      font-weight: 700;
+    }
+    .city-body { padding: 1rem 1.2rem; background: #fff; }
+    .city-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .85rem;
+      padding: .3rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .city-stat:last-child { border-bottom: none; }
+    .city-stat label { color: var(--muted); }
+    .city-stat strong { color: var(--dark); }
+    .priority-badge {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
+
+    /* ── CHANNELS ── */
+    .channel-card {
+      border-radius: .75rem;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      background: #fff;
+    }
+    .channel-top {
+      padding: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+    .channel-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .channel-name { font-weight: 700; font-size: 1rem; color: var(--dark); }
+    .channel-desc { font-size: .82rem; color: var(--muted); margin-top: .1rem; }
+    .channel-meta {
+      padding: .8rem 1.2rem;
+      background: #f8fafc;
+      border-top: 1px solid var(--border);
+      font-size: .8rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .channel-meta span { color: var(--muted); }
+    .channel-meta strong { color: var(--dark); }
+    .roi-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: #e2e8f0;
+      margin-top: .6rem;
+      overflow: hidden;
+    }
+    .roi-fill { height: 100%; border-radius: 3px; }
+
+    /* ── AI TOOLS ── */
+    .tool-card {
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      padding: 1.3rem;
+      background: #fff;
+      position: relative;
+    }
+    .tool-badge {
+      position: absolute;
+      top: -9px; left: 14px;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .2rem .6rem;
+      border-radius: 99px;
+    }
+    .tool-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: .3rem;
+      margin-top: .4rem;
+    }
+    .tool-desc { font-size: .85rem; color: var(--muted); margin-bottom: .8rem; }
+    .tool-use {
+      font-size: .8rem;
+      color: #0f172a;
+      background: #f8fafc;
+      border-left: 3px solid var(--green);
+      padding: .5rem .75rem;
+      border-radius: 0 .4rem .4rem 0;
+      margin-bottom: .7rem;
+    }
+    .price-chip {
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .2rem .65rem;
+      border-radius: 99px;
+      background: #f0fdf4;
+      color: var(--green2);
+      border: 1px solid #bbf7d0;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; padding-left: 2.5rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: .75rem; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--green), var(--blue), var(--purple));
+    }
+    .tl-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .tl-dot {
+      position: absolute;
+      left: -2.5rem;
+      top: .2rem;
+      width: 1.5rem; height: 1.5rem;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      font-weight: 800;
+      color: #fff;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 3px rgba(0,0,0,.08);
+    }
+    .tl-phase {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: .2rem;
+    }
+    .tl-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: .4rem;
+    }
+    .tl-body {
+      font-size: .88rem;
+      color: var(--muted);
+    }
+    .tl-tasks {
+      margin-top: .7rem;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .tl-task {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .85rem;
+      color: var(--text);
+    }
+    .tl-task i { color: var(--green); margin-top: .15rem; flex-shrink: 0; }
+
+    /* ── FUNNEL ── */
+    .funnel {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .funnel-step {
+      padding: 1rem 2rem;
+      color: #fff;
+      font-weight: 700;
+      font-size: .95rem;
+      text-align: center;
+      position: relative;
+    }
+    .funnel-step::after {
+      content: '';
+      position: absolute;
+      bottom: -12px; left: 50%;
+      transform: translateX(-50%);
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-top: 12px solid currentColor;
+      z-index: 1;
+    }
+    .funnel-step:last-child::after { display: none; }
+    .funnel-step:nth-child(1) { background: #217346; border-radius: .6rem .6rem 0 0; }
+    .funnel-step:nth-child(2) { background: #1565c0; color: #fff; }
+    .funnel-step:nth-child(3) { background: #6a1b9a; }
+    .funnel-step:nth-child(4) { background: #e65100; border-radius: 0 0 .6rem .6rem; }
+    .funnel-label {
+      font-size: .75rem;
+      font-weight: 400;
+      opacity: .8;
+      display: block;
+    }
+    .funnel-num {
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    /* ── BUDGET TABLE ── */
+    .budget-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    .budget-table th {
+      background: var(--dark);
+      color: #fff;
+      padding: .75rem 1rem;
+      text-align: left;
+      font-size: .8rem;
+      letter-spacing: .05em;
+    }
+    .budget-table td {
+      padding: .7rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .budget-table tr:last-child td { border-bottom: none; font-weight: 700; background: #f8fafc; }
+    .budget-table tr:hover td { background: #f8fafc; }
+
+    /* ── CONTENT IDEAS ── */
+    .content-idea {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+    }
+    .idea-icon {
+      width: 40px; height: 40px;
+      border-radius: .5rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .idea-title { font-weight: 700; font-size: .92rem; color: var(--dark); margin-bottom: .2rem; }
+    .idea-desc { font-size: .82rem; color: var(--muted); }
+    .idea-hook { font-size: .78rem; font-style: italic; color: var(--green2); margin-top: .3rem; }
+
+    /* ── SEPARATOR ── */
+    .sep { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+
+    /* ── ALERT ── */
+    .alert {
+      border-radius: .75rem;
+      padding: 1rem 1.3rem;
+      font-size: .9rem;
+      display: flex;
+      gap: .8rem;
+      align-items: flex-start;
+    }
+    .alert-warning { background: #fffbeb; border: 1px solid #fcd34d; color: #78350f; }
+    .alert-info    { background: #eff6ff; border: 1px solid #93c5fd; color: #1e3a8a; }
+    .alert-green   { background: #f0fdf4; border: 1px solid #86efac; color: #14532d; }
+    .alert i { margin-top: .1rem; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    .page-footer {
+      background: var(--dark);
+      color: rgba(255,255,255,.5);
+      text-align: center;
+      padding: 2rem;
+      font-size: .82rem;
+    }
+    .page-footer strong { color: #4ade80; }
+
+    /* ── NAV (sticky) ── */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: .75rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+    }
+    .sticky-nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color .2s;
+    }
+    .sticky-nav a:hover { color: var(--green); }
+    .sticky-nav .brand { color: var(--dark); font-weight: 800; margin-right: auto; }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-badge">📊 Plan de crecimiento</div>
+  <h1>Cómo llevar tu curso de Excel<br><span>de 0 a tu primera venta</span></h1>
+  <p>Una hoja de ruta completa: nombre del proyecto, mercados objetivo, canales, herramientas de IA y un plan de 90 días para conseguir los primeros estudiantes.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <strong>~62M</strong>
+      <span>hispanos en EE.UU.</span>
+    </div>
+    <div class="hero-stat">
+      <strong>+650M</strong>
+      <span>hispanohablantes en el mundo</span>
+    </div>
+    <div class="hero-stat">
+      <strong>$60B</strong>
+      <span>mercado e-learning LATAM</span>
+    </div>
+    <div class="hero-stat">
+      <strong>#1</strong>
+      <span>Excel — skill más buscado en LATAM</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── STICKY NAV ────────────────────────────────────────────────── -->
+<nav class="sticky-nav">
+  <a class="brand" href="#">📗 Plan Excel</a>
+  <a href="#nombre">Nombre</a>
+  <a href="#mercados">Mercados</a>
+  <a href="#canales">Canales</a>
+  <a href="#ia-videos">IA & Videos</a>
+  <a href="#contenido">Contenido</a>
+  <a href="#funnel">Funnel</a>
+  <a href="#roadmap">Roadmap</a>
+  <a href="#presupuesto">Presupuesto</a>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 1 — NOMBRE DEL PROYECTO                              -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="nombre">
+  <div class="section-label">Paso 1</div>
+  <div class="section-title">El nombre del proyecto</div>
+  <div class="section-desc">
+    Antes de crear redes sociales o videos necesitas un nombre que sea fácil de recordar, disponible en Instagram/TikTok/YouTube y que diga exactamente qué vendes. Aquí van las mejores opciones analizadas.
+  </div>
+
+  <div class="alert alert-warning" style="margin-bottom:2rem;">
+    <i class="fas fa-lightbulb"></i>
+    <div>
+      <strong>Lo más importante de un nombre:</strong>
+      Que sea fácil de decir en audio (para TikTok/YouTube), que no tenga tildes en el handle de redes y que el dominio .com esté disponible o ya lo tengas. <code>josedavidgt.com</code> ya es tuyo — considera usarlo como autoridad personal.
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:1rem;">
+
+    <div class="name-card winner" style="border:2px solid #217346; background:#f0fdf4;">
+      <h3>ExcelConJose</h3>
+      <p>Personal brand + producto. "Con Jose" genera confianza y humaniza el curso. Escalable si agregas otros cursos.</p>
+      <div class="pros">
+        <span class="tag tag-green">Fácil de pronunciar</span>
+        <span class="tag tag-green">Personal brand</span>
+        <span class="tag tag-green">Diferenciador</span>
+        <span class="tag tag-blue">@excelconjose disponible</span>
+      </div>
+    </div>
+
+    <div class="name-card" style="border:1px solid var(--border);">
+      <h3>FormulaLatam</h3>
+      <p>Más amplio, podría incluir otros cursos de productividad en el futuro. Pero no posiciona Excel específicamente.</p>
+      <div class="pros">
+        <span class="tag tag-blue">Escalable</span>
+        <span class="tag tag-orange">Muy genérico</span>
+        <span class="tag tag-gray">Competencia alta</span>
+      </div>
+    </div>
+
+    <div class="name-card" style="border:1px solid var(--border);">
+      <h3>ExcelDesdeZero</h3>
+      <p>Muy descriptivo y atractivo para principiantes. Posiciona bien en búsquedas pero puede alejar a intermedios.</p>
+      <div class="pros">
+        <span class="tag tag-green">SEO natural</span>
+        <span class="tag tag-blue">Claro</span>
+        <span class="tag tag-orange">Limita a básicos</span>
+      </div>
+    </div>
+
+    <div class="name-card" style="border:1px solid var(--border);">
+      <h3>ExcelPro365</h3>
+      <p>Directo, incluye "365" que comunica modernidad (Excel 365). Puede confundirse con productos Microsoft.</p>
+      <div class="pros">
+        <span class="tag tag-blue">Moderno</span>
+        <span class="tag tag-red">Riesgo marca Microsoft</span>
+        <span class="tag tag-gray">Genérico</span>
+      </div>
+    </div>
+
+    <div class="name-card" style="border:1px solid var(--border);">
+      <h3>MasterExcelHoy</h3>
+      <p>El "Hoy" transmite urgencia y acción inmediata. Buen para ads. "Master" puede sonar pretencioso.</p>
+      <div class="pros">
+        <span class="tag tag-green">Urgencia</span>
+        <span class="tag tag-orange">Puede sonar arrogante</span>
+        <span class="tag tag-blue">Buen para ads</span>
+      </div>
+    </div>
+
+    <div class="name-card" style="border:1px solid var(--border);">
+      <h3>JoseDavidGT (tu marca personal)</h3>
+      <p>Ya tienes el dominio y algo de audiencia potencial. Usar tu nombre real crea autoridad a largo plazo.</p>
+      <div class="pros">
+        <span class="tag tag-green">Dominio disponible ✓</span>
+        <span class="tag tag-green">Autoridad personal</span>
+        <span class="tag tag-purple">Largo plazo</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alert alert-green">
+    <i class="fas fa-check-circle"></i>
+    <div>
+      <strong>Recomendación concreta:</strong>
+      Usa <strong>@ExcelConJose</strong> como nombre de redes y canal. Mantén <strong>josedavidgt.com</strong> como el dominio. Esto combina autoridad personal + producto claro. Si el día de mañana vendes otros cursos, el personal brand te protege.
+    </div>
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 2 — MERCADOS OBJETIVO                                -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="mercados">
+  <div class="section-label">Paso 2</div>
+  <div class="section-title">¿Dónde empezar?</div>
+  <div class="section-desc">
+    La ventaja de un curso digital es que puedes vender en todo el mundo desde el día 1, pero la estrategia de contenido debe apuntar a una audiencia específica. Así se dividen las oportunidades.
+  </div>
+
+  <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--dark);">
+    🇺🇸 Ciudades latinas en EE.UU. — Alto poder adquisitivo + español
+  </h3>
+  <div class="grid-4" style="margin-bottom:2.5rem;">
+
+    <div class="city-card">
+      <div class="city-header" style="background:#c62828;">
+        🌴 Miami, FL
+        <span class="priority-badge" style="background:#fff;color:#c62828;float:right;font-size:.6rem;">PRIORIDAD 1</span>
+      </div>
+      <div class="city-body">
+        <div class="city-stat"><label>Hispanos</label><strong>~70% de la ciudad</strong></div>
+        <div class="city-stat"><label>Perfil</label><strong>Empresarios, emprendedores</strong></div>
+        <div class="city-stat"><label>Poder adquisitivo</label><strong>Alto ⭐⭐⭐⭐</strong></div>
+        <div class="city-stat"><label>Idioma preferido</label><strong>Español</strong></div>
+        <div class="city-stat"><label>Por qué</label><strong>Hub de negocios LATAM-US</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#e65100;">
+        🤠 Houston, TX
+        <span class="priority-badge" style="background:#fff;color:#e65100;float:right;font-size:.6rem;">PRIORIDAD 2</span>
+      </div>
+      <div class="city-body">
+        <div class="city-stat"><label>Hispanos</label><strong>~45% de la ciudad</strong></div>
+        <div class="city-stat"><label>Perfil</label><strong>Petróleo, construcción, salud</strong></div>
+        <div class="city-stat"><label>Poder adquisitivo</label><strong>Alto ⭐⭐⭐⭐</strong></div>
+        <div class="city-stat"><label>Idioma preferido</label><strong>Español/inglés</strong></div>
+        <div class="city-stat"><label>Por qué</label><strong>4ta ciudad más grande de EE.UU.</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#1565c0;">
+        🎬 Los Ángeles, CA
+        <span class="priority-badge" style="background:#fff;color:#1565c0;float:right;font-size:.6rem;">PRIORIDAD 2</span>
+      </div>
+      <div class="city-body">
+        <div class="city-stat"><label>Hispanos</label><strong>~49% del condado</strong></div>
+        <div class="city-stat"><label>Perfil</label><strong>Entretenimiento, tech, PYMEs</strong></div>
+        <div class="city-stat"><label>Poder adquisitivo</label><strong>Muy alto ⭐⭐⭐⭐⭐</strong></div>
+        <div class="city-stat"><label>Idioma preferido</label><strong>Español/inglés</strong></div>
+        <div class="city-stat"><label>Por qué</label><strong>Enorme clase media latina</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#4a148c;">
+        🗽 New York, NY
+        <span class="priority-badge" style="background:#fff;color:#4a148c;float:right;font-size:.6rem;">PRIORIDAD 3</span>
+      </div>
+      <div class="city-body">
+        <div class="city-stat"><label>Hispanos</label><strong>~29% de la ciudad</strong></div>
+        <div class="city-stat"><label>Perfil</label><strong>Finanzas, servicios, PYME</strong></div>
+        <div class="city-stat"><label>Poder adquisitivo</label><strong>Alto ⭐⭐⭐⭐</strong></div>
+        <div class="city-stat"><label>Idioma preferido</label><strong>Español/inglés</strong></div>
+        <div class="city-stat"><label>Por qué</label><strong>Alta demanda de habilidades office</strong></div>
+      </div>
+    </div>
+
+  </div>
+
+  <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--dark);">
+    🌎 LATAM — Volumen masivo, tickets más bajos (pero perfectos para tu precio)
+  </h3>
+  <div class="grid-3">
+
+    <div class="city-card">
+      <div class="city-header" style="background:#217346;">🇲🇽 México</div>
+      <div class="city-body">
+        <div class="city-stat"><label>Población con internet</label><strong>~85M usuarios</strong></div>
+        <div class="city-stat"><label>Ticket cómodo</label><strong>$15–$30 USD</strong></div>
+        <div class="city-stat"><label>Canales que funcionan</label><strong>TikTok, YouTube, Telegram</strong></div>
+        <div class="city-stat"><label>Perfil ideal</label><strong>Contadores, admins, estudiantes</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#1565c0;">🇨🇴 Colombia</div>
+      <div class="city-body">
+        <div class="city-stat"><label>Población con internet</label><strong>~35M usuarios</strong></div>
+        <div class="city-stat"><label>Ticket cómodo</label><strong>$15–$25 USD</strong></div>
+        <div class="city-stat"><label>Canales que funcionan</label><strong>Instagram, YouTube, WhatsApp</strong></div>
+        <div class="city-stat"><label>Perfil ideal</label><strong>Emprendedores, profesionales</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#c62828;">🇦🇷 Argentina</div>
+      <div class="city-body">
+        <div class="city-stat"><label>Población con internet</label><strong>~37M usuarios</strong></div>
+        <div class="city-stat"><label>Ticket cómodo</label><strong>$10–$20 USD</strong></div>
+        <div class="city-stat"><label>Canales que funcionan</label><strong>YouTube, Instagram, Discord</strong></div>
+        <div class="city-stat"><label>Perfil ideal</label><strong>Universitarios, freelancers</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#e65100;">🇵🇪 Perú</div>
+      <div class="city-body">
+        <div class="city-stat"><label>Muy receptivo a cursos online</label><strong>↑ crecimiento</strong></div>
+        <div class="city-stat"><label>Ticket cómodo</label><strong>$10–$20 USD</strong></div>
+        <div class="city-stat"><label>Canal principal</label><strong>YouTube, Facebook Groups</strong></div>
+        <div class="city-stat"><label>Perfil ideal</label><strong>Analistas, contadores</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#2e7d32;">🇨🇱 Chile</div>
+      <div class="city-body">
+        <div class="city-stat"><label>Mayor ingreso per cápita LATAM</label><strong>⭐⭐⭐⭐⭐</strong></div>
+        <div class="city-stat"><label>Ticket cómodo</label><strong>$20–$30 USD</strong></div>
+        <div class="city-stat"><label>Canal principal</label><strong>LinkedIn, Instagram, YouTube</strong></div>
+        <div class="city-stat"><label>Perfil ideal</label><strong>Corporativos, profesionales</strong></div>
+      </div>
+    </div>
+
+    <div class="city-card">
+      <div class="city-header" style="background:#4a148c;">🌐 Toda LATAM</div>
+      <div class="city-body">
+        <div class="city-stat"><label>Estrategia</label><strong>Contenido en español neutro</strong></div>
+        <div class="city-stat"><label>Evitar</label><strong>Modismos muy locales</strong></div>
+        <div class="city-stat"><label>Ventaja</label><strong>Un video llega a 20 países</strong></div>
+        <div class="city-stat"><label>SEO</label><strong>"Excel en español" 80K búsq/mes</strong></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 3 — CANALES                                          -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="canales">
+  <div class="section-label">Paso 3</div>
+  <div class="section-title">Canales de difusión</div>
+  <div class="section-desc">
+    No tienes que estar en todos. Empieza con <strong>1 canal principal + 1 de apoyo</strong>. Para un curso de Excel en español, el orden de ROI es claro.
+  </div>
+
+  <div class="grid-2" style="margin-bottom:2rem;">
+
+    <div class="channel-card">
+      <div class="channel-top">
+        <div class="channel-icon" style="background:#000;">🎵</div>
+        <div>
+          <div class="channel-name">TikTok <span class="tag tag-green" style="margin-left:.4rem;">CANAL #1</span></div>
+          <div class="channel-desc">El algoritmo distribuye contenido de cuentas nuevas. No necesitas seguidores para empezar.</div>
+        </div>
+      </div>
+      <div style="padding:0 1.2rem .8rem;">
+        <div style="font-size:.82rem;color:var(--muted);margin-bottom:.4rem;">ROI para cursos técnicos:</div>
+        <div class="roi-bar"><div class="roi-fill" style="width:95%;background:#217346;"></div></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">
+          <strong style="color:var(--dark);">Tipo de contenido:</strong> Tips de 30-60 seg, "¿Sabías que con esta fórmula…?", before/after datos.
+        </div>
+      </div>
+      <div class="channel-meta">
+        <span><strong>Audiencia:</strong> 18-35 años, México/Colombia/USA latino</span>
+        <span><strong>Frecuencia ideal:</strong> 4-5 videos/semana</span>
+      </div>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-top">
+        <div class="channel-icon" style="background:#FF0000;">▶</div>
+        <div>
+          <div class="channel-name">YouTube <span class="tag tag-blue" style="margin-left:.4rem;">CANAL #2</span></div>
+          <div class="channel-desc">Motor de búsqueda #2 del mundo. Los videos indexan en Google y traen tráfico orgánico de por vida.</div>
+        </div>
+      </div>
+      <div style="padding:0 1.2rem .8rem;">
+        <div style="font-size:.82rem;color:var(--muted);margin-bottom:.4rem;">ROI para cursos técnicos:</div>
+        <div class="roi-bar"><div class="roi-fill" style="width:85%;background:#1565c0;"></div></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">
+          <strong style="color:var(--dark);">Tipo de contenido:</strong> Tutoriales de 5-15 min, Shorts (reels del TikTok), series de "Excel desde cero".
+        </div>
+      </div>
+      <div class="channel-meta">
+        <span><strong>Ventaja:</strong> Tráfico pasivo de búsquedas</span>
+        <span><strong>Frecuencia ideal:</strong> 1-2 videos/semana + Shorts diarios</span>
+      </div>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-top">
+        <div class="channel-icon" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">📷</div>
+        <div>
+          <div class="channel-name">Instagram <span class="tag tag-orange" style="margin-left:.4rem;">CANAL #3</span></div>
+          <div class="channel-desc">Reels tienen alcance orgánico similar a TikTok. Además funciona para comunidad y DMs de ventas.</div>
+        </div>
+      </div>
+      <div style="padding:0 1.2rem .8rem;">
+        <div style="font-size:.82rem;color:var(--muted);margin-bottom:.4rem;">ROI para cursos técnicos:</div>
+        <div class="roi-bar"><div class="roi-fill" style="width:72%;background:#e65100;"></div></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">
+          <strong style="color:var(--dark);">Tipo de contenido:</strong> El mismo video de TikTok (sin marca de agua), carruseles de tips, historias con encuestas.
+        </div>
+      </div>
+      <div class="channel-meta">
+        <span><strong>Reutilizar:</strong> Mismo contenido de TikTok</span>
+        <span><strong>Audiencia ideal:</strong> Profesionales 25-40 años</span>
+      </div>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-top">
+        <div class="channel-icon" style="background:#0077b5; color:#fff; font-size:.9rem; font-weight:800;">in</div>
+        <div>
+          <div class="channel-name">LinkedIn <span class="tag tag-purple" style="margin-left:.4rem;">B2B / LARGO PLAZO</span></div>
+          <div class="channel-desc">Llega a profesionales y empresas. Excelente para ventas de bundles y cursos corporativos.</div>
+        </div>
+      </div>
+      <div style="padding:0 1.2rem .8rem;">
+        <div style="font-size:.82rem;color:var(--muted);margin-bottom:.4rem;">ROI para cursos técnicos:</div>
+        <div class="roi-bar"><div class="roi-fill" style="width:65%;background:#0077b5;"></div></div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">
+          <strong style="color:var(--dark);">Tipo de contenido:</strong> Posts de "3 errores de Excel en el trabajo", casos de uso profesional, carruseles PDF.
+        </div>
+      </div>
+      <div class="channel-meta">
+        <span><strong>Ventaja:</strong> Tickets más altos, clientes corporativos</span>
+        <span><strong>Frecuencia ideal:</strong> 3x/semana</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="alert alert-info">
+    <i class="fas fa-route"></i>
+    <div>
+      <strong>Estrategia de contenido multiplataforma:</strong> Graba <strong>1 video corto</strong> por día (30-60 seg). Súbelo a TikTok. Luego descárgalo sin marca de agua y súbelo como Reel en Instagram. En 30 días tienes 30 videos en dos plataformas con el mismo esfuerzo. El canal de YouTube crece más lento pero trae tráfico para siempre.
+    </div>
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 4 — IA Y VIDEOS (TODO AUTOMÁTICO)                   -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="ia-videos">
+  <div class="section-label">Paso 4</div>
+  <div class="section-title">Herramientas que crean los videos solas</div>
+  <div class="section-desc">
+    Solo necesitas darle un tema o un guión corto. La IA se encarga de todo lo demás: voz, imágenes, subtítulos, música, edición y formato para cada red social.
+  </div>
+
+  <!-- ALERTA REALIDAD CHECK -->
+  <div class="alert alert-warning" style="margin-bottom:2rem;">
+    <i class="fas fa-exclamation-triangle"></i>
+    <div>
+      <strong>Una verdad importante antes de elegir:</strong>
+      Hay dos tipos de video para Excel. Los <strong>tutoriales</strong> (donde muestras el archivo en pantalla) y los <strong>videos de concepto</strong> (donde un presentador explica la idea).
+      Las herramientas 100% automáticas hacen muy bien los de concepto. Para los tutoriales necesitas 1 grabación de pantalla tuya — pero eso se puede automatizar con <strong>Opus Clip</strong> después.
+    </div>
+  </div>
+
+  <!-- PIPELINES VISUALES -->
+  <h3 style="font-size:1.15rem;font-weight:800;color:var(--dark);margin-bottom:1.2rem;">
+    🔄 Pipelines de producción — elige el que más te conviene
+  </h3>
+
+  <!-- Pipeline 1: InVideo AI -->
+  <div class="card" style="margin-bottom:1.5rem;border-left:4px solid #217346;">
+    <div class="card-header" style="background:#f0fdf4;border-bottom:1px solid #e2e8f0;">
+      <span style="background:#217346;color:#fff;padding:.2rem .7rem;border-radius:99px;font-size:.7rem;font-weight:700;">PIPELINE 1 — 100% AUTOMÁTICO</span>
+      &nbsp;Tú escribes el tema → la IA hace el video completo
+    </div>
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1.2rem;">
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;font-weight:600;color:#15803d;">
+          📝 Tú escribes: <br><em style="font-weight:400;">"video 60s sobre XLOOKUP en español"</em>
+        </div>
+        <div style="font-size:1.5rem;color:#94a3b8;">→</div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;font-weight:600;color:#15803d;">
+          🤖 InVideo AI genera: <br><em style="font-weight:400;">guión + voz + imágenes + subtítulos</em>
+        </div>
+        <div style="font-size:1.5rem;color:#94a3b8;">→</div>
+        <div style="background:#217346;border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;font-weight:700;color:#fff;">
+          ✅ Video listo <br>para publicar
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="tool-card" style="border:none;background:#f8fafc;padding:1rem;">
+          <span class="tool-badge" style="background:#217346;color:#fff;font-size:.6rem;">🥇 RECOMENDADO #1</span>
+          <div class="tool-name" style="margin-top:.8rem;">InVideo AI</div>
+          <div class="tool-desc">Describes el video en español, elige duración y plataforma (TikTok/YouTube/Reels) y lo genera completo: voz en español, imágenes de stock, texto animado, música y subtítulos.</div>
+          <div class="tool-use">💡 Prompt ejemplo: <em>"Crea un video de TikTok de 45 segundos explicando qué es XLOOKUP en Excel, tono informal, para profesionales latinoamericanos, con subtítulos grandes."</em></div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+            <span class="price-chip">$25/mes · 40 videos</span>
+            <span class="tag tag-green">Voz en español</span>
+            <span class="tag tag-blue">TikTok/Reels/YT</span>
+            <span class="tag tag-purple">Subtítulos auto</span>
+          </div>
+        </div>
+        <div class="tool-card" style="border:none;background:#f8fafc;padding:1rem;">
+          <span class="tool-badge" style="background:#6a1b9a;color:#fff;font-size:.6rem;">🥇 RECOMENDADO #2</span>
+          <div class="tool-name" style="margin-top:.8rem;">Pictory AI</div>
+          <div class="tool-desc">Pegas un texto/guión (o URL de blog) y genera el video automáticamente con imágenes de stock, voz IA y subtítulos. Ideal para convertir los temas del curso en videos.</div>
+          <div class="tool-use">💡 Flujo: pega el texto de un módulo del curso → Pictory hace el video explicativo de ese módulo.</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+            <span class="price-chip">$19/mes · 30 videos</span>
+            <span class="tag tag-purple">Texto → Video</span>
+            <span class="tag tag-blue">Voz IA español</span>
+          </div>
+        </div>
+        <div class="tool-card" style="border:none;background:#f8fafc;padding:1rem;">
+          <span class="tool-badge" style="background:#1565c0;color:#fff;font-size:.6rem;">AVATAR TU CARA</span>
+          <div class="tool-name" style="margin-top:.8rem;">HeyGen</div>
+          <div class="tool-desc">Subes 2 minutos de video tuyo una sola vez. HeyGen crea un avatar de IA con tu cara y tu voz. De ahí en adelante solo escribes el guión y el avatar graba el video por ti.</div>
+          <div class="tool-use">💡 Resultado: videos con TU cara y TU voz pero sin que tú grabes nada. Máxima confianza del espectador.</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+            <span class="price-chip">$29/mes</span>
+            <span class="tag tag-blue">Tu cara/voz IA</span>
+            <span class="tag tag-green">Sin grabar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pipeline 2: Opus Clip -->
+  <div class="card" style="margin-bottom:1.5rem;border-left:4px solid #1565c0;">
+    <div class="card-header" style="background:#eff6ff;border-bottom:1px solid #e2e8f0;">
+      <span style="background:#1565c0;color:#fff;padding:.2rem .7rem;border-radius:99px;font-size:.7rem;font-weight:700;">PIPELINE 2 — GRABAR 1 VEZ → IA MULTIPLICA</span>
+      &nbsp;Graba 1 tutorial largo → la IA corta 10-20 clips cortos virales
+    </div>
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1.2rem;">
+        <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;font-weight:600;color:#1e3a8a;">
+          🎥 Tú grabas: <br><em style="font-weight:400;">1 tutorial de Excel 20-30 min</em>
+        </div>
+        <div style="font-size:1.5rem;color:#94a3b8;">→</div>
+        <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;font-weight:600;color:#1e3a8a;">
+          🤖 Opus Clip detecta: <br><em style="font-weight:400;">los momentos más virales</em>
+        </div>
+        <div style="font-size:1.5rem;color:#94a3b8;">→</div>
+        <div style="background:#1565c0;border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;font-weight:700;color:#fff;">
+          ✅ 10–20 clips cortos<br>listos para TikTok
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="tool-card" style="border:none;background:#f8fafc;padding:1rem;">
+          <span class="tool-badge" style="background:#1565c0;color:#fff;font-size:.6rem;">🥇 EL MULTIPLICADOR</span>
+          <div class="tool-name" style="margin-top:.8rem;">Opus Clip</div>
+          <div class="tool-desc">Sube un video largo (tu tutorial grabado). Opus Clip lo analiza con IA, detecta los momentos más interesantes, los corta automáticamente en clips de 30-90 segundos, les agrega subtítulos animados, reencuadra para formato vertical (9:16) y los puntúa por potencial viral.</div>
+          <div class="tool-use">💡 Resultado: 1 grabación tuya de 30 minutos = 15 clips listos para publicar durante 2 semanas. Esfuerzo mínimo, volumen máximo.</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+            <span class="price-chip">$15/mes · 150 min/mes</span>
+            <span class="tag tag-blue">Auto-cut clips</span>
+            <span class="tag tag-green">Subtítulos virales</span>
+            <span class="tag tag-orange">Puntuación viral</span>
+          </div>
+        </div>
+        <div class="tool-card" style="border:none;background:#f8fafc;padding:1rem;">
+          <span class="tool-badge" style="background:#e65100;color:#fff;font-size:.6rem;">SUBTÍTULOS AUTO</span>
+          <div class="tool-name" style="margin-top:.8rem;">Submagic</div>
+          <div class="tool-desc">Agrega subtítulos animados de estilo viral (como los de MrBeast o Hormozi) automáticamente a cualquier video. Detecta la voz en español y sincroniza perfecto.</div>
+          <div class="tool-use">💡 Los subtítulos aumentan un 40% el watch time en TikTok porque muchos ven sin audio. Submagic los hace en 1 clic.</div>
+          <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+            <span class="price-chip">$20/mes</span>
+            <span class="tag tag-orange">Estilo viral</span>
+            <span class="tag tag-green">Español auto</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stack recomendado final -->
+  <div style="
+    background:linear-gradient(135deg,#0f172a,#1e3a5f);
+    border-radius:1rem;padding:2rem;color:#fff;
+  ">
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;margin-bottom:.5rem;">
+      ⚡ STACK RECOMENDADO COMPLETO
+    </div>
+    <div style="font-size:1.1rem;font-weight:800;margin-bottom:1.2rem;">
+      Produce 30 videos al mes invirtiendo menos de 2 horas de tu tiempo
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+      <div style="background:rgba(255,255,255,.08);border-radius:.6rem;padding:1rem;">
+        <div style="font-size:.75rem;color:#94a3b8;margin-bottom:.3rem;">TÚ HACES</div>
+        <div style="font-weight:700;">Grabar 1 tutorial Excel / semana en Loom</div>
+        <div style="font-size:.8rem;color:#94a3b8;margin-top:.2rem;">~20-30 min de grabación</div>
+      </div>
+      <div style="background:rgba(255,255,255,.08);border-radius:.6rem;padding:1rem;">
+        <div style="font-size:.75rem;color:#4ade80;margin-bottom:.3rem;">OPUS CLIP HACE</div>
+        <div style="font-weight:700;">Corta 8-12 clips virales del tutorial</div>
+        <div style="font-size:.8rem;color:#94a3b8;margin-top:.2rem;">Automático · 10 min de espera</div>
+      </div>
+      <div style="background:rgba(255,255,255,.08);border-radius:.6rem;padding:1rem;">
+        <div style="font-size:.75rem;color:#4ade80;margin-bottom:.3rem;">INVIDEO AI HACE</div>
+        <div style="font-weight:700;">Genera 2-3 videos de concepto extra</div>
+        <div style="font-size:.8rem;color:#94a3b8;margin-top:.2rem;">Tú solo escribes el tema</div>
+      </div>
+      <div style="background:rgba(255,255,255,.08);border-radius:.6rem;padding:1rem;">
+        <div style="font-size:.75rem;color:#4ade80;margin-bottom:.3rem;">RESULTADO</div>
+        <div style="font-weight:700;">10-15 videos por semana</div>
+        <div style="font-size:.8rem;color:#94a3b8;margin-top:.2rem;">TikTok + Reels + YouTube Shorts</div>
+      </div>
+    </div>
+    <div style="margin-top:1.2rem;font-size:.85rem;color:rgba(255,255,255,.6);">
+      Costo total: ~<strong style="color:#4ade80;">$40/mes</strong> (Opus Clip $15 + InVideo AI $25) · Tiempo tuyo: <strong style="color:#4ade80;">2 horas/semana</strong>
+    </div>
+  </div>
+
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 5 — IDEAS DE CONTENIDO                               -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="contenido">
+  <div class="section-label">Paso 5</div>
+  <div class="section-title">Ideas de contenido que convierten</div>
+  <div class="section-desc">
+    El contenido que mejor funciona para cursos de Excel en redes son los "aha moment" — cuando alguien ve el video y piensa "¡no sabía eso!". Aquí van los formatos más probados.
+  </div>
+
+  <div class="grid-2">
+
+    <div class="content-idea">
+      <div class="idea-icon" style="background:#dcfce7;">💡</div>
+      <div>
+        <div class="idea-title">"¿Sabías que...?" — Truco de 30 segundos</div>
+        <div class="idea-desc">Muestra algo sorprendente que Excel puede hacer. El espectador aprende algo en 30 seg.</div>
+        <div class="idea-hook">Hook: "¿Sabías que Excel puede hacer esto automáticamente en 1 segundo? El 95% no lo sabe." (muestra XLOOKUP)</div>
+      </div>
+    </div>
+
+    <div class="content-idea">
+      <div class="idea-icon" style="background:#fee2e2;">😱</div>
+      <div>
+        <div class="idea-title">"El error que comete todo el mundo"</div>
+        <div class="idea-desc">Muestra un error común (VLOOKUP cuando debería ser XLOOKUP, usar suma manual, etc.).</div>
+        <div class="idea-hook">Hook: "Si sigues haciendo esto en Excel, estás perdiendo 2 horas al día." (muestra copiar/pegar manual)</div>
+      </div>
+    </div>
+
+    <div class="content-idea">
+      <div class="idea-icon" style="background:#dbeafe;">🔄</div>
+      <div>
+        <div class="idea-title">Antes / Después</div>
+        <div class="idea-desc">Muestra un Excel feo/ineficiente → Excel profesional con fórmulas y formato. Muy visual.</div>
+        <div class="idea-hook">Hook: "Así llegan los reportes vs así los entrego yo." (lado a lado)</div>
+      </div>
+    </div>
+
+    <div class="content-idea">
+      <div class="idea-icon" style="background:#f3e8ff;">🏆</div>
+      <div>
+        <div class="idea-title">"En 60 segundos aprendes..." — Serie</div>
+        <div class="idea-desc">Una fórmula o función explicada en 60 segundos. Cada video es un episodio. Crea hábito de seguirte.</div>
+        <div class="idea-hook">Hook: "Ep 1: SUMA. Ep 2: SI. Ep 3: BUSCARV. Sigue la serie →"</div>
+      </div>
+    </div>
+
+    <div class="content-idea">
+      <div class="idea-icon" style="background:#ffedd5;">📊</div>
+      <div>
+        <div class="idea-title">Dashboard en tiempo real</div>
+        <div class="idea-desc">Muestra cómo construyes un dashboard desde cero. Alto valor percibido, atrae a profesionales.</div>
+        <div class="idea-hook">Hook: "Construí este dashboard en Excel en 10 minutos. Te enseño cómo." (muestra el resultado al inicio)</div>
+      </div>
+    </div>
+
+    <div class="content-idea">
+      <div class="idea-icon" style="background:#fef9c3;">💰</div>
+      <div>
+        <div class="idea-title">"Excel para tu trabajo específico"</div>
+        <div class="idea-desc">Contadores, vendedores, administradores. Contenido hiper-específico tiene el mejor CTR.</div>
+        <div class="idea-hook">Hook: "Si trabajas en ventas, esta fórmula te va a cambiar la vida." (muestra SUMIFS por vendedor)</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:1.5rem;" class="alert alert-warning">
+    <i class="fas fa-fire"></i>
+    <div>
+      <strong>El formato más viral para Excel en TikTok:</strong>
+      Pantalla de Excel grabada con tu voz explicando, fondo de música lo-fi suave, subtítulos grandes en blanco. Velocidad de habla: más rápido de lo normal. Duración: 30-45 seg. Primer 3 segundos: muestra el resultado final antes de explicar.
+    </div>
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 6 — FUNNEL DE VENTAS                                 -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="funnel">
+  <div class="section-label">Paso 6</div>
+  <div class="section-title">El embudo de ventas</div>
+  <div class="section-desc">
+    Tu curso ya tiene el Nivel 0 gratuito — eso es un lead magnet perfecto. El funnel se construye solo.
+  </div>
+
+  <div class="grid-2" style="align-items:center;">
+
+    <div class="funnel">
+      <div class="funnel-step">
+        <span class="funnel-label">Paso 1 — Atracción</span>
+        <span class="funnel-num">Video gratis en TikTok/YouTube</span>
+        <span class="funnel-label">"Me interesa, ¿dónde aprendo más?"</span>
+      </div>
+      <div style="height:12px;"></div>
+      <div class="funnel-step">
+        <span class="funnel-label">Paso 2 — Registro</span>
+        <span class="funnel-num">Nivel 0 GRATIS en josedavidgt.com</span>
+        <span class="funnel-label">6 módulos de fundamentos sin costo</span>
+      </div>
+      <div style="height:12px;"></div>
+      <div class="funnel-step">
+        <span class="funnel-label">Paso 3 — Primera compra</span>
+        <span class="funnel-num">Nivel 1 — $15 USD</span>
+        <span class="funnel-label">Baja barrera de entrada. Ya confía en ti.</span>
+      </div>
+      <div style="height:12px;"></div>
+      <div class="funnel-step">
+        <span class="funnel-label">Paso 4 — Upsell</span>
+        <span class="funnel-num">Bundle completo — $60 USD</span>
+        <span class="funnel-label">"Ya compré Nivel 1, el bundle vale la pena"</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div class="card">
+        <div class="card-body">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:.8rem;color:var(--dark);">📈 Conversión estimada (referencia mercado)</div>
+          <div class="city-stat"><label>Visitas únicas al mes</label><strong>1,000</strong></div>
+          <div class="city-stat"><label>Se registran en Nivel 0 (3%)</label><strong>30 usuarios</strong></div>
+          <div class="city-stat"><label>Compran Nivel 1 (20% de registrados)</label><strong>6 ventas</strong></div>
+          <div class="city-stat"><label>Compran bundle (30% de N1)</label><strong>2 ventas</strong></div>
+          <div class="city-stat"><label>Ingresos estimados mes 1</label><strong style="color:var(--green);">$210 USD</strong></div>
+        </div>
+      </div>
+
+      <div class="alert alert-green">
+        <i class="fas fa-chart-line"></i>
+        <div>
+          <strong>El objetivo no es la primera venta.</strong><br>
+          Es construir la lista de usuarios registrados. Cada usuario del Nivel 0 es un lead calificado al que puedes hacer email marketing después.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 7 — ROADMAP 90 DÍAS                                  -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="roadmap">
+  <div class="section-label">Paso 7</div>
+  <div class="section-title">Plan de 90 días</div>
+  <div class="section-desc">
+    Concreto, ejecutable, sin necesidad de presupuesto inicial. El objetivo es llegar a las primeras 10 ventas antes del día 60.
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--green);">1</div>
+      <div class="tl-phase" style="color:var(--green);">Días 1–7 — SETUP</div>
+      <div class="tl-title">Cimentar la base antes de crear contenido</div>
+      <div class="tl-tasks">
+        <div class="tl-task"><i class="fas fa-check-square"></i> Elegir nombre: crear @ExcelConJose en TikTok, Instagram y YouTube en el mismo día</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Foto de perfil profesional (Canva + foto tuya o avatar con HeyGen)</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Bio: "🎓 Aprende Excel en español | Nivel 0 GRATIS → link en bio"</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Configurar link de bio (Linktree gratis o página simple) apuntando a josedavidgt.com/curso</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Instalar Loom y CapCut. Grabar un video de práctica (no publicar aún).</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Preparar 5 guiones de video con IA (Claude/ChatGPT)</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--blue);">2</div>
+      <div class="tl-phase" style="color:var(--blue);">Días 8–30 — CONTENIDO</div>
+      <div class="tl-title">Construir presencia: 20+ videos en el primer mes</div>
+      <div class="tl-tasks">
+        <div class="tl-task"><i class="fas fa-check-square"></i> Publicar 1 video corto por día en TikTok (30-60 seg)</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Subir el mismo video sin marca de agua a Instagram Reels</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> 1 tutorial largo por semana en YouTube (10-15 min)</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Cada video menciona: "Nivel 0 GRATIS en el link de mi bio"</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Responder TODOS los comentarios — el algoritmo premia la interacción</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Meta: 200+ seguidores en TikTok y 50 usuarios registrados en el curso</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--orange);">3</div>
+      <div class="tl-phase" style="color:var(--orange);">Días 31–60 — PRIMERAS VENTAS</div>
+      <div class="tl-title">Convertir audiencia en compradores</div>
+      <div class="tl-tasks">
+        <div class="tl-task"><i class="fas fa-check-square"></i> Email a todos los usuarios registrados del Nivel 0: "Accede al Nivel 1 con 20% de descuento esta semana"</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Crear un video específico: "Esto es lo que aprenderás en el Nivel 1" (demo del contenido)</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Lanzar en grupos de Facebook de Excel en español (México, Colombia, LATAM)</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Compartir en LinkedIn con un post de "Por qué lancé un curso de Excel en español"</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Meta: 10 ventas (Nivel 1 o Bundle)</div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot" style="background:var(--purple);">4</div>
+      <div class="tl-phase" style="color:var(--purple);">Días 61–90 — ESCALAR</div>
+      <div class="tl-title">Optimizar lo que funciona y amplificar</div>
+      <div class="tl-tasks">
+        <div class="tl-task"><i class="fas fa-check-square"></i> Identificar los 3 videos con más visitas → hacer versiones expandidas</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Probar $5-10 USD/día de ads en TikTok o Meta apuntando al video más viral</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Pedir a los primeros compradores un testimonio (screenshot de su Excel mejorado)</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Agregar los testimonios a la landing page josedavidgt.com/curso</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Crear comunidad de WhatsApp/Discord para estudiantes activos</div>
+        <div class="tl-task"><i class="fas fa-check-square"></i> Meta: $500+ USD en ventas acumuladas y 500+ seguidores en TikTok</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="sep" />
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- SECCIÓN 8 — PRESUPUESTO                                      -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div class="container" id="presupuesto">
+  <div class="section-label">Paso 8</div>
+  <div class="section-title">Presupuesto mínimo viable</div>
+  <div class="section-desc">
+    Puedes empezar con $0 y escalar solo cuando empieces a vender. Aquí el desglose completo.
+  </div>
+
+  <div class="grid-2" style="align-items:start;">
+
+    <div>
+      <h3 style="font-weight:700;margin-bottom:1rem;">Mes 1 — Sin gastar nada</h3>
+      <div class="card">
+        <div class="card-body" style="padding:0;">
+          <table class="budget-table">
+            <thead>
+              <tr><th>Herramienta</th><th>Costo</th><th>Para qué</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>TikTok</td><td style="color:var(--green);font-weight:700;">$0</td><td>Canal principal</td></tr>
+              <tr><td>Instagram</td><td style="color:var(--green);font-weight:700;">$0</td><td>Reels con mismo video</td></tr>
+              <tr><td>YouTube</td><td style="color:var(--green);font-weight:700;">$0</td><td>SEO a largo plazo</td></tr>
+              <tr><td>Loom (gratis)</td><td style="color:var(--green);font-weight:700;">$0</td><td>Grabar tutoriales</td></tr>
+              <tr><td>CapCut (gratis)</td><td style="color:var(--green);font-weight:700;">$0</td><td>Editar + subtítulos</td></tr>
+              <tr><td>Canva (gratis)</td><td style="color:var(--green);font-weight:700;">$0</td><td>Thumbnails + posts</td></tr>
+              <tr><td>Tu hosting actual</td><td style="color:var(--green);font-weight:700;">$0</td><td>La web ya existe</td></tr>
+              <tr><td><strong>TOTAL MES 1</strong></td><td style="color:var(--green);font-weight:800;font-size:1.1rem;">$0</td><td><strong>Presupuesto cero</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-weight:700;margin-bottom:1rem;">Mes 2-3 — Cuando lleguen las primeras ventas</h3>
+      <div class="card">
+        <div class="card-body" style="padding:0;">
+          <table class="budget-table">
+            <thead>
+              <tr><th>Herramienta</th><th>Costo/mes</th><th>Para qué</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>TikTok Ads</td><td>$30–50</td><td>Amplificar video viral</td></tr>
+              <tr><td>Meta Ads (Instagram)</td><td>$30–50</td><td>Targeting por interés Excel</td></tr>
+              <tr><td>CapCut Pro (opcional)</td><td>$8</td><td>Más templates</td></tr>
+              <tr><td>Canva Pro (opcional)</td><td>$13</td><td>Brand kit, más assets</td></tr>
+              <tr><td>HeyGen (opcional)</td><td>$29</td><td>Si no quieres aparecer en cámara</td></tr>
+              <tr><td>ElevenLabs (opcional)</td><td>$5</td><td>Narración IA</td></tr>
+              <tr><td><strong>TOTAL MES 2-3</strong></td><td style="color:var(--orange);font-weight:800;">$60–155</td><td><strong>Escalable con ROI</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:1.5rem;" class="alert alert-green">
+    <i class="fas fa-calculator"></i>
+    <div>
+      <strong>El math es simple:</strong>
+      Con 5 ventas del Bundle ($60 c/u) al mes = $300 USD. Esto cubre todos los costos de herramientas y ads, y queda $100+ de ganancia. A partir de mes 3, el contenido que ya publicaste sigue atrayendo gente sin costo adicional.
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+<footer class="page-footer">
+  <p>Plan de difusión preparado para <strong>josedavidgt.com</strong> — Curso Excel 365</p>
+  <p style="margin-top:.3rem;">Generado con análisis de mercado LATAM / Hispanic US · Actualizado 2025</p>
+</footer>
+
+<script>
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Auto-select radio on label click (name cards)
+  document.querySelectorAll('.name-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.name-card').forEach(c => {
+        c.style.border = '1px solid var(--border)';
+        c.style.background = '';
+      });
+      card.style.border = '2px solid var(--green)';
+      card.style.background = '#f0fdf4';
+    });
+  });
+</script>
+</body>
+</html>
