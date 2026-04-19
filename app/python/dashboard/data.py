@@ -1,11 +1,10 @@
 # app/python/dashboard/data.py
 
-import pandas as pd
-
 def load_data(file_path):
     """
     Carga y procesa el archivo CSV, asigna colores a los equipos y filtra los datos.
     """
+    import pandas as pd  # lazy import — no penaliza el cold start
     df = pd.read_csv(file_path)
     
     # Diccionario de colores para los clubes

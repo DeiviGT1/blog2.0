@@ -7,7 +7,6 @@ from ..python.spotify.spotify import (
     Playlist_Data,
     Song_Data
 )
-import pandas as pd
 import base64
 import json
 
@@ -65,6 +64,7 @@ def playlists_callback():
         print("No se encontraron canciones en las playlists.")
         return render_template("projects/spotify/playlist.html", avg_per_playlist_base64='')
 
+    import pandas as pd  # lazy import — no penaliza el cold start
     df = pd.DataFrame(avg_dicts)
     avg_per_playlist = df.groupby(["playlist_name", "playlist_url"]).mean(numeric_only=True)["popularity"]
 

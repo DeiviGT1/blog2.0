@@ -15,6 +15,10 @@
     ],
     "crons": [
       {
+        "path": "/ping",
+        "schedule": "*/5 * * * *"
+      },
+      {
         "path": "/sosqueue/api/reset-queues",
         "schedule": "0 2 * * *"
       }

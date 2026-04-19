@@ -1,7 +1,12 @@
 # app/routes/main.py
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 
 main_bp = Blueprint('main', __name__)
+
+@main_bp.route('/ping')
+def ping():
+    """Keep-alive endpoint — Vercel cron hits this every 5 min to prevent cold starts."""
+    return jsonify({"status": "ok"}), 200
 
 @main_bp.route('/')
 def index():
