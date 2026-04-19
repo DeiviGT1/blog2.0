@@ -98,17 +98,13 @@
         {% block contenido %}
         <!-- Aquí se inserta el contenido específico de cada página -->
         {% endblock %}
-
-        <!-- Pie de Página -->
-        <footer class="footer mt-auto py-3">
-          <div class="container">
-            <span class="text-muted"
-              >© 2024 Jose David GT. All rights reserved.</span
-            >
-          </div>
-        </footer>
       </div>
     </div>
+
+    <!-- Pie de Página — fuera del wrapper para centrarse en toda la pantalla -->
+    <footer class="footer py-3">
+      <span class="text-muted">© 2024 Jose David GT. All rights reserved.</span>
+    </footer>
 
     <!-- Modal de Contacto -->
     {% include 'main/modal.html' %}
