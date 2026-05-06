@@ -38,6 +38,7 @@ def register_routes(app):
     # from .routes.sosqueue_routes import sos_bp  # deshabilitado temporalmente (requiere Redis)
     from .routes.auth_routes import auth_bp
     from .routes.curso_routes import curso_bp
+    from .routes.brisa_sites_routes import brisa_sites_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(openai_bp)
@@ -48,3 +49,4 @@ def register_routes(app):
     # app.register_blueprint(sos_bp)  # deshabilitado temporalmente (requiere Redis)
     app.register_blueprint(auth_bp)
     app.register_blueprint(curso_bp)
+    app.register_blueprint(brisa_sites_bp)
