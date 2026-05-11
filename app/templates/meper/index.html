@@ -110,6 +110,16 @@
       line-height: 1.5;
     }
 
+    .dedication {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(14px, 1.3vw, 16px);
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      margin-top: 18px;
+    }
+
     /* Actions */
     .actions {
       display: flex;
@@ -305,6 +315,7 @@
       <!-- Scene 1 -->
       <section class="scene" data-scene="ask" data-active>
         <h1 class="headline">Meper🍩🍩?</h1>
+        <p class="dedication">Valentina Ospino</p>
         <div class="actions">
           <button class="btn btn-yes" data-action="yes">Sí</button>
           <button class="btn btn-no"  data-action="no">No</button>
