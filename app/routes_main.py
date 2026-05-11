@@ -39,6 +39,7 @@ def register_routes(app):
     from .routes.auth_routes import auth_bp
     from .routes.curso_routes import curso_bp
     from .routes.brisa_sites_routes import brisa_sites_bp
+    from .routes.meper_routes import meper_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(openai_bp)
@@ -50,3 +51,4 @@ def register_routes(app):
     app.register_blueprint(auth_bp)
     app.register_blueprint(curso_bp)
     app.register_blueprint(brisa_sites_bp)
+    app.register_blueprint(meper_bp)
