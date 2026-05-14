@@ -178,12 +178,15 @@ def get_all_permissions_for_user(user_id: str) -> list:
 def set_module_permission(user_id: str, module_id: str, enabled: bool,
                           granted_by: str | None = None):
     sb = get_admin_client()
-    sb.table("module_permissions").upsert({
-        "user_id": user_id,
-        "module_id": module_id,
-        "enabled": enabled,
-        "granted_by": granted_by,
-    }).execute()
+    sb.table("module_permissions").upsert(
+        {
+            "user_id": user_id,
+            "module_id": module_id,
+            "enabled": enabled,
+            "granted_by": granted_by,
+        },
+        on_conflict="user_id,module_id",
+    ).execute()
 
 
 def bulk_set_level_permissions(user_id: str, module_ids: list[str],
@@ -194,7 +197,9 @@ def bulk_set_level_permissions(user_id: str, module_ids: list[str],
          "enabled": enabled, "granted_by": granted_by}
         for mid in module_ids
     ]
-    sb.table("module_permissions").upsert(rows).execute()
+    sb.table("module_permissions").upsert(
+        rows, on_conflict="user_id,module_id"
+    ).execute()
 
 
 # ── Submission helpers ────────────────────────────────────────────────────────
