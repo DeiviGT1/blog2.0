@@ -276,7 +276,7 @@ def _after_auth(user, access_token):
     Auto-approves all users and ensures nivel 0 is unlocked (free tier)."""
     from app.python.supabase_client import (
         get_profile, create_or_update_profile, approve_user,
-        set_admin, get_user_permissions, bulk_set_level_permissions,
+        set_admin, get_all_permissions_for_user, bulk_set_level_permissions,
     )
     user_id  = user.id
     email    = user.email
@@ -299,19 +299,23 @@ def _after_auth(user, access_token):
         if is_admin and not profile.get("is_admin"):
             set_admin(user_id, True)
 
-    # Ensure nivel 0 (free) modules are unlocked
-    existing_perms = get_user_permissions(user_id)
-    nivel0_mids = [m["id"] for m in LEVELS["nivel0"]["modules"]]
-    if not all(mid in existing_perms for mid in nivel0_mids):
-        bulk_set_level_permissions(user_id, nivel0_mids, True, None)
+    # Only create permissions for modules that have NO record at all.
+    # Modules with a record (even disabled) were set by admin — don't override.
+    all_perms = get_all_permissions_for_user(user_id)
+    modules_with_record = {p["module_id"] for p in all_perms}
 
-    # Also unlock any previously purchased levels (in case perms were lost)
+    nivel0_mids = [m["id"] for m in LEVELS["nivel0"]["modules"]]
+    nivel0_new = [mid for mid in nivel0_mids if mid not in modules_with_record]
+    if nivel0_new:
+        bulk_set_level_permissions(user_id, nivel0_new, True, None)
+
     purchased = _get_purchased_levels(user_id)
     for lk in purchased:
         if lk != "nivel0":
             lk_mids = [m["id"] for m in LEVELS[lk]["modules"]]
-            if not all(mid in existing_perms for mid in lk_mids):
-                bulk_set_level_permissions(user_id, lk_mids, True, None)
+            lk_new = [mid for mid in lk_mids if mid not in modules_with_record]
+            if lk_new:
+                bulk_set_level_permissions(user_id, lk_new, True, None)
 
     _save_session(user_id, email, username, is_admin, is_approved, access_token)
     return True  # Always approved
