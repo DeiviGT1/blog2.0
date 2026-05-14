@@ -625,6 +625,10 @@ def dashboard():
     submitted_modules = {s["module_id"] for s in submissions}
     purchased  = {"nivel0", "nivel1", "nivel2", "nivel3", "nivel4"} if is_admin \
                  else _get_purchased_levels(user_id)
+    # Treat a level as unlocked if the admin granted any module in it
+    for lk, lv in LEVELS.items():
+        if any(m["id"] in enabled for m in lv["modules"]):
+            purchased.add(lk)
     return render_template(
         "curso/dashboard.html",
         levels=LEVELS,
